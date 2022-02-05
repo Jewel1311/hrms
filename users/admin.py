@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Login,ApplicantProfile
+from .models import Newuser,ApplicantProfile
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -25,6 +25,7 @@ class UserAdminConfig(UserAdmin):
         ],
     ]
 
+# table heading view of Applicant Profile 
 class Applicantadmin(admin.ModelAdmin):
     list_display=('first_name','last_name')
 
@@ -32,7 +33,7 @@ class Applicantadmin(admin.ModelAdmin):
 
  
 
-admin.site.register(Login, UserAdminConfig)
+admin.site.register(Newuser, UserAdminConfig)
 admin.site.register(ApplicantProfile,Applicantadmin)
 
 

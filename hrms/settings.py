@@ -137,7 +137,7 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL= 'users.Login'
+AUTH_USER_MODEL= 'users.Newuser'  #register the custom user model
 
 
 

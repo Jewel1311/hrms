@@ -35,7 +35,7 @@ class CustomAccountManager(BaseUserManager):
 
 
 #creating the user
-class Login(AbstractUser):
+class Newuser(AbstractUser):
     username=None
     middle_name=models.CharField(max_length=60,blank=True)
     email = models.EmailField(_('email address'), unique=True)
@@ -61,7 +61,7 @@ class ApplicantProfile(models.Model):
         ('F', 'Female'),
         ('O', 'Others'),
     )
-    user=models.OneToOneField(Login,unique=True,on_delete=models.CASCADE)
+    user=models.OneToOneField(Newuser,unique=True,on_delete=models.CASCADE)
     first_name=models.CharField(max_length=60)
     middle_name=models.CharField(max_length=30,blank=True,default='')
     last_name=models.CharField(max_length=60)
