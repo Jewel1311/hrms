@@ -1,0 +1,14 @@
+
+.box-boxshadow{
+    width: 50vw;
+    padding:2em;
+    margin:2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.from style{
+    padding:0.2em
+}
