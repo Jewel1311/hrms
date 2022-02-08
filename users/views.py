@@ -57,7 +57,7 @@ def filterlogin(request):
         else:
            return render(request, 'applicant/applicant-home.html')  #go to user home page
 
-    elif request.user.is_Employee:
+    elif request.user.is_employee:
         return render(request, 'users/employee.html')
  
 
