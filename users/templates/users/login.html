@@ -12,7 +12,6 @@
                    <div class="alert alert-success">{{message}}</div>
                 {% endfor%}
             {% endif %}
-        <div class="box-boxshadow">
             <h2>Login</h2>
             <div class="form-group">
                 <form method="POST">
@@ -20,9 +19,12 @@
                     {% csrf_token %}
                     {{ form | crispy }}
 
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-primary mt-2">Login</button>
                 </form>
-            </div>
+                <small class="text-muted">
+                    <a href="{% url 'password_reset' %}">Fortgot Password</a>
+                </small>
+
         </div>
     
     {% endblock body %}

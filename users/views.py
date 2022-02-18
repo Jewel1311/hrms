@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import ApplicantProfile, Newuser, Newuser
 from .forms import UserRegistrationForm
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password
+
 
 
 def register(request):

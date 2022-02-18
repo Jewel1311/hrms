@@ -9,7 +9,6 @@ from django.contrib.auth.admin import UserAdmin
 
 class UserAdminConfig(UserAdmin):
     
-
     #displaying the table
     search_fields=('email','first_name','middle_name','last_name')
     list_filter=('email','first_name')
@@ -29,6 +28,8 @@ class UserAdminConfig(UserAdmin):
                 'fields':['first_name','middle_name','last_name','email','password1','password2','is_employee','is_applicant','is_staff','is_active']}
         ],
     ]
+
+
 
 # table heading view of Applicant Profile 
 class Applicantadmin(admin.ModelAdmin):

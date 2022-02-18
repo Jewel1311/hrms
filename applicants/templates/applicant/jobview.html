@@ -1,0 +1,89 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+   {% block title %}
+   <title>Job-View</title>
+   {% endblock title %}
+
+    {% block body %}
+
+    <!-- topbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;">
+        <div class="align"> 
+            
+            <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
+      
+            <div class="navbar-nav">
+                <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
+                <a class="custom-link " style="color: white;" href="{% url 'login' %}">Login</a>
+            </div>
+        </div>
+      </nav>
+      <center><h3 class="heading  pb-1"> Job Offerings</h3></center>
+      <!-- card -->
+      {% for job in jobs %}
+        <div class="job-card mt-3">
+          <div class="col-9" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ job.job_title }}</h5>
+                <p class="card-text">{{ job.job_description }}</p>
+                <a href="#" class="custom-style-button">More Info </a>
+              </div>
+            </div>
+          </div>
+        </div> 
+     {% endfor %}
+     {% for job in jobs %}
+     <div class="job-card mt-3">
+       <div class="col-9" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+         <div class="card">
+           <div class="card-body">
+             <h5 class="card-title">{{ job.job_title }}</h5>
+             <p class="card-text">{{ job.job_description }}</p>
+             <a href="#" class="custom-style-button">More Info </a>
+           </div>
+         </div>
+       </div>
+     </div> 
+  {% endfor %}
+  {% for job in jobs %}
+  <div class="job-card mt-3">
+    <div class="col-9" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ job.job_title }}</h5>
+          <p class="card-text">{{ job.job_description }}</p>
+          <a href="#" class="custom-style-button">More Info </a>
+        </div>
+      </div>
+    </div>
+  </div> 
+{% endfor %}
+{% for job in jobs %}
+<div class="job-card mt-3">
+  <div class="col-sm-9" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ job.job_title }}</h5>
+        <p class="card-text">{{ job.job_description }}</p>
+        <a href="#" class="custom-style-button">More Info </a>
+      </div>
+    </div>
+  </div>
+</div> 
+{% endfor %}
+ {% for job in jobs %}
+        <div class="job-card mt-3">
+          <div class="col-sm-9" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ job.job_title }}</h5>
+                <p class="card-text">{{ job.job_description }}</p>
+                <a href="#" class="custom-style-button">More Info </a>
+              </div>
+            </div>
+          </div>
+        </div> 
+     {% endfor %}
+    {% endblock body %}
