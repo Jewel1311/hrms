@@ -1,0 +1,43 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+<title>Job-detail</title>
+{% endblock title %}
+
+{% block body %}
+ <!-- topbar -->
+ <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;">
+    <div class="align"> 
+        
+        <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
+  
+        <div class="navbar-nav">
+            <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
+            <a class="custom-link " style="color: white;" href="{% url 'login' %}">Login</a>
+        </div>
+    </div>
+  </nav>
+  <div class="row mx-5 ">
+    <h3 class="heading  pb-1 "> {{ job_id.job_title }}</h3>
+  </div>
+  <div class="row mx-5 mt-3">
+        <div class="col-sm-9">
+            <h4>Description</h4>
+            <p>{{job_id.job_description}}</p>
+            <h4>Skills Required</h4>
+            <p>{{job_id.skills}}</p>
+        </div>
+        <div class="col-sm-3" style="border: 1px solid #082032;padding:1rem;box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
+            <h6>Location</h6>
+            <p>{{ job_id.location }}</p>
+            <h6>Posted on</h6>
+            <p>{{ job_id.posted_on }}</p>
+            <h6>Apply before</h6>
+            <p>{{ job_id.withdraw_date }}</p>
+        </div>
+    </div>
+    <center>
+        <a href="#" class="custom-style-button">Apply Now </a>
+    </center>
+    {% endblock body %}
+

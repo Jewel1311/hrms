@@ -16,6 +16,7 @@ class Category(models.Model):
 class Jobs(models.Model):
     job_title = models.CharField(max_length=60)
     job_description = models.TextField()
+    skills = models.TextField(default='')
     location = models.CharField(max_length=60)
     posted_on = models.DateField(auto_now_add=True)
     withdraw_date = models.DateField()
