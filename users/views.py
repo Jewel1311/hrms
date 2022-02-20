@@ -17,17 +17,7 @@ def register(request):
             user=reg_form.save(False)
             user.is_applicant=True
             user.save()
-            # user_inst=Newuser()  
-
-            # user_inst.first_name=reg_form.cleaned_data['first_name']  
-            # user_inst.middle_name=reg_form.cleaned_data['middle_name'] 
-            # user_inst.last_name=reg_form.cleaned_data['last_name'] 
-            # user_inst.email=reg_form.cleaned_data['email'] 
-            # password=reg_form.cleaned_data['password1']     
-            # user_inst.password= make_password(password)
-            # user_inst.is_applicant=True                                                  
-            
-            # user_inst.save()
+          
 
 
             messages.success(request, f'Registered Successfully')

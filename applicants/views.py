@@ -6,6 +6,7 @@ from django.core.paginator import Paginator,EmptyPage
 from django.contrib import messages
 from applicants.models import Applications
 from base.models import Jobs
+from users.models import ApplicantProfile
 
 # list view of jobs 
 
@@ -44,6 +45,26 @@ def job_detail(request, job_id):
 @login_required
 def apply_now(request,job_id):
    application = Applications()
-   application.user = request.user
-   application.job = job_id
-   return render(request, 'applicant/applicant-home')
+   job = Jobs.objects.get(pk=job_id)  #select the Jobs instance using job id 
+   profile = ApplicantProfile.objects.get(user=request.user) #select the appliant profile for setting last applied
+
+
+  # this checks last job apply of the user
+   if profile.last_apply is not None:
+      diff = datetime.date.today() - profile.last_apply 
+      diff = diff.days                                   #convert the date field to days
+   else:
+      diff = 90
+   print(datetime.date.today())
+
+   if diff >= 90:
+      application.user = request.user
+      application.job = job   #save the foreign key using the selected instance
+      application.save()
+      profile.last_apply = datetime.date.today()  #changes the last apply date to current date in applicant profile
+      profile.save()
+      return render(request, 'applicant/applicant-home.html')
+   else:
+       messages.success(request, f'No results found')
+       return render(request, 'applicant/jobview.html')
+
