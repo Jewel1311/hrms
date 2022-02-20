@@ -1,4 +1,4 @@
-from queue import Empty
+from django.db.models import Q
 from django.shortcuts import render
 from django.core.paginator import Paginator,EmptyPage
 from base.models import Jobs
@@ -6,17 +6,23 @@ from base.models import Jobs
 # list view of jobs 
 
 def jobs(request):
-    jobs = Jobs.objects.order_by('-posted_on')
-    
-    p = Paginator(jobs,5)  # second argument is no of items to be displayed
-   
-    page_num = request.GET.get('page',1 ) #get the page no by url  and 1 is default
-    try:
+   jobs = Jobs.objects.order_by('-posted_on')
+   value = request.GET.get('search_jobs')
+   if value:
+         jobs = Jobs.objects.filter(Q (job_title__icontains=value) | Q(location__icontains = value))
+   count = jobs.count()
+   if count < 5:
+       p = Paginator(jobs,count)  #if objects are less than 5 dispaly that much objects in pagination
+   else:
+
+       p = Paginator(jobs,5)  # second argument is no of items to be displayed
+   page_num = request.GET.get('page',1 ) #get the page no by url  and 1 is default
+   try:
        page = p.page(page_num)
-    except EmptyPage:
+   except EmptyPage:
        page = p.page(1)
 
-    return render(request, 'applicant/jobview.html',{'jobs': page})
+   return render(request, 'applicant/jobview.html',{'jobs': page})
 
 # detailed view of jobs
 

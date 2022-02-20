@@ -10,11 +10,19 @@
     <div class="align"> 
         
         <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
-  
-        <div class="navbar-nav">
-            <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
-            <a class="custom-link " style="color: white;" href="{% url 'login' %}">Login</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+           <div class="align">
+            <div class="navbar-nav">
+                <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
+                <a class="custom-link " style="color: white;" href="{% url 'login' %}">Login</a>
+
+            </div> 
         </div>
+      </div>
     </div>
   </nav>
   <div class="row mx-5 ">

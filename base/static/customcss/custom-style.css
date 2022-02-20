@@ -45,7 +45,6 @@
    display: flex;
    justify-content: space-between;
    align-items: center;
-   margin-right: 3rem;
    margin-left: 3rem;
 }
 .job-card{
@@ -125,4 +124,25 @@
 .btn-round:hover{
     background-color: #e43c5c;
     color: white;
+}
+.navbar-nav{
+    display: flex;
+    align-items: center;
+}
+
+/* search bar  */
+
+.form-inline{
+    display: flex;
+    
+}
+
+.btn-outline-success{
+    border:2px solid #e43c5c;
+    color: white;
+    font-weight: bold;
+}
+.btn-outline-success:hover{
+    background-color: #e43c5c;
+    border:2px solid #e43c5c;
 }
