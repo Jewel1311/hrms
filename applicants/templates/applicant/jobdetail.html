@@ -7,26 +7,25 @@
 {% block body %}
  <!-- topbar -->
  <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;">
-    <div class="align"> 
         
         <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+          <span><i class="bi bi-list mobile-nav-toggle" style="color: white;"></i></span>
         </button>
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
            <div class="align">
             <div class="navbar-nav">
                 <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
-                <a class="custom-link " style="color: white;" href="{% url 'login' %}">Login</a>
-
+                <a class="custom-link" style="color: white;" href="{% url 'login' %}">Login</a>
             </div> 
         </div>
       </div>
-    </div>
   </nav>
-  <div class="row mx-5 ">
-    <h3 class="heading  pb-1 "> {{ job_id.job_title }}</h3>
+  <div class="row mx-5">
+    <div class="col-sm-12">
+    <h3 class=" heading pb-1 "> {{ job_id.job_title }}</h3>
+   </div>
   </div>
   <div class="row mx-5 mt-3">
         <div class="col-sm-9">
@@ -45,7 +44,7 @@
         </div>
     </div>
     <center>
-        <a href="#" class="custom-style-button">Apply Now </a>
+        <a href="{% url 'apply_now' job_id %}" class="custom-style-button mt-2 mb-2 ">Apply Now </a>
     </center>
     {% endblock body %}
 

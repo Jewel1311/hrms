@@ -6,34 +6,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    
      <!-- css  link-->
      <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     
-     <!-- js link -->
-     <link href="{% static 'bootstrap/js/bootstrap.min.js' %}" rel="stylesheet">
 
-     <!-- custom css link -->
-     <link href="{% static 'customcss/custom-style.css' %}" rel="stylesheet">
-     
      <!-- bootstrap icons  -->
      <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
 
+      <!-- custom css link -->
+     <link href="{% static 'customcss/custom-style.css' %}" rel="stylesheet">
 
-     <link rel = "icon" href = "{% static 'assets/img/logo.png' %}">
+      <!-- custom css link -->>
+
+      <link rel = "icon" href = "{% static 'assets/img/logo.png' %}">
           
 
-                {% block title %} {% endblock title %}
+        {% block title %} {% endblock title %}
       
          
 
         
 </head>
 <body>
-    
-
+        
         {% block body %}   {% endblock body %}
 
-    
-        
+
+     <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
+
+     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </body>
 </html>

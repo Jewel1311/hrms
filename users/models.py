@@ -98,6 +98,7 @@ class ApplicantProfile(models.Model):
     place=models.CharField(max_length=60)
     city=models.CharField(max_length=60)
     state=models.CharField(max_length=60)
+    last_apply = models.DateField(null=True)
 
     pin_regex = RegexValidator(regex=r'^\+?1?\d{6}$', message="Pin must be a 6 digit number")   
     pin = models.CharField(validators=[pin_regex], max_length=6) 

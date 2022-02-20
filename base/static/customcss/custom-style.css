@@ -66,6 +66,7 @@
 .custom-style-button:hover{
     background-color: #a50825;
     color:white;
+    text-decoration: none;
     transition: 0.3s ease;
 }
 
@@ -75,7 +76,11 @@
     margin-left: 3rem;
     
 }
+ a:hover{
+    text-decoration: none;
+}
 .custom-link::after{
+    text-decoration: none;
     display: block;
     content: '';
     border-bottom: solid 3px #e43c5c;  
@@ -83,18 +88,19 @@
     transition: transform 250ms ease-in-out;
 }
 .custom-link:hover:after { 
+    text-decoration: none;
     transform: scaleX(1); 
 }
 .heading{
     margin-top: 5rem;
-    display:inline-block;
+    display: inline-block;
     border-bottom: 4px solid #e43c5c;
 }
 
 
-.navbar-toggler-icon{
-    border-color: #a50825;
-}
+
+
+
 .line{
     width: 100%;
     border-bottom: 2px solid #b1bbc2;
