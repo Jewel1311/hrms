@@ -38,9 +38,13 @@ def jobs(request):
 
 def job_detail(request, job_id):
     job_id = Jobs.objects.get(id=job_id)
-    context = { 'job_id':job_id}
+    context = { 'job_id':job_id }
     return render(request,'applicant/jobdetail.html',context)
 
+@login_required
+def apply_confirmation(request,job_id):
+   job = Jobs.objects.get(id=job_id) 
+   return render(request, "applicant/apply_confirmation.html",{'job':job })
 
 @login_required
 def apply_now(request,job_id):
@@ -55,7 +59,6 @@ def apply_now(request,job_id):
       diff = diff.days                                   #convert the date field to days
    else:
       diff = 90
-   print(datetime.date.today())
 
    if diff >= 90:
       application.user = request.user

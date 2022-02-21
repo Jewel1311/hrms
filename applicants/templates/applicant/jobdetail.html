@@ -1,11 +1,58 @@
 {% extends "base/base.html" %}
 
-{% block title %}
-<title>Job-detail</title>
-{% endblock title %}
+   {% block title %}
+   <title>
+   {% if user.is_authenticated %}
+    
+         Applicant-Home
+   
+   {% else %}
+      
+         Job-detail
+   {% endif %}
+  </title>
+   {% endblock title %}
 
 {% block body %}
  <!-- topbar -->
+ <!-- if user is not logged in show this navbar -->
+ {% if user.is_authenticated %}
+
+ <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;"> 
+          
+    <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="bi bi-list mobile-nav-toggle" style="color: white;"></i></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+       <ul class="navbar-nav  ml-auto">
+          <li class="nav-item mr-5">
+                <div class="dropdown">
+                   <button class=" dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:none;border:none;color: white;">
+                      {{ user.first_name | title }}
+                   </button>
+                   <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuButton" style="box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
+                   <a class="dropdown-item" href="#">Action</a>
+                   <a class="dropdown-item" href="#">Another action</a>
+                   <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                   </div>
+                </div>
+          </li>
+          <li class="nav-item">
+             <form class="d-flex ml-auto" method="POST">
+                {% csrf_token %}
+                <input class="form-control mr-2" type="text" name="search_jobs" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+             </form>
+          </li>
+       </ul>
+</div>
+</nav>
+
+ <!-- if user is logged in show this navbar -->
+
+{% else %}
  <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;">
         
         <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
@@ -14,17 +61,23 @@
         </button>
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-           <div class="align">
+        
             <div class="navbar-nav">
                 <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
                 <a class="custom-link" style="color: white;" href="{% url 'login' %}">Login</a>
-            </div> 
+        
         </div>
       </div>
   </nav>
+
+{% endif %}
+
   <div class="row mx-5">
     <div class="col-sm-12">
-    <h3 class=" heading pb-1 "> {{ job_id.job_title }}</h3>
+
+       <!-- the | title will give first letter capital  -->
+
+    <h3 class=" heading pb-1 "> {{ job_id.job_title }}</h3>  
    </div>
   </div>
   <div class="row mx-5 mt-3">
@@ -44,7 +97,7 @@
         </div>
     </div>
     <center> 
-        <a href="{% url 'apply_now' job_id.id %}" class="custom-style-button mt-2 mb-2 ">Apply Now </a>
+        <a href="{% url 'apply_confirmation' job_id.id %}" class="custom-style-button mt-2 mb-2 ">Apply Now </a>
     </center>
     {% endblock body %}
 

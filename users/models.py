@@ -53,27 +53,27 @@ class Newuser(AbstractUser):
 
     # override the save method of Newuser
     
-    def save(self,*args, **kwargs):
-        super().save(False)                   # saves the current created user
-        if not self.is_superuser:
-            inst_check = ApplicantProfile.objects.filter(user=self.id).count()  # check whether a profile of current user exists
+    # def save(self,*args, **kwargs):
+    #     super().save(False)                   # saves the current created user
+    #     if not self.is_superuser:
+    #         inst_check = ApplicantProfile.objects.filter(user=self.id).count()  # check whether a profile of current user exists
 
 
-            if inst_check:                          
-                applicant_ins= ApplicantProfile.objects.get(user=self.id)    # if user exists take that existing instance(row)
+    #         if inst_check:                          
+    #             applicant_ins= ApplicantProfile.objects.get(user=self.id)    # if user exists take that existing instance(row)
 
-            else:     
-                applicant_ins = ApplicantProfile()    # else create an instance of Applciant Profile
+    #         else:     
+    #             applicant_ins = ApplicantProfile()    # else create an instance of Applciant Profile
 
-                applicant_ins.user = self             # connects the two tables ,primary key of the user table with foreign key 
-                                                    # of Applicnt profile(here 'user' is the forign key)
+    #             applicant_ins.user = self             # connects the two tables ,primary key of the user table with foreign key 
+    #                                                 # of Applicnt profile(here 'user' is the forign key)
 
-            applicant_ins.first_name=self.first_name      #insert the values
-            applicant_ins.middle_name=self.middle_name   
-            applicant_ins.last_name=self.last_name
-            applicant_ins.save()                           #save the Applicant Profile instance
+    #         applicant_ins.first_name=self.first_name      #insert the values
+    #         applicant_ins.middle_name=self.middle_name   
+    #         applicant_ins.last_name=self.last_name
+    #         applicant_ins.save()                           #save the Applicant Profile instance
 
-        super().save(*args, **kwargs)                  # save the user
+    #     super().save(*args, **kwargs)                  # save the user
     
 
 

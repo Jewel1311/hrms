@@ -34,18 +34,9 @@ def register(request):
 def filterlogin(request):
 
     if request.user.is_applicant:  #checking if the login user is an applicant
-
-        uid=request.user.id                               #get the primary key of currently login user
-
-        # to take the profile associated with user using the primary key and  phone number not set  
-        
-        profile=ApplicantProfile.objects.filter(user=uid).filter(phone='').count()
-
-        if profile:
-           return render(request, 'applicant/fillprofile.html') #go to fill details page
-
-        else:
-           return render(request, 'applicant/applicant-home.html')  #go to user home page
+        return redirect('jobs')
+ 
+       
 
     elif request.user.is_employee:
         return render(request, 'users/employee.html')

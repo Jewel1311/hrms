@@ -40,13 +40,6 @@
 
 /* jobs style */
 
-.align{
-   width: 100%;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   margin-left: 3rem;
-}
 .job-card{
     width: 100%;
     display: flex;
@@ -60,7 +53,7 @@
     text-decoration: none;
     color: white;
     font-weight: bold;
-    padding:.375rem 0.75rem;
+    padding:0.375rem 0.75rem;
     border-radius: 0.2rem;
 }
 .custom-style-button:hover{
@@ -151,4 +144,7 @@
 .btn-outline-success:hover{
     background-color: #e43c5c;
     border:2px solid #e43c5c;
+}
+.dropdown-toggle:focus{
+    outline: none;
 }
