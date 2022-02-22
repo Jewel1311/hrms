@@ -14,11 +14,15 @@
         </button>
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+         <div class="navbar-nav">
+            <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
+            <a class="custom-link" style="color: white;" href="{% url 'login' %}">Login</a>
+         </div>
            <ul class="navbar-nav  ml-auto">
               <li class="nav-item mr-5">
                     <div class="dropdown">
                        <button class=" dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:none;border:none;color: white;">
-                          {{ user.first_name | title }}
+                        {{ user.first_name | title }} {{ user.middle_name | title }} {{ user.last_name | title }}
                        </button>
                        <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuButton" style="box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
                        <a class="dropdown-item" href="#">Action</a>
@@ -27,13 +31,7 @@
                        </div>
                     </div>
               </li>
-              <li class="nav-item">
-                 <form class="d-flex ml-auto" method="POST">
-                    {% csrf_token %}
-                    <input class="form-control mr-2" type="text" name="search_jobs" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                 </form>
-              </li>
+              
            </ul>
     </div>
     </nav>

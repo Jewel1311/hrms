@@ -6,19 +6,26 @@
    {% endblock title %}
 
     {% block body %}
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;">
+        
+        <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
+
+    </nav>
     <center>
-        <div class="box">
-            <h2>Regsitration</h2>
-            <div class="form-group">
+        <div class="box-1 mb-5" style="margin-top:5rem;">
+            <div class="mb-3">
+               <h2>Regsitration</h2>
+            </div>
+            <div class="form-style mt2">
                 <form method="POST">
 
                     {% csrf_token %}
                     {{ reg_form | crispy }}
 
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="custom-style-button mt-2" style="width: 100%;">Register</button>
                 </form>
             </div>
         </div>
-    
+    </center>
     {% endblock body %}
 

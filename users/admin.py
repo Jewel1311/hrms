@@ -30,18 +30,7 @@ class UserAdminConfig(UserAdmin):
     ]
 
 
-
-# table heading view of Applicant Profile 
-class Applicantadmin(admin.ModelAdmin):
-    list_display=('first_name','middle_name','last_name','phone')
-    list_filter=('first_name','middle_name','last_name','phone')
-    ordering=['first_name']
-
-
-
- 
-
 admin.site.register(Newuser, UserAdminConfig)
-admin.site.register(ApplicantProfile,Applicantadmin)
+admin.site.register(ApplicantProfile)
 
 

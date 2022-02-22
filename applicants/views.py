@@ -1,4 +1,4 @@
-import datetime
+import datetime 
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -41,6 +41,8 @@ def job_detail(request, job_id):
     context = { 'job_id':job_id }
     return render(request,'applicant/jobdetail.html',context)
 
+
+
 @login_required
 def apply_confirmation(request,job_id):
    job = Jobs.objects.get(id=job_id) 
@@ -71,3 +73,24 @@ def apply_now(request,job_id):
        messages.success(request, f'No results found')
        return render(request, 'applicant/jobview.html')
 
+@login_required
+def save_applicant_profile(request):
+   if request.method == "POST":
+      addressline1 = request.POST['addressline1']
+      place = request.POST['place']
+      city = request.POST['city']
+      state = request.POST['state']
+      mobile = request.POST['mobile']
+      pin = request.POST['pin']
+      dob = request.POST['dob']
+      cv = request.POST['cv']
+
+      if len(mobile)!=10:
+         messages.warning(request, f'Phone number must be 10 digits')
+         return render(request, 'applicant/fillprofile.html')
+      elif len(pin) != 6:
+         messages.warning(request, f'Postcode must be 6 digits')
+         return render(request, 'applicant/fillprofile.html')
+
+      else:
+         return render(request, 'applicant/fillprofile.html')

@@ -6,26 +6,41 @@
    {% endblock title %}
 
     {% block body %}
-    <center>
+   
+        <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;">
+        
+            <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
+
+        </nav>
+        <center>
+        <div class="box-1" style="margin-top:5rem;">
             {% if messages %}
                 {% for message in messages %}
                    <div class="alert alert-success">{{message}}</div>
                 {% endfor%}
             {% endif %}
-            <h2>Login</h2>
-            <div class="form-group">
+            <div class="mb-3">
+                <h2 >Login</h2>
+            </div> 
+            <div class="form-style mt-2">
                 <form method="POST">
 
                     {% csrf_token %}
                     {{ form | crispy }}
 
-                <button type="submit" class="btn btn-primary mt-2">Login</button>
+                <button type="submit" class="custom-style-button mt-2" style="width: 100%;">Login</button>
                 </form>
-                <small class="text-muted">
-                    <a href="{% url 'password_reset' %}">Fortgot Password</a>
-                </small>
+               
+                <div class="text-muted mt-2">
+                    Not registered?
+                    <a href="{% url 'register' %}">Register</a>
+                </div>
+                <div class="text-muted mt-2">
+                    <a href="{% url 'password_reset' %}">Fortgot Password?</a>
+                </div>
 
+            </div>
         </div>
-    
+    </center>
     {% endblock body %}
 

@@ -3,6 +3,7 @@ from django.forms import  ValidationError
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
+from django.core.validators import FileExtensionValidator
 
 
 #custom manager Newuser
@@ -90,11 +91,9 @@ class ApplicantProfile(models.Model):
         ('O', 'Others'),
     )
     user=models.OneToOneField(Newuser,unique=True,on_delete=models.CASCADE)
-    first_name=models.CharField(max_length=60)
-    middle_name=models.CharField(max_length=30,blank=True,default='')
-    last_name=models.CharField(max_length=60)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     dob=models.DateField(null=True)
+    addressline1 = models.CharField(max_length= 60,default='')
     place=models.CharField(max_length=60)
     city=models.CharField(max_length=60)
     state=models.CharField(max_length=60)
@@ -106,7 +105,7 @@ class ApplicantProfile(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{10}$', message="Phone number must be a 10 digit number.")
     phone = models.CharField(validators=[phone_regex], max_length=10) 
 
-    cv=models.FileField()
+    cv=models.FileField( validators=[FileExtensionValidator( ['pdf'] ) ])
     
     
     
