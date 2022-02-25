@@ -1,48 +1,76 @@
 {% extends "base/base.html" %}
-
-
+{% load static %}
    {% block title %}
     <title>Applicant-Profile</title>
    {% endblock title %}
 
     {% block body %}
 
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;">
-        
-      <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
-
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;"> 
+          
+        <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span><i class="bi bi-list mobile-nav-toggle" style="color: white;"></i></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <div class="navbar-nav">
+             <a class="custom-link" style="color: white;" href="{% url 'login' %}">Home</a>
+             <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
+             <a class="custom-link" style="color: white;" href="{% url 'login' %}">Login</a>
+          </div>
+           <ul class="navbar-nav  ml-auto">
+              <li class="nav-item mr-5">
+                    <div class="dropdown">
+                       <button class=" dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:none;border:none;color: white;">
+                         {{ user.first_name | title }} {{ user.middle_name | title }} {{ user.last_name | title }}
+                       </button>
+                       <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuButton" style="box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
+                       <a class="dropdown-item" href="{% url 'view_applicant_profile' %}">Profile</a>
+                       <a class="dropdown-item" href="#">Another action</a>
+                       <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                       </div>
+                    </div>
+              </li>
+           </ul>
+    </div>
     </nav>
 
         <div class="container mb-4" style="width: 50%;margin-top: 5rem;">
             <h2>Your Profile</h2> 
                 <div class="box-1 mt-3" style="display:block;">
-              
-                        {% csrf_token %}
-                        <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="" name="addressline1" required></div>
-                        <div class="col-md-12"><label class="labels">Place</label><input type="text" class="form-control"  placeholder="" name="place" required></div>
-                        <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control"  placeholder="" name="city" required></div>
-                        <div class="col-md-12"><label class="labels">State</label><input type="text" class="form-control" placeholder="" name="state" required></div>
-                        <div class="col-md-12"><label class="labels">Mobile Number</label><input type="number" class="form-control" placeholder="" name="mobile"  required></div>
-                        <div class="col-md-12"><label class="labels">Date of Birth</label><input type="date" class="form-control" placeholder="" name="dob" required></div>
-                        <div class="col-md-12"><label class="labels">Postcode</label><input type="number" class="form-control" placeholder="" name="pin"  required></div>
-                        <label class="col-md-12 labels">Gender</label>
-                        <div class="row ml-2 mt-3 mb-3">
-                            <div class="col-md-4">
-                              <input type="radio"   placeholder="" name="gender" value="m" required>
-                              <label class="labels">Male</label>
+                     <div class="row">
+                        <div class="col-md-4" style="border-right: 1px solid black;display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                           <div>
+                            <img src="{% static 'images/applicant.png' %}" width="120px" height="120px">
+                            <div class="mt-2"><b>{{ applicant.user.first_name | title}} {{ applicant.user.middle_name | title}}
+                                {{ applicant.user.last_name | title}} </b></div>
                             </div>
-                            <div class="col-md-4">
-                                <input type="radio"  placeholder="" name="gender" value="f" required>
-                                <label class="labels">Female</label>
-                            </div>
-                            <div class="col-md-4">
-                                <input type="radio"   placeholder="" name="gender" value="o" required>
-                                <label class="labels">Others</label>
-                              </div>
                         </div>
 
-                        <div class="col-md-12"><label class="labels">Cv</label><p>File must be a pdf with size less than 2 mb</p><input type="file" class="form-control" placeholder="" name="cv" accept="application/pdf"  required></div>
+                           <div class="col-md-8">
+                                <div class="row">
+                                <div class="ml-auto"><a href="{% url 'save_applicant_profile' %}">Edit Profile</a></div>
+                                </div>
+                
+                                    <div class="col-md-12">{{ applicant.addressline1 }}</div>
+                                    <div class="col-md-12">{{ applicant.place }}</div>
+                                    <div class="col-md-12">{{ applicant.city }},{{ applicant.state }}</div>
+                                    <div class="col-md-12">{{ applicant.pin }}</div>
+                                    <div class="col-md-12"><b>Date of Birth : </b>{{ applicant.dob }}</div>
+                                    <div class="col-md-12 mt-2"><b>Mobile : </b>{{ applicant.phone }}</div>
+                                    {% if applicant.gender == 'm' %}
+                                      <div class="col-md-12 mt-2"><b>Gender : </b>Male</div>
+                                    {% elif applicant.gender == 'f' %}
+                                       <div class="col-md-12 mt-2"><b>Gender : </b>Female</div>
+                                    {% elif applicant.gender == 'o' %}
+                                       <div class="col-md-12 mt-2"><b>Gender : </b>Others</div>
+                                    {% endif %}
+                                    <div class="col-md-12 mt-2"><b>CV : </b><a href= "/media/{{ applicant.cv }} ">{{ applicant.cv }}</a></div>
+                                </div>    
+                            
                 </div>
+            </div>
         </div>
 
     {% endblock body %}

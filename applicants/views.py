@@ -1,4 +1,5 @@
 import datetime
+from distutils.log import log
 from urllib.request import Request 
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -13,28 +14,28 @@ from users.models import ApplicantProfile
 # list view of jobs 
 
 def jobs(request):
-   today = datetime.date.today()
-   jobs = Jobs.objects.filter(withdraw_date__gte=today).order_by('-posted_on')
-   if request.method == "POST":
-        value = request.POST['search_jobs']
-        print(value)
-        jobs = Jobs.objects.filter(Q (job_title__icontains=value) | Q(location__icontains = value)).filter(withdraw_date__gte=today).order_by('-posted_on')
-   count = jobs.count()
-   
-   if count == 0:
-       messages.success(request, f'No results found')
-       return render(request, 'applicant/jobview.html')
+         today = datetime.date.today()
+         jobs = Jobs.objects.filter(withdraw_date__gte=today).order_by('-posted_on')
+         if request.method == "POST":
+            value = request.POST['search_jobs']
+            print(value)
+            jobs = Jobs.objects.filter(Q (job_title__icontains=value) | Q(location__icontains = value)).filter(withdraw_date__gte=today).order_by('-posted_on')
+         count = jobs.count()
+         
+         if count == 0:
+            messages.success(request, f'No results found')
+            return render(request, 'applicant/jobview.html')
 
-   else:
+         else:
+            
+            p = Paginator(jobs,5)  # second argument is no of items to be displayed
+            page_num = request.GET.get('page',1 ) #get the page no by url  and 1 is default
+            try:
+               page = p.page(page_num)
+            except EmptyPage:
+               page = p.page(1)
+            return render(request, 'applicant/jobview.html',{'jobs': page})
       
-       p = Paginator(jobs,5)  # second argument is no of items to be displayed
-       page_num = request.GET.get('page',1 ) #get the page no by url  and 1 is default
-       try:
-          page = p.page(page_num)
-       except EmptyPage:
-          page = p.page(1)
-       return render(request, 'applicant/jobview.html',{'jobs': page})
-   
 
 # detailed view of jobs
 
@@ -47,36 +48,45 @@ def job_detail(request, job_id):
 
 @login_required
 def apply_confirmation(request,job_id):
-   job = Jobs.objects.get(id=job_id) 
-   return render(request, "applicant/apply_confirmation.html",{'job':job })
+   profile = ApplicantProfile.objects.filter(user=request.user)
+   if profile:
+         job = Jobs.objects.get(id=job_id) 
+         return render(request, "applicant/apply_confirmation.html",{'job':job })
+   else:
+         return redirect('filterlogin')
 
 @login_required
 def apply_now(request,job_id):
-   application = Applications()
-   job = Jobs.objects.get(pk=job_id)  #select the Jobs instance using job id 
-   profile = ApplicantProfile.objects.get(user=request.user) #select the appliant profile for setting last applied
+   
+         application = Applications()
+         job = Jobs.objects.get(pk=job_id)  #select the Jobs instance using job id 
+         profile = ApplicantProfile.objects.get(user=request.user) #select the appliant profile for setting last applied
 
 
-  # this checks last job apply of the user
-   if profile.last_apply is not None:
-      diff = datetime.date.today() - profile.last_apply 
-      diff = diff.days                                   #convert the date field to days
-   else:
-      diff = 90
+      # this checks last job apply of the user
+         if profile.last_apply is not None:
+            diff = datetime.date.today() - profile.last_apply 
+            diff = diff.days                                   #convert the date field to days
+         else:
+            diff = 90
 
-   if diff >= 90:
-      application.user = request.user
-      application.job = job   #save the foreign key using the selected instance
-      application.save()
-      profile.last_apply = datetime.date.today()  #changes the last apply date to current date in applicant profile
-      profile.save()
-      return render(request, 'applicant/applicant-home.html')
-   else:
-       messages.success(request, f'No results found')
-       return render(request, 'applicant/jobview.html')
+         if diff >= 90:
+            application.user = request.user
+            application.job = job   #save the foreign key using the selected instance
+            application.save()
+            profile.last_apply = datetime.date.today()  #changes the last apply date to current date in applicant profile
+            profile.save()
+            return render(request, 'applicant/applicant-home.html')
+         else:
+            messages.success(request, f'No results found')
+            return render(request, 'applicant/jobview.html')
+
 
 @login_required
 def save_applicant_profile(request):
+   profile = ApplicantProfile.objects.filter(user = request.user).count()
+   if profile:
+         applicant = ApplicantProfile.objects.get(user = request.user)
    if request.method == "POST":
       addressline1 = request.POST['addressline1']
       place = request.POST['place']
@@ -85,19 +95,31 @@ def save_applicant_profile(request):
       mobile = request.POST['mobile']
       pin = request.POST['pin']
       dob = request.POST['dob']
-      cv = request.FILES['cv']
-   
+      gender = request.POST['gender']
       
       if len(mobile)!=10:
          messages.warning(request, f'Phone number must be 10 digits')
-         return render(request, 'applicant/fillprofile.html')
+         if profile:
+            return render(request, "applicant/fillprofile.html",{'applicant':applicant})
+         else:
+            return render(request, 'applicant/fillprofile.html')
       elif len(pin) != 6:
          messages.warning(request, f'Postcode must be 6 digits')
-         return render(request, 'applicant/fillprofile.html')
-      elif cv.size > 2000000:
+         if profile:
+            return render(request, "applicant/fillprofile.html",{'applicant':applicant})
+         else:
+            return render(request, 'applicant/fillprofile.html')
+      elif request.FILES:
+        cv = request.FILES['cv']
+        if cv.size > 2000000:
          messages.warning(request, f'File size should be less than 2 mb')
-         return render(request, 'applicant/fillprofile.html')
+         if profile:
+            return render(request, "applicant/fillprofile.html",{'applicant':applicant})
+         else:
+            return render(request, 'applicant/fillprofile.html')
+
       else:
+         
          applicant = ApplicantProfile.objects.filter(user = request.user).count()
          if applicant:
             applicant = ApplicantProfile.objects.get(user = request.user)
@@ -112,10 +134,24 @@ def save_applicant_profile(request):
          applicant.phone = mobile
          applicant.pin = pin
          applicant.dob = dob
-         applicant.cv = cv
+         applicant.gender = gender
+         if request.FILES:
+           applicant.cv = cv
          applicant.save()
          return redirect('filterlogin')
    else: 
-      return render(request, 'applicant/fillprofile.html')
+      if profile:
+         return render(request, "applicant/fillprofile.html",{'applicant':applicant})
+      else:
+         return render(request, 'applicant/fillprofile.html')
       
-  
+@login_required 
+def view_applicant_profile(request):
+   profile = ApplicantProfile.objects.filter(user = request.user).count()
+   if profile:
+      applicant = ApplicantProfile.objects.get(user = request.user)
+      return render(request, "applicant/viewprofile.html",{'applicant':applicant})
+   else:    
+      return redirect('filterlogin')
+
+

@@ -33,7 +33,7 @@
                               {{ user.first_name | title }} {{ user.middle_name | title }} {{ user.last_name | title }} 
                           </button>
                           <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuButton" style="box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
-                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="{% url 'view_applicant_profile' %}">Profile</a>
                           <a class="dropdown-item" href="#">Another action</a>
                           <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                           </div>

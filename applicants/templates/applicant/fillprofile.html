@@ -7,11 +7,19 @@
 
     {% block body %}
 
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;">
-        
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;"> 
+          
       <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
-
-    </nav>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="bi bi-list mobile-nav-toggle" style="color: white;"></i></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav ml-auto mr-4">
+           <a class="custom-link" style="color: white;" href="{% url 'logout' %}">Logout</a>
+        </div>
+  </div>
+  </nav>
 
         <div class="container mb-4" style="width: 50%;margin-top: 5rem;">
             <h2>Your Profile</h2> 
@@ -23,30 +31,35 @@
               {% endif %}
                   <form action="" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="" name="addressline1" required></div>
-                        <div class="col-md-12"><label class="labels">Place</label><input type="text" class="form-control"  placeholder="" name="place" required></div>
-                        <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control"  placeholder="" name="city" required></div>
-                        <div class="col-md-12"><label class="labels">State</label><input type="text" class="form-control" placeholder="" name="state" required></div>
-                        <div class="col-md-12"><label class="labels">Mobile Number</label><input type="number" class="form-control" placeholder="" name="mobile"  required></div>
-                        <div class="col-md-12"><label class="labels">Date of Birth</label><input type="date" class="form-control" placeholder="" name="dob" required></div>
-                        <div class="col-md-12"><label class="labels">Postcode</label><input type="number" class="form-control" placeholder="" name="pin"  required></div>
+                        <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="" name="addressline1" {% if applicant %} value="{{ applicant.addressline1 }} " {% endif %} required ></div>
+                        <div class="col-md-12"><label class="labels">Place</label><input type="text" class="form-control"  placeholder="" name="place" {% if applicant %} value="{{ applicant.place }} " {% endif %} required></div>
+                        <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control"  placeholder="" name="city" {% if applicant %} value="{{ applicant.city }} " {% endif %} required></div>
+                        <div class="col-md-12"><label class="labels">State</label><input type="text" class="form-control" placeholder="" name="state" {% if applicant %} value="{{ applicant.state }} " {% endif %} required></div>
+
+                        <div class="col-md-12"><label class="labels">Mobile Number</label><input type="number" class="form-control" placeholder="" name="mobile" {% if applicant %} value="{{ applicant.phone }}" {% endif %} required></div>
+          
+                        <div class="col-md-12"><label class="labels">Date of Birth</label><input type="date" class="form-control" placeholder="" name="dob" {% if applicant %} value='{{ applicant.dob|date:"Y-m-d" }}' {% endif %} required></div>
+                        <div class="col-md-12"><label class="labels">Postcode</label><input type="number" class="form-control" placeholder="" name="pin" {% if applicant %} value="{{ applicant.pin }}" {% endif %} required></div>
                         <label class="col-md-12 labels">Gender</label>
                         <div class="row ml-2 mt-3 mb-3">
                             <div class="col-md-4">
-                              <input type="radio"   placeholder="" name="gender" value="m" required>
+                              <input type="radio"   placeholder="" name="gender" value="m" {% if applicant.gender == 'm' %} checked {% endif %} required >
                               <label class="labels">Male</label>
                             </div>
                             <div class="col-md-4">
-                                <input type="radio"  placeholder="" name="gender" value="f" required>
+                                <input type="radio"  placeholder="" name="gender" value="f" {% if applicant.gender == 'f' %} checked {% endif %} required>
                                 <label class="labels">Female</label>
                             </div>
                             <div class="col-md-4">
-                                <input type="radio"   placeholder="" name="gender" value="o" required>
+                                <input type="radio"   placeholder="" name="gender" value="o" {% if applicant.gender == 'o' %} checked {% endif %} required>
                                 <label class="labels">Others</label>
                               </div>
                         </div>
 
-                        <div class="col-md-12"><label class="labels">Cv</label><p>File must be a pdf with size less than 2 mb</p><input type="file" class="form-control" placeholder="" name="cv" accept="application/pdf"  required></div>
+                        <div class="col-md-12"><label class="labels">CV</label><p>File must be a pdf with size less than 2 mb</p>
+                          {% if applicant %} Current file : <a href= "/media/{{ applicant.cv }} ">{{ applicant.cv }}</a> {% endif %}
+                          <input type="file" class="form-control" placeholder="" name="cv" accept="application/pdf" {% if not applicant %}required {% endif %}>
+                        </div>
 
                         <center><button type="submit" class="custom-style-button mt-3">Save Profile</button></center>
                       </form>
