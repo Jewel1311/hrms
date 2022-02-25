@@ -1,4 +1,5 @@
-import datetime 
+import datetime
+from urllib.request import Request 
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -7,6 +8,7 @@ from django.contrib import messages
 from applicants.models import Applications
 from base.models import Jobs
 from users.models import ApplicantProfile
+
 
 # list view of jobs 
 
@@ -83,14 +85,37 @@ def save_applicant_profile(request):
       mobile = request.POST['mobile']
       pin = request.POST['pin']
       dob = request.POST['dob']
-      cv = request.POST['cv']
-
+      cv = request.FILES['cv']
+   
+      
       if len(mobile)!=10:
          messages.warning(request, f'Phone number must be 10 digits')
          return render(request, 'applicant/fillprofile.html')
       elif len(pin) != 6:
          messages.warning(request, f'Postcode must be 6 digits')
          return render(request, 'applicant/fillprofile.html')
-
-      else:
+      elif cv.size > 2000000:
+         messages.warning(request, f'File size should be less than 2 mb')
          return render(request, 'applicant/fillprofile.html')
+      else:
+         applicant = ApplicantProfile.objects.filter(user = request.user).count()
+         if applicant:
+            applicant = ApplicantProfile.objects.get(user = request.user)
+         else:
+            applicant = ApplicantProfile()
+            applicant.user = request.user
+
+         applicant.addressline1 = addressline1
+         applicant.place = place
+         applicant.city = city
+         applicant.state = state
+         applicant.phone = mobile
+         applicant.pin = pin
+         applicant.dob = dob
+         applicant.cv = cv
+         applicant.save()
+         return redirect('filterlogin')
+   else: 
+      return render(request, 'applicant/fillprofile.html')
+      
+  

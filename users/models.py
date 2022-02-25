@@ -3,7 +3,7 @@ from django.forms import  ValidationError
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
-from django.core.validators import FileExtensionValidator
+
 
 
 #custom manager Newuser
@@ -105,7 +105,7 @@ class ApplicantProfile(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{10}$', message="Phone number must be a 10 digit number.")
     phone = models.CharField(validators=[phone_regex], max_length=10) 
 
-    cv=models.FileField( validators=[FileExtensionValidator( ['pdf'] ) ])
+    cv=models.FileField()
     
     
     

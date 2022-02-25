@@ -1,10 +1,7 @@
-
-from dataclasses import fields
-from email.policy import default
-from tkinter import Widget
 from django import forms
-from .models import Newuser,ApplicantProfile
+from .models import Newuser
 from django.contrib.auth.forms import UserCreationForm
+
 
 
 
@@ -17,7 +14,4 @@ class UserRegistrationForm(UserCreationForm):
         model = Newuser
         fields = [ 'first_name','middle_name','last_name','email' ]
 
-class Cv(forms.ModelForm):
-    class Meta:
-        model = ApplicantProfile
-        fields = ['cv']
+

@@ -1,9 +1,8 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .models import ApplicantProfile, Newuser
+from .models import ApplicantProfile
 from .forms import UserRegistrationForm
 from django.contrib import messages
-from .forms import Cv
 
 
 
@@ -35,13 +34,11 @@ def register(request):
 def filterlogin(request):
 
     if request.user.is_applicant:  #checking if the login user is an applicant
-        cv = Cv()
         profile = ApplicantProfile.objects.filter(user=request.user)
         if profile:
            return redirect('jobs')
-        else: 
-           return render(request, "applicant/fillprofile.html",{'cv':cv})
- 
+        else:
+           return redirect('save_applicant_profile')
        
 
     elif request.user.is_employee:
