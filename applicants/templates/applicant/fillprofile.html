@@ -26,7 +26,7 @@
                 <div class="box-1 mt-3" style="display:block;">
                   {% if messages %}
                   {% for message in messages %}
-                     <div class="alert alert-danger">{{message}}</div>
+                     <div class="alert alert-{{message.tags}}">{{message}}</div>
                   {% endfor%}
               {% endif %}
                   <form action="" method="POST" enctype="multipart/form-data">

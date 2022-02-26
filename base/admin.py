@@ -1,6 +1,6 @@
 from tabnanny import verbose
 from django.contrib import admin
-from .models import Department, Jobs   
+from .models import Department, Jobs
 
 
 class JobsAdmin(admin.ModelAdmin):

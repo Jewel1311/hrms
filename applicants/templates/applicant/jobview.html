@@ -26,6 +26,13 @@
             </button>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <div class="navbar-nav">
+                  <a class="custom-link active" style="color: white;" href="{% url 'jobs' %}">Home</a>
+                  <a class="custom-link" style="color: white;" href="{% url 'applied' %}">Your Applications</a>
+                  <a class="custom-link" style="color: white;" href="{% url 'interviews' %}">Interviews</a>
+                </div>
+
               <ul class="navbar-nav  ml-auto">
                   <li class="nav-item mr-5">
                         <div class="dropdown">
@@ -34,7 +41,6 @@
                           </button>
                           <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuButton" style="box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
                           <a class="dropdown-item" href="{% url 'view_applicant_profile' %}">Profile</a>
-                          <a class="dropdown-item" href="#">Another action</a>
                           <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                           </div>
                         </div>
@@ -76,13 +82,13 @@
          
       <center><h3 class="heading  pb-1 "> Job Offerings</h3></center>
       <center>
+        {% if messages %}
           {% for message in messages %}
-          {% if message %}
-          <div class="mt-2">
+          <div class="alert alert-{{message.tags}} mt-2">
               {{ message }}
           </div>
-          {% endif %}
           {% endfor %}
+          {% endif %}
         </center>
       <!-- card -->
       {% for job in jobs %}

@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator,EmptyPage
 from django.contrib import messages
-from applicants.models import Applications
+from applicants.models import Applications, Interviews
 from base.models import Jobs
 from users.models import ApplicantProfile
 
@@ -76,10 +76,12 @@ def apply_now(request,job_id):
             application.save()
             profile.last_apply = datetime.date.today()  #changes the last apply date to current date in applicant profile
             profile.save()
-            return render(request, 'applicant/applicant-home.html')
+            applied = Applications.objects.filter(user=request.user).order_by('-applied_date')
+            messages.success(request, f'Your application has been submitted successfully')
+            return render(request, 'applicant/applied.html',{'applied':applied})
          else:
-            messages.success(request, f'No results found')
-            return render(request, 'applicant/jobview.html')
+            messages.warning(request, f'You can only apply for a new profile after {90-diff} days')
+            return redirect('jobs')
 
 
 @login_required
@@ -155,3 +157,21 @@ def view_applicant_profile(request):
       return redirect('filterlogin')
 
 
+@login_required
+def applied(request):
+   applied = Applications.objects.filter(user=request.user).order_by('-applied_date')
+   if applied:
+      return render(request, "applicant/applied.html",{'applied':applied})
+   else:
+      messages.warning(request, f"You haven't applied for any jobs")
+      return render(request, "applicant/applied.html")
+
+@login_required
+def interviews(request):
+   applications = Applications.objects.filter(user = request.user)
+   interviews = Interviews.objects.filter()
+   context = {
+      'applications':applications,
+      'interviews':interviews
+   }
+   return render(request, "applicant/interviews.html",context)

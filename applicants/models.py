@@ -1,6 +1,6 @@
 from operator import mod
 from django.db import models
-from base.models import Jobs
+from base.models import Department, Jobs
 from users.models import Newuser
 
 class Applications(models.Model):
@@ -9,4 +9,11 @@ class Applications(models.Model):
     user = models.ForeignKey(Newuser,on_delete=models.CASCADE )
     job = models.ForeignKey(Jobs, on_delete=models.CASCADE)
 
+
+class Interviews(models.Model):
+    interview_date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    job = models.ForeignKey(Jobs, on_delete=models.CASCADE) 
     

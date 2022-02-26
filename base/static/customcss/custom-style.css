@@ -85,6 +85,20 @@
     text-decoration: none;
     transform: scaleX(1); 
 }
+.custom-link.active::after{
+    text-decoration: none;
+    display: block;
+    content: '';
+    border-bottom: solid 3px #e43c5c;  
+    transform: scaleX(0);  
+    transition: transform 250ms ease-in-out;
+}
+.custom-link.active::after { 
+    text-decoration: none;
+    transform: scaleX(1); 
+}
+
+
 .heading{
     margin-top: 5rem;
     display: inline-block;

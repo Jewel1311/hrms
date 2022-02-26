@@ -15,8 +15,9 @@
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
          <div class="navbar-nav">
-            <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
-            <a class="custom-link" style="color: white;" href="{% url 'login' %}">Login</a>
+            <a class="custom-link" style="color: white;" href="{% url 'jobs' %}">Home</a>
+            <a class="custom-link" style="color: white;" href="{% url 'applied' %}">Your Applications</a>
+            <a class="custom-link" style="color: white;" href="{% url 'interviews' %}">Interviews</a>
          </div>
            <ul class="navbar-nav  ml-auto">
               <li class="nav-item mr-5">
@@ -44,7 +45,7 @@
             <div class="card-body">
               <h5 class="card-title">Apply Confirmation</h5>
               <p class="card-text">Are you sure you want to apply for the profile <b>{{job.job_title }}</b>?</p>
-              <a href="{% url 'apply_now' job.id %}" class="btn btn-success">Yes </a>
+              <a href="{% url 'apply_now' job.id  %}" class="btn btn-success">Yes </a>
               <a href="{% url 'job-detail' job.id %}" class="btn btn-danger ml-2">No </a>
             </div>
           </div>
