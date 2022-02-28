@@ -18,7 +18,6 @@ def jobs(request):
          jobs = Jobs.objects.filter(withdraw_date__gte=today).order_by('-posted_on')
          if request.method == "POST":
             value = request.POST['search_jobs']
-            print(value)
             jobs = Jobs.objects.filter(Q (job_title__icontains=value) | Q(location__icontains = value)).filter(withdraw_date__gte=today).order_by('-posted_on')
          count = jobs.count()
          
@@ -86,63 +85,59 @@ def apply_now(request,job_id):
 
 @login_required
 def save_applicant_profile(request):
-   profile = ApplicantProfile.objects.filter(user = request.user).count()
+   profile = ApplicantProfile.objects.filter(user = request.user).count() #check if profile for user exists or not
    if profile:
-         applicant = ApplicantProfile.objects.get(user = request.user)
+      applicant = ApplicantProfile.objects.get(user = request.user)
    if request.method == "POST":
-      addressline1 = request.POST['addressline1']
-      place = request.POST['place']
-      city = request.POST['city']
-      state = request.POST['state']
-      mobile = request.POST['mobile']
-      pin = request.POST['pin']
-      dob = request.POST['dob']
-      gender = request.POST['gender']
-      
-      if len(mobile)!=10:
-         messages.warning(request, f'Phone number must be 10 digits')
-         if profile:
-            return render(request, "applicant/fillprofile.html",{'applicant':applicant})
-         else:
-            return render(request, 'applicant/fillprofile.html')
-      elif len(pin) != 6:
-         messages.warning(request, f'Postcode must be 6 digits')
-         if profile:
-            return render(request, "applicant/fillprofile.html",{'applicant':applicant})
-         else:
-            return render(request, 'applicant/fillprofile.html')
-      elif request.FILES:
-        cv = request.FILES['cv']
-        if cv.size > 2000000:
-         messages.warning(request, f'File size should be less than 2 mb')
-         if profile:
-            return render(request, "applicant/fillprofile.html",{'applicant':applicant})
-         else:
-            return render(request, 'applicant/fillprofile.html')
-
-      else:
-         
-         applicant = ApplicantProfile.objects.filter(user = request.user).count()
-         if applicant:
-            applicant = ApplicantProfile.objects.get(user = request.user)
-         else:
-            applicant = ApplicantProfile()
-            applicant.user = request.user
-
-         applicant.addressline1 = addressline1
-         applicant.place = place
-         applicant.city = city
-         applicant.state = state
-         applicant.phone = mobile
-         applicant.pin = pin
-         applicant.dob = dob
-         applicant.gender = gender
+         addressline1 = request.POST['addressline1']
+         place = request.POST['place']
+         city = request.POST['city']
+         state = request.POST['state']
+         mobile = request.POST['mobile']
+         pin = request.POST['pin']
+         dob = request.POST['dob']
+         gender = request.POST['gender']
          if request.FILES:
-           applicant.cv = cv
-         applicant.save()
-         return redirect('filterlogin')
+            cv = request.FILES['cv']
+            if cv.size > 2000000:
+               messages.warning(request, f'File size should be less than 2 mb')
+               if profile:
+                 return render(request, "applicant/fillprofile.html",{'applicant':applicant})
+               else:
+                 return render(request, 'applicant/fillprofile.html')
+
+         if len(mobile)!=10:
+            messages.warning(request, f'Phone number must be 10 digits')
+            if profile:
+               return render(request, "applicant/fillprofile.html",{'applicant':applicant})
+            else:
+               return render(request, 'applicant/fillprofile.html')
+         elif len(pin) != 6:
+            messages.warning(request, f'Postcode must be 6 digits')
+            if profile:
+               return render(request, "applicant/fillprofile.html",{'applicant':applicant})
+            else:
+               return render(request, 'applicant/fillprofile.html')
+         else: 
+            if not profile:
+               applicant = ApplicantProfile()
+               applicant.user = request.user
+
+            applicant.addressline1 = addressline1
+            applicant.place = place
+            applicant.city = city
+            applicant.state = state
+            applicant.phone = mobile
+            applicant.pin = pin
+            applicant.dob = dob
+            applicant.gender = gender
+            if request.FILES:
+               applicant.cv = cv
+            applicant.save()
+            return redirect('filterlogin')
    else: 
       if profile:
+         applicant = ApplicantProfile.objects.get(user = request.user)
          return render(request, "applicant/fillprofile.html",{'applicant':applicant})
       else:
          return render(request, 'applicant/fillprofile.html')
