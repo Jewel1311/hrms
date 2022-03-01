@@ -1,0 +1,79 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+   {% block title %}
+    <title>Employee-Profile</title>
+   {% endblock title %}
+
+    {% block body %}
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;"> 
+          
+      <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'employee-home' %}">Home</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="bi bi-list mobile-nav-toggle" style="color: white;"></i></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav ml-auto mr-4">
+           <a class="custom-link" style="color: white;" href="{% url 'logout' %}">Logout</a>
+        </div>
+  </div>
+  </nav>
+
+        <div class="container mb-4" style="width: 50%;margin-top: 5rem;">
+            <h2>Your Profile</h2> 
+                <div class="box-1 mt-3" style="display:block;">
+                  {% if messages %}
+                  {% for message in messages %}
+                     <div class="alert alert-{{message.tags}}">{{message}}</div>
+                  {% endfor%}
+              {% endif %}
+                  <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                            <div class="col-md-12"><label class="labels">Profile Photo</label><br>
+                                {% if employee.photo %} <img class= "rounded-circle" src= "/media/{{ employee.photo }} " height="80px" width="80px">
+                                Current Photo : <a href="/media/{{ employee.photo }}">{{ employee.photo }}</a> 
+                                {% else %}
+                                <img src="/media/default/profile.png" height="80px" width="80px">
+                                {% endif %}
+                            
+                                 <br>Change : <input type="file" class="mt-2" placeholder="" name="photo">   
+                            </div>
+                            <div class="row mt-2" style="border-bottom: 1px solid grey;"></div>
+
+
+                        <div class="col-md-12 mt-3"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="" name="addressline1" {% if employee %} value="{{  employee.addressline1 }} " {% endif %} required ></div>
+                        <div class="col-md-12"><label class="labels">Place</label><input type="text" class="form-control"  placeholder="" name="place" {% if  employee %} value="{{  employee.place }} " {% endif %} required></div>
+                        <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control"  placeholder="" name="city" {% if  employee %} value="{{  employee.city }} " {% endif %} required></div>
+                        <div class="col-md-12"><label class="labels">State</label><input type="text" class="form-control" placeholder="" name="state" {% if  employee %} value="{{  employee.state }} " {% endif %} required></div>
+
+                        <div class="col-md-12"><label class="labels">Mobile Number</label><input type="number" class="form-control" placeholder="" name="mobile" {% if  employee %} value="{{  employee.phone }}" {% endif %} required></div>
+          
+                        <div class="col-md-12"><label class="labels">Date of Birth</label><input type="date" class="form-control" placeholder="" name="dob" {% if  employee %} value='{{  employee.dob|date:"Y-m-d" }}' {% endif %} required></div>
+                        <div class="col-md-12"><label class="labels">Postcode</label><input type="number" class="form-control" placeholder="" name="pin" {% if  employee %} value="{{  employee.pin }}" {% endif %} required></div>
+                        <label class="col-md-12 labels">Gender</label>
+                        <div class="row ml-2 mt-3 mb-3">
+                            <div class="col-md-4">
+                              <input type="radio"   placeholder="" name="gender" value="m" {% if  employee.gender == 'm' %} checked {% endif %} required >
+                              <label class="labels">Male</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="radio"  placeholder="" name="gender" value="f" {% if  employee.gender == 'f' %} checked {% endif %} required>
+                                <label class="labels">Female</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="radio"   placeholder="" name="gender" value="o" {% if  employee.gender == 'o' %} checked {% endif %} required>
+                                <label class="labels">Others</label>
+                              </div>
+                        </div>
+
+
+                        <center><button type="submit" class="custom-style-button mt-3">Save Profile</button></center>
+                      </form>
+                </div>
+        </div>
+
+    {% endblock body %}
+

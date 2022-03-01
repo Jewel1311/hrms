@@ -22,7 +22,7 @@ def jobs(request):
          count = jobs.count()
          
          if count == 0:
-            messages.success(request, f'No results found')
+            messages.warning(request, f'No results found')
             return render(request, 'applicant/jobview.html')
 
          else:

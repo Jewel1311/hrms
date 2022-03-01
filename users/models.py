@@ -98,13 +98,8 @@ class ApplicantProfile(models.Model):
     city=models.CharField(max_length=60)
     state=models.CharField(max_length=60)
     last_apply = models.DateField(null=True)
-
-    pin_regex = RegexValidator(regex=r'^\+?1?\d{6}$', message="Pin must be a 6 digit number")   
-    pin = models.CharField(validators=[pin_regex], max_length=6) 
-
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{10}$', message="Phone number must be a 10 digit number.")
-    phone = models.CharField(validators=[phone_regex], max_length=10) 
-
+    pin = models.CharField( max_length=6) 
+    phone = models.CharField( max_length=10) 
     cv=models.FileField()
     
     

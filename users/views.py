@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
+
+from employees.models import EmployeeProfile
 from .models import ApplicantProfile
 from .forms import UserRegistrationForm
 from django.contrib import messages
@@ -42,6 +44,10 @@ def filterlogin(request):
        
 
     elif request.user.is_employee:
-        return render(request, 'users/employee.html')
+        profile = EmployeeProfile.objects.filter(user = request.user).count()
+        if profile:
+           return redirect('employee-home')
+        else:
+            return redirect('employee_profile')
  
 
