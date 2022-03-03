@@ -33,4 +33,8 @@ class EmployeeProfile(models.Model):
             image.thumbnail(resize)
             image.save(self.photo.path)
 
- 
+class Attendance(models.Model):
+    attendance_date = models.DateField()
+    entry_time = models.TimeField()
+    exit_time = models.TimeField()
+    user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
