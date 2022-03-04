@@ -51,9 +51,9 @@
                                 <label class="labels">Female</label>
                             </div>
                             <div class="col-md-4">
-                                <input type="radio"   placeholder="" name="gender" value="o" {% if applicant.gender == 'o' %} checked {% endif %} required>
-                                <label class="labels">Others</label>
-                              </div>
+                              <input type="radio"   placeholder="" name="gender" value="n" {% if  employee.gender == 'n' %} checked {% endif %} required>
+                              <label class="labels">Prefer not to say</label>
+                            </div>
                         </div>
 
                         <div class="col-md-12"><label class="labels">CV</label><p>File must be a pdf with size less than 2 mb</p>

@@ -35,6 +35,6 @@ class EmployeeProfile(models.Model):
 
 class Attendance(models.Model):
     attendance_date = models.DateField()
-    entry_time = models.TimeField()
-    exit_time = models.TimeField()
+    entry_time = models.TimeField(null=True)
+    exit_time = models.TimeField(null=True)
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)

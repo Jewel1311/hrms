@@ -1,9 +1,10 @@
+import datetime 
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-
-import employees
-from .models import EmployeeProfile
+from pymysql import NULL
+from .models import Attendance, EmployeeProfile
 from django.contrib import messages
+from django.db.models import Q
 
 @login_required
 def employee_home(request):
@@ -74,3 +75,38 @@ def view_employee_profile(request):
       return render(request, "employees/viewemployeeprofile.html",{'employee':employee})
    else:    
       return redirect('filterlogin')
+
+
+# Employee Attendance
+
+@login_required
+def morning_shift(request):
+      if request.method == "POST":
+            if 'entry' in request.POST:
+               morning_shift = Attendance()
+               morning_shift.attendance_date = datetime.date.today()
+               morning_shift.entry_time = datetime.datetime.now().time()
+               morning_shift.user = request.user
+               morning_shift.save()
+               return redirect('morning_shift')
+
+            elif 'exit' in request.POST:
+               morning_shift = Attendance.objects.filter(user = request.user).filter(attendance_date = datetime.date.today())
+               morning_shift.exit_time = datetime.datetime.now().time()
+               morning_shift.save()
+               return redirect('morning_shift')
+      else:
+            check = Attendance.objects.filter(user = request.user).filter(attendance_date = datetime.date.today())
+            if check:
+               if check.entry_time is not None and check.exit_time is not None:
+                  messages.warning(request , f"You have marked todays attendance")
+                  return render(request, 'employees/morningshift.html')
+               else:
+                  return render(request, 'employees/morningshift.html', {'check':check}) 
+            else:
+               check = Attendance()
+               return render(request, 'employees/morningshift.html', {'check':check}) 
+
+                 
+
+     
