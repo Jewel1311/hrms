@@ -86,27 +86,71 @@ def morning_shift(request):
                morning_shift = Attendance()
                morning_shift.attendance_date = datetime.date.today()
                morning_shift.entry_time = datetime.datetime.now().time()
+               morning_shift.shift = 'morning'
                morning_shift.user = request.user
                morning_shift.save()
                return redirect('morning_shift')
 
             elif 'exit' in request.POST:
-               morning_shift = Attendance.objects.filter(user = request.user).filter(attendance_date = datetime.date.today())
+               morning_shift = Attendance.objects.get(user = request.user, attendance_date = datetime.date.today(), shift = 'morning')
                morning_shift.exit_time = datetime.datetime.now().time()
                morning_shift.save()
                return redirect('morning_shift')
-      else:
-            check = Attendance.objects.filter(user = request.user).filter(attendance_date = datetime.date.today())
-            if check:
-               if check.entry_time is not None and check.exit_time is not None:
-                  messages.warning(request , f"You have marked todays attendance")
-                  return render(request, 'employees/morningshift.html')
-               else:
-                  return render(request, 'employees/morningshift.html', {'check':check}) 
-            else:
-               check = Attendance()
-               return render(request, 'employees/morningshift.html', {'check':check}) 
+      else:                                                             
+         try:
+            #checks if an attendance object of the user for today exists
 
+            check = Attendance.objects.get(user = request.user, attendance_date = datetime.date.today(), shift = 'morning') 
+
+            #checks if the attendance is fully marked that is both fields are not none
+            if check.entry_time is not None and check.exit_time is not None:
+                  messages.success(request , f"You have marked todays attendance")
+                  return render(request, 'employees/attendance.html',{'check':check,'shift':'morning' })
+            else:
+                  return render(request, 'employees/attendance.html', {'check':check,'shift':'morning'}) 
+         except:
+               check = Attendance()
+               return render(request, 'employees/attendance.html', {'check':check,'shift':'morning'}) 
+
+
+#mark night shift
+@login_required
+def night_shift(request):
+      if request.method == "POST":
+            if 'entry' in request.POST:
+               night_shift = Attendance()
+               night_shift.attendance_date = datetime.date.today()
+               night_shift.entry_time = datetime.datetime.now().time()
+               night_shift.shift = 'night'
+               night_shift.user = request.user
+               night_shift.save()
+               return redirect('night_shift')
+
+            elif 'exit' in request.POST:
+               night_shift = Attendance.objects.get(user = request.user, attendance_date = datetime.date.today(), shift = 'night')
+               night_shift.exit_time = datetime.datetime.now().time()
+               night_shift.save()
+               return redirect('night_shift')
+      else:                                                             
+         try:
+            #checks if an attendance object of the user for today exists
+
+            check = Attendance.objects.get(user = request.user, attendance_date = datetime.date.today(),shift = 'night') 
+
+            #checks if the attendance is fully marked that is both fields are not none
+            if check.entry_time is not None and check.exit_time is not None:
+                  messages.success(request , f"You have marked your night shift")
+                  return render(request, 'employees/attendance.html',{'check':check,'shift':'night'})
+            else:
+                  return render(request, 'employees/attendance.html', {'check':check,'shift':'night'}) 
+         except:
+               check = Attendance()
+               return render(request, 'employees/attendance.html', {'check':check,'shift':'night'}) 
                  
 
      
+#view attendance
+@login_required
+def attendance_view(request):
+   attendance =  Attendance.objects.filter(user = request.user)
+   return render(request, 'employees/attendance_view.html',{'attendance':attendance})

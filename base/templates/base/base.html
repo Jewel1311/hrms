@@ -22,6 +22,10 @@
 
       <link rel = "icon" href = "{% static 'assets/img/logo.png' %}">
 
+      <!-- datatable  -->
+
+      <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}"/>
+
       
           
 
@@ -42,5 +46,14 @@
      <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
      
      <script src="{% static 'dashboard/js/dash.js' %}"></script>
+     
+     <!-- datatable  -->
+
+     <script type="text/javascript" src="{% static 'DataTables/datatables.min.js' %}"></script>
+     <script>
+        $(document).ready(function(){
+        $('#tableid1').DataTable();
+        });
+     </script>
 </body>
 </html>

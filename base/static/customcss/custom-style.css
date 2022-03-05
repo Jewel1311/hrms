@@ -171,4 +171,59 @@
 }
 
 
+/* attendance */
+.attendace-btn{
+  margin-top: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  width: 10em;
+  height: 10rem;
+  border-radius: 50%;
+  border: none;
+  background: rgb(50, 122, 50);
+  color: white;
+  font-weight: bold;
+}
 
+.attendace-btn1{
+    margin-top: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    width: 10em;
+    height: 10rem;
+    border-radius: 50%;
+    border: none;
+    background: #e43c5c;
+    color: white;
+    font-weight: bold;
+  }
+
+  .attendace-btn:hover{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    background: rgb(17, 105, 17);
+  }
+  .attendace-btn1:hover{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    background: rgb(184, 50, 9);
+  }
+  .vertical-align{
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     min-height: calc(100vh - 10vh);
+     align-items: center;
+     
+    }
+
+    /* jquery table  */
+    .jtable{
+        padding: 1rem;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        margin: 2rem;
+
+    }
+    .jtable tbody tr:nth-child(even){
+        background-color: #eeeeee;
+    }
+    .jtable thead{
+        background-color:#082032;
+        color: white;
+    }

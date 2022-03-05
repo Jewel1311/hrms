@@ -1,0 +1,23 @@
+{% extends "employees/employee-home.html" %}
+
+{% block content %} 
+<div class="jtable">
+<table id='tableid1'>
+    <thead>
+        <th>Date</th>
+        <th>Entry Time</th>
+        <th>Exit Time</th>
+    </thead>
+    <tbody>
+        {% for attendance in attendance %}
+        <tr>
+            <td>{{ attendance.attendance_date }}</td>
+            <td>{{ attendance.entry_time }}</td>
+            <td>{{ attendance.exit_time }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock content %}
+

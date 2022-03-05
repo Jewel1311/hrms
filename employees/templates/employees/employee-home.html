@@ -21,8 +21,8 @@
             <li> <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Attendance</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li> <a href="{% url 'morning_shift' %}">Morning Shift</a> </li>
-                    <li> <a href="#">Night Shift</a> </li>
-                    <li> <a href="#">Attendance View</a> </li>
+                    <li> <a href="{% url 'night_shift' %}">Night Shift</a> </li>
+                    <li> <a href="{% url 'attendance_view' %}">Attendance View</a> </li>
                 </ul>
             </li>
             <li> <a href="#">Users</a> </li>
@@ -42,7 +42,7 @@
      
     </nav>
     <div class="content" id="navcontent">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light"> <button type="button" id="sidebarCollapse" style="border:none; background-color:#f8f9fa;" > <i class="bi bi-list mobile-nav-toggle" style="color: black;"></i> </button> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <nav class="navbar navbar-expand-lg navbar-light" style="height: 10vh;"> <button type="button" id="sidebarCollapse" style="border:none; background-color:rgb(240, 239, 239);" > <i class="bi bi-list mobile-nav-toggle" style="color: black;"></i> </button> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item mr-3"> <a href="{% url 'view_employee_profile' %}">{{ user.first_name|title}} {{ user.middle_name|title}} {{ user.last_name|title}} </a></li>

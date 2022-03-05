@@ -37,4 +37,5 @@ class Attendance(models.Model):
     attendance_date = models.DateField()
     entry_time = models.TimeField(null=True)
     exit_time = models.TimeField(null=True)
+    shift = models.CharField(max_length=10,default='')
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)

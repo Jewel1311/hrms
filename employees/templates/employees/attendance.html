@@ -1,0 +1,43 @@
+{% extends "employees/employee-home.html" %}
+
+{% block content %} 
+<center>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}
+
+    </center>
+    <div class="vertical-align">
+        <form  action="" method="POST">
+            {% csrf_token %}
+            <!-- if both fields are null the show attendance in  -->
+            {% if check.entry_time is None and check.exit_time is None %}  
+              <button class="attendace-btn" type="submit" name="entry">
+                {% if shift == 'morning' %}
+                Day In
+                {% elif shift == 'night' %}
+                Night In
+                {% endif %}
+             </button>
+
+            {% elif check.exit_time is None %}
+
+            <!-- if exit time is none show attendace out -->
+
+              <button class="attendace-btn1"  type="submit" name="exit">    
+                {% if shift == 'morning' %}
+                Day Out
+                {% elif shift == 'night' %}
+                Night out
+                {% endif %}
+             </button></button>
+            {% endif %}
+        </form>
+    </div>
+  
+{% endblock content %}
+
