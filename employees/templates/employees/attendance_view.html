@@ -1,12 +1,23 @@
 {% extends "employees/employee-home.html" %}
 
 {% block content %} 
+<center>
+    <form method="POST" class="mt-2">
+        {% csrf_token %}
+        <select name="shift" class="dropdown-style">
+            <option value="morning" {% if shift == 'morning'%}selected{% endif %}>Morning Shift</option>
+            <option value="night"{% if shift == 'night'%}selected{% endif %}>Night Shift</option>
+        </select>
+        <button type="submit" class="custom-style-button">Show</button>
+    </form>
+</center>
 <div class="jtable">
 <table id='tableid1'>
     <thead>
         <th>Date</th>
         <th>Entry Time</th>
         <th>Exit Time</th>
+        <th>Shift</th>
     </thead>
     <tbody>
         {% for attendance in attendance %}
@@ -14,6 +25,7 @@
             <td>{{ attendance.attendance_date }}</td>
             <td>{{ attendance.entry_time }}</td>
             <td>{{ attendance.exit_time }}</td>
+            <td>{{ attendance.shift }}</td>
         </tr>
         {% endfor %}
     </tbody>

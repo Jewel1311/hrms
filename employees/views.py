@@ -152,5 +152,11 @@ def night_shift(request):
 #view attendance
 @login_required
 def attendance_view(request):
-   attendance =  Attendance.objects.filter(user = request.user)
-   return render(request, 'employees/attendance_view.html',{'attendance':attendance})
+   if request.method == "POST":
+      shift = request.POST['shift']
+      attendance =  Attendance.objects.filter(user = request.user,shift = shift)
+      return render(request, 'employees/attendance_view.html',{'attendance':attendance,'shift':shift})
+
+   else:
+      attendance =  Attendance.objects.filter(user = request.user,shift='morning')
+      return render(request, 'employees/attendance_view.html',{'attendance':attendance})
