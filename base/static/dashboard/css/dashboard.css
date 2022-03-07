@@ -92,13 +92,13 @@ a:focus {
 
 #sidebar ul li a:hover {
     color: #fff;
-    background: #e43c5c;
+    background: #3c5be4;
 }
 
 #sidebar ul li.active>a,
 a[aria-expanded="true"] {
     color: #fff;
-    background: #e43c5c;
+    background: #3c5be4;
 }
 
 a[data-toggle="collapse"] {
