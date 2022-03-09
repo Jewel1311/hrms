@@ -1,0 +1,24 @@
+{% extends "employees/employee-home.html" %}
+{% block content %} 
+<center>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}
+
+    </center>
+        <div class="container d-flex flex-column align-items-center mt-2">
+            <form method="POST">
+                {% csrf_token %}
+            {{ leave_form.as_p }}
+            <center>
+            <button type="submit" class="custom-style-button">Apply Leave</button>
+        </center>
+        </form>
+        </div>
+
+{% endblock content %}
+

@@ -1,0 +1,24 @@
+{% extends "employees/employee-home.html" %}
+
+{% block content %} 
+
+<div class="jtable">
+<table id='tableid1'>
+    <thead>
+        <th>Leave Type</th>
+        <th>From</th>
+        <th>To</th>
+    </thead>
+    <tbody>
+        {% for leave in leave %}
+        <tr>
+            <td>{{ leave.leave_type }}</td>
+            <td>{{ leave.from_date }}</td>
+            <td>{{ leave.to_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock content %}
+

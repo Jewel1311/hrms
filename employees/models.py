@@ -39,3 +39,16 @@ class Attendance(models.Model):
     exit_time = models.TimeField(null=True)
     shift = models.CharField(max_length=10,default='')
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
+
+
+
+class Leave(models.Model):
+    leave_type = models.CharField(max_length=10)
+    from_date = models.DateField()
+    from_session = models.CharField(max_length=10)
+    to_date = models.DateField()
+    to_session = models.CharField(max_length=10)
+    reason = models.TextField()
+    user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
+    approval = models.BooleanField(default=False)
+    

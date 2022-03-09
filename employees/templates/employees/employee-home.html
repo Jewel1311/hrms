@@ -15,7 +15,7 @@
         <!-- provide active class  -->
         {% with url_name=request.resolver_match.url_name %}   
         <div class="sidebar-header">
-            <h3>HRMS</h3>
+            <h3>EMPLOYEE</h3>
             <hr>
         </div>
         <ul class="list-unstyled components">
@@ -28,12 +28,10 @@
                     <li> <a class="{% if url_name == 'attendance_view' %} dashactive {% endif %}" href="{% url 'attendance_view' %}">Attendance View</a> </li>
                 </ul>
             </li>
-            <li> <a  href="#">Users</a> </li>
-            <li> <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Subscribers</a>
+            <li> <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Leave</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
-                    <li> <a href="#">Active</a> </li>
+                    <li> <a class="{% if url_name == 'apply_leave' %} dashactive {% endif %}" href="{% url 'apply_leave' %}">Apply Leave</a> </li>
                     <li> <a href="#">Idle</a> </li>
-                    <li> <a href="#">Non Active</a> </li>
                 </ul>
             </li>
             <li> <a href="#">Timeline</a> </li>
@@ -62,11 +60,4 @@
      
 
 </div>
-<script>
-    $('.listed-unstyled components li ').click(function(event){
-      event.preventDefault();
-      $('.listed-unstyled components li a').removeClass('active')
-      $(this).addClass('active');
-    });
-  </script>
 {% endblock body %}

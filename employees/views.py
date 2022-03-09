@@ -1,10 +1,12 @@
 import datetime 
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from pymysql import NULL
+
+from employees.forms import LeaveForm
+from .models import Leave
 from .models import Attendance, EmployeeProfile
 from django.contrib import messages
-from django.db.models import Q
+
 
 @login_required
 def employee_home(request):
@@ -160,3 +162,24 @@ def attendance_view(request):
    else:
       attendance =  Attendance.objects.filter(user = request.user,shift='morning')
       return render(request, 'employees/attendance_view.html',{'attendance':attendance})
+
+#apply leave 
+@login_required
+def apply_leave(request):
+   if request.method == "POST":
+      leave_form = LeaveForm(request.POST)
+      if leave_form.is_valid():
+         leave = leave_form.save(False)
+         leave.user = request.user
+         leave.save()
+         messages.success(request, f'Leave Applied')
+         return redirect('apply_leave')
+   else:  
+      leave_form = LeaveForm()
+      return render(request, 'employees/apply_leave.html',{ 'leave_form': leave_form })
+
+# view leave
+@login_required
+def view_leave(request):
+   leave = Leave.objects.filter(user = request.user)
+   return render(request,'employees/view_leave.html',{'leave':leave})
