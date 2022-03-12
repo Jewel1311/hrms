@@ -25,9 +25,9 @@ class AddEmployeeForm(UserRegistrationForm):
 
 class SalaryForm(forms.ModelForm):
     basic_pay = forms.IntegerField(widget=forms.TextInput(attrs= {'class':'form-control'}),required=True)
-    hra = forms.BooleanField(widget= forms.CheckboxInput(attrs= {'class':'form-control'}),required=False)
-    ta = forms.BooleanField(widget= forms.CheckboxInput(attrs= {'class':'form-control'}),required=False)
-    pf = forms.BooleanField(widget= forms.CheckboxInput(attrs= {'class':'form-control'}),required=False)
+    hra = forms.BooleanField(widget= forms.CheckboxInput(attrs= {'class':'form-check-inline'}),required=False)
+    ta = forms.BooleanField(widget= forms.CheckboxInput(attrs= {'class':'form-check-inline'}),required=False)
+    pf = forms.BooleanField(widget= forms.CheckboxInput(attrs= {'class':'form-check-inline'}),required=False)
     class Meta:
         model = Salary
         fields = ['basic_pay','hra','ta','pf']

@@ -3,13 +3,18 @@
 {% block content %} 
         <div class="container mb-4" style="width: 50%;margin-top: 5rem;">
             <h2>Your Profile</h2> 
-                <div class="box-1 mt-3" style="display:block;">
-                     <div class="row">
-                        <div class="col-md-4" style="border-right: 1px solid black;display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div class="box-1 mt-3" style="display:block; min-width: 300px;">
+
+                    <div class="row">
+                        <div class="col-md-4" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                            <div>
                             <img src="/media/{{ employee.photo }}" class="rounded-circle" width="120px" height="120px">
+                            <center>
                             <div class="mt-2"><b>{{ user.first_name | title}} {{ user.middle_name | title}}
                                 {{ user.last_name | title}} </b></div>
+
+                                <div class="mt-2"><b>{{ designation | title}}</b></div>
+                            </center>
                             </div>
                         </div>
 
@@ -17,12 +22,15 @@
                                 <div class="row">
                                 <div class="ml-auto"><a href="{% url 'employee_profile' %}" style="color:rgb(88, 88, 212)">Edit Profile</a></div>
                                 </div>
-                
+                                    <div class="col-md-12 mb-2"><b>Employee ID : </b>{{ user.id }}</div>
+                                    <div class="col-md-12 mb-2"><b>Department : </b>{{ department | title }}</div>
+                                    <div class="col-md-12 mb-2"><b>Joining Date : </b>{{ user.date_joined | date }}</div>
+                                    <b class="col-md-12">Address : </b>
                                     <div class="col-md-12">{{ employee.addressline1 }}</div>
                                     <div class="col-md-12">{{ employee.place }}</div>
                                     <div class="col-md-12">{{ employee.city }},{{ employee.state }}</div>
                                     <div class="col-md-12">{{ employee.pin }}</div>
-                                    <div class="col-md-12"><b>Date of Birth : </b>{{ employee.dob }}</div>
+                                    <div class="col-md-12 mt-2"><b>Date of Birth : </b>{{ employee.dob }}</div>
                                     <div class="col-md-12 mt-2"><b>Mobile : </b>{{ employee.phone }}</div>
                                     {% if employee.gender == 'm' %}
                                       <div class="col-md-12 mt-2"><b>Gender : </b>Male</div>

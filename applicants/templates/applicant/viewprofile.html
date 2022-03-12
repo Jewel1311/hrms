@@ -37,9 +37,9 @@
 
         <div class="container mb-4" style="width: 50%;margin-top: 5rem;">
             <h2>Your Profile</h2> 
-                <div class="box-1 mt-3" style="display:block;">
+                <div class="box-1 mt-3" style="display:block; min-width: 300px;">
                      <div class="row">
-                        <div class="col-md-4" style="border-right: 1px solid black;display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <div class="col-md-4" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                            <div>
                             <img src="{% static 'images/applicant.png' %}" width="120px" height="120px">
                             <div class="mt-2"><b>{{ applicant.user.first_name | title}} {{ applicant.user.middle_name | title}}

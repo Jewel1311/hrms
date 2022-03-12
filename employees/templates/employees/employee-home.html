@@ -21,10 +21,12 @@
 
         <ul class="list-unstyled components">
             <li class="{% if url_name == 'employee-home' %} active {% endif %}">
-              <a  href="{% url 'employee-home' %}" >Dashboard</a> 
+              <a  href="{% url 'employee-home' %}" ><i class="bi bi-house-door-fill"></i> <span class="ml-2">Dashboard </span></a> 
             </li>
             <li class =" {% if url_name == 'morning_shift'  %} active {% elif url_name == 'night_shift' %}active  {% elif url_name == 'attendance_view' %}active {% endif %}">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Attendance</a>
+
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-calendar-check"></i> <span class="ml-2">Attendance </span></a>
+
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li class="{% if url_name == 'morning_shift' %} active {% endif %}">
                         <a  href="{% url 'morning_shift' %}">Morning Shift</a>
@@ -38,7 +40,7 @@
                 </ul>
             </li>
             <li>
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Leave</a>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-calendar2-minus"></i> <span class="ml-2">Leave </span></a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
                         <a href="{% url 'apply_leave' %}">Apply Leave</a>
@@ -51,11 +53,13 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="#">Portfolio</a>
+
+            <!-- profile  -->
+            <li class="{% if url_name == 'view_employee_profile' %} active {% endif %}">
+                <a href="{% url 'view_employee_profile' %}"><i class="bi bi-person-square"></i> <span class="ml-2">Profile </span></a>
             </li>
             <li>
-                <a href="{% url 'logout' %}">Logout</a>
+                <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> <span class="ml-2">Logout </span></a>
             </li>
         </ul>
     </nav>

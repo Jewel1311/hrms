@@ -1,9 +1,11 @@
 import datetime 
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from admin.models import Designations
+from base.models import Department
 
 from employees.forms import LeaveForm
-from .models import Leave
+from .models import EmployeeDesignation, Leave
 from .models import Attendance, EmployeeProfile
 from django.contrib import messages
 
@@ -60,7 +62,7 @@ def employee_profile(request):
             if request.FILES:
                employee.photo = photo
             employee.save()
-            return redirect('filterlogin')
+            return redirect('view_employee_profile')
    else:                                                          #render the form if not post request 
       if profile:
          employee = EmployeeProfile.objects.get(user = request.user)
@@ -74,7 +76,18 @@ def view_employee_profile(request):
    profile = EmployeeProfile.objects.filter(user = request.user).count()
    if profile:
       employee = EmployeeProfile.objects.get(user = request.user)
-      return render(request, "employees/viewemployeeprofile.html",{'employee':employee})
+
+      #to get designation of employee from EmployeeDesignation
+      desig_obj = EmployeeDesignation.objects.get(user = request.user)
+      designation = Designations.objects.get(id = desig_obj.designation_id )
+
+      #to get department of employee from EmployeeDesignation
+
+      dep_obj = EmployeeDesignation.objects.get(user = request.user)
+      department = Department.objects.get(id = dep_obj.department_id )
+      
+
+      return render(request, "employees/viewemployeeprofile.html",{'employee':employee, 'designation':designation, 'department':department})
    else:    
       return redirect('filterlogin')
 

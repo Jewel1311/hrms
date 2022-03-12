@@ -1,0 +1,46 @@
+{% extends "admin/admin-home.html" %}
+
+{% block page %} 
+<!-- <center>
+    <form method="POST" class="mt-2">
+        {% csrf_token %}
+        <select name="shift" class="dropdown-style">
+            <option value="morning" {% if shift == 'morning'%}selected{% endif %}>Morning Shift</option>
+            <option value="night"{% if shift == 'night'%}selected{% endif %}>Night Shift</option>
+        </select>
+        <button type="submit" class="custom-style-button">Show</button>
+    </form>
+</center> -->
+{% if employees|length > 0 %}
+        <table class="jtable" id='tableid1'>
+            <thead>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Joining Date</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.id }}</td>
+                    <td>{{ employee.first_name|title }}</td>
+                    <td>{{ employee.last_name|title }}</td>
+                    <td>{{ employee.email}}</td>
+                    <td>{{ employee.employeeprofile.gender|title }}</td>
+                    <td>{{ employee.date_joined|date}}</td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No Employees Registered </p>
+        </center>
+{% endif %}
+{% endblock page %}
+
