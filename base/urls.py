@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('jobs/', include('applicants.urls')),
     path('employees/', include('employees.urls')),
+    path('admin/', include('admin.urls')),
 ]
 
 if settings.DEBUG:

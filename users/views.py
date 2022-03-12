@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 
@@ -35,6 +36,7 @@ def register(request):
 @login_required
 def filterlogin(request):
 
+    #for applicant
     if request.user.is_applicant:  #checking if the login user is an applicant
         profile = ApplicantProfile.objects.filter(user=request.user)
         if profile:
@@ -42,12 +44,16 @@ def filterlogin(request):
         else:
            return redirect('save_applicant_profile')
        
-
+    #for employee
     elif request.user.is_employee:
         profile = EmployeeProfile.objects.filter(user = request.user).count()
         if profile:
            return redirect('employee-home')
         else:
             return redirect('employee_profile')
+
+    #for admin
+    elif request.user.is_superuser:
+        return redirect('admin_home')
  
 

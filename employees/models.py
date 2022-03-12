@@ -1,7 +1,6 @@
-from ctypes import resize
-from email.policy import default
 from django.db import models
 from PIL import Image
+from admin.models import Designations
 from base.models import Department
 from users.models import Newuser
 
@@ -22,7 +21,7 @@ class EmployeeProfile(models.Model):
     pin = models.CharField(max_length=6) 
     phone = models.CharField( max_length=10) 
     photo = models.ImageField(default ='default/profile.png')
-    # Department = models.ForeignKey(Department, on_delete=models.CASCADE)
+
 
     def save(self,*args, **kwargs):
         super().save(*args, **kwargs)
@@ -51,4 +50,11 @@ class Leave(models.Model):
     reason = models.TextField()
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
     approval = models.BooleanField(default=False)
-    
+
+#to store the employees designation and department  
+class EmployeeDesignation(models.Model):
+    designation = models.ForeignKey(Designations, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    user = models.ForeignKey(Newuser,on_delete=models.CASCADE)
+
+ 

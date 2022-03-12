@@ -16,4 +16,5 @@ class Interviews(models.Model):
     end_time = models.TimeField()
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     job = models.ForeignKey(Jobs, on_delete=models.CASCADE) 
+    description = models.TextField(default='')
     

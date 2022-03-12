@@ -1,0 +1,113 @@
+{% extends "base/base.html" %}
+{% load static %}
+   {% block title %}
+     <!-- dashobard style  -->
+     <link href="{% static 'dashboard/css/dashboard.css' %}" rel="stylesheet">
+   <title>
+    
+         Admin
+  </title>
+   {% endblock title %}
+
+{% block body %}
+
+<div class="wrapper">
+    <!-- Sidebar  -->
+    {% with url_name=request.resolver_match.url_name %}
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Admin</h3>
+        </div>
+       
+        <!-- Dashboard  -->
+        <ul class="list-unstyled components">
+            <li class="{% if url_name == 'admin_home' %} active {% endif %}">
+              <a  href="{% url 'admin_home' %}" >Dashboard</a> 
+            </li>
+
+            <!-- Employees  -->
+
+            <li>
+                <a href="#employeeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Employees</a>
+                <ul class="collapse list-unstyled" id="employeeSubmenu">
+                    <li>
+                        <a href="{% url 'add_employee' %}">Add Employee</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 3</a>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li class =" {% if url_name == 'morning_shift'  %} active {% elif url_name == 'night_shift' %}active  {% elif url_name == 'attendance_view' %}active {% endif %}">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Attendance</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li class="{% if url_name == 'morning_shift' %} active {% endif %}">
+                        <a  href="#">Morning Shift</a>
+                    </li>
+                    <li class="{% if url_name == 'night_shift' %} active {% endif %}">
+                        <a  href="#">Night Shift</a>
+                    </li>
+                    <li class="{% if url_name == 'attendance_view' %} active {% endif %}">
+                        <a  href="#">Attendance View</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Leave</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="#">Apply Leave</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 3</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Portfolio</a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}">Logout</a>
+            </li>
+        </ul>
+    </nav>
+{% endwith %}
+    <!-- Page Content  -->
+    <div id="content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-info" style="background-color: #082032;">
+                    <i class="bi bi-list mobile-nav-toggle"></i>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="background-color: #e43c5c;">
+                    <i class="bi bi-list mobile-nav-toggle"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+
+                        <li class="nav-item mr-3"> <a href="#">Welcome, Admin </a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% block page %} {% endblock page %}
+
+    </div>                  
+        
+</div>
+
+{% endblock body %}
