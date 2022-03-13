@@ -56,17 +56,13 @@
                         <label class="col-md-12 labels">Gender</label>
                         <div class="row ml-2 mt-3 mb-3">
                             <div class="col-md-4">
-                              <input type="radio"   placeholder="" name="gender" value="m" {% if  employee.gender == 'm' %} checked {% endif %} required >
+                              <input type="radio"   placeholder="" name="gender" value="Male" {% if  employee.gender == 'Male' %} checked {% endif %} required >
                               <label class="labels">Male</label>
                             </div>
                             <div class="col-md-4">
-                                <input type="radio"  placeholder="" name="gender" value="f" {% if  employee.gender == 'f' %} checked {% endif %} required>
+                                <input type="radio"  placeholder="" name="gender" value="Female" {% if  employee.gender == 'Female' %} checked {% endif %} required>
                                 <label class="labels">Female</label>
                             </div>
-                            <div class="col-md-4">
-                                <input type="radio"   placeholder="" name="gender" value="n" {% if  employee.gender == 'n' %} checked {% endif %} required>
-                                <label class="labels">Prefer not to say</label>
-                              </div>
                         </div>
 
 

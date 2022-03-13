@@ -1,16 +1,6 @@
 {% extends "admin/admin-home.html" %}
 
 {% block page %} 
-<!-- <center>
-    <form method="POST" class="mt-2">
-        {% csrf_token %}
-        <select name="shift" class="dropdown-style">
-            <option value="morning" {% if shift == 'morning'%}selected{% endif %}>Morning Shift</option>
-            <option value="night"{% if shift == 'night'%}selected{% endif %}>Night Shift</option>
-        </select>
-        <button type="submit" class="custom-style-button">Show</button>
-    </form>
-</center> -->
 {% if employees|length > 0 %}
         <table class="jtable" id='tableid1'>
             <thead>
@@ -19,7 +9,8 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Gender</th>
-                <th>Joining Date</th>
+                <th>Designation</th>
+                <th>Department</th>
                 <th>Action</th>
             </thead>
             <tbody>
@@ -30,8 +21,19 @@
                     <td>{{ employee.last_name|title }}</td>
                     <td>{{ employee.email}}</td>
                     <td>{{ employee.employeeprofile.gender|title }}</td>
-                    <td>{{ employee.date_joined|date}}</td>
-                    <td></td>
+
+                    <!-- getting the dept and designation from employeedesignation table  -->
+
+                    {% for object in obj %} 
+                    {% if object.user == employee %}
+
+                    <td>{{ object.designation }}</td>
+                    <td>{{ object.department }}</td>    
+
+                    {% endif %}
+                    {%endfor %}
+
+                    <td><a href="#"class="custom-style-button">View</i></a></td>
                 </tr>
                 {% endfor %}
             </tbody>

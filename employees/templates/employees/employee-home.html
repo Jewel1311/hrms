@@ -39,14 +39,17 @@
                     </li>
                 </ul>
             </li>
-            <li>
+
+           <!-- leave  -->
+
+            <li class =" {% if url_name == 'apply_leave'  %} active {% elif url_name == 'view_leave' %}active  {% elif url_name == 'attenda' %} active {% endif %}">
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-calendar2-minus"></i> <span class="ml-2">Leave </span></a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
-                    <li>
+                    <li class="{% if url_name == 'apply_leave' %} active {% endif %}">
                         <a href="{% url 'apply_leave' %}">Apply Leave</a>
-                    </li>
+                    </li class="{% if url_name == 'view_leave' %} active {% endif %}">
                     <li>
-                        <a href="#">Page 2</a>
+                        <a href="{% url 'view_leave' %}">Leave Requests</a>
                     </li>
                     <li>
                         <a href="#">Page 3</a>

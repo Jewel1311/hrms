@@ -182,11 +182,12 @@ def apply_leave(request):
    if request.method == "POST":
       leave_form = LeaveForm(request.POST)
       if leave_form.is_valid():
+         print(leave_form.cleaned_data['leave_type'])
          leave = leave_form.save(False)
          leave.user = request.user
          leave.save()
          messages.success(request, f'Leave Applied')
-         return redirect('apply_leave')
+      return redirect('apply_leave')
    else:  
       leave_form = LeaveForm()
       return render(request, 'employees/apply_leave.html',{ 'leave_form': leave_form })
@@ -194,5 +195,5 @@ def apply_leave(request):
 # view leave
 @login_required
 def view_leave(request):
-   leave = Leave.objects.filter(user = request.user)
+   leave = Leave.objects.filter(user = request.user).order_by('-id')
    return render(request,'employees/view_leave.html',{'leave':leave})

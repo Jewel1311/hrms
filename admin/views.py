@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from admin.forms import AddEmployeeForm, DesignationForm, SalaryForm
 from django.contrib import messages
+from base.models import Department
+from employees.models import EmployeeDesignation
 
 from users.models import Newuser
 
@@ -52,8 +54,16 @@ def add_employee(request):
         desig_form = DesignationForm()
         return render(request, 'admin/add-employee.html', {'reg_form':reg_form, 'salary_form':salary_form, 'desig_form':desig_form })
 
-# view the employees 
+# view the employees in table 
 @login_required
 def view_employee(request):
     employees = Newuser.objects.filter(is_employee = True)
-    return render(request, 'admin/employee-view.html',{'employees':employees})
+    obj = EmployeeDesignation.objects.all()
+    
+    return render(request, 'admin/employee-view.html',{'employees':employees,'obj':obj})
+
+#detailed view of an employee
+@login_required
+def employee_detail(request,emp_id):
+    employee = Newuser.objects.get(id = emp_id)
+    return render(request, 'admin/employee-detail.hmtl',{'employee':employee})

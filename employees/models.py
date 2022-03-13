@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 from PIL import Image
 from admin.models import Designations
@@ -6,12 +7,11 @@ from users.models import Newuser
 
 class EmployeeProfile(models.Model):
     GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Others'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
     )
     user=models.OneToOneField(Newuser,unique=True,on_delete=models.CASCADE)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES)
     dob = models.DateField(null=True)
     addressline1 = models.CharField(max_length= 60,default='')
     place = models.CharField(max_length=60)
@@ -41,14 +41,15 @@ class Attendance(models.Model):
 
 
 class Leave(models.Model):
-    leave_type = models.CharField(max_length=10)
+    leave_type = models.CharField(max_length=20)
     from_date = models.DateField()
     from_session = models.CharField(max_length=10)
     to_date = models.DateField()
     to_session = models.CharField(max_length=10)
     reason = models.TextField()
+    applied_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
-    approval = models.BooleanField(default=False)
+    approval = models.CharField(max_length=12,default='pending')
 
 #to store the employees designation and department  
 class EmployeeDesignation(models.Model):

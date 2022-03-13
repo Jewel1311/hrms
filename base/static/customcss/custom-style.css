@@ -236,3 +236,8 @@
 .dropdown-style{
     border: 2px solid #e43c5c;
 }
+
+.bg-warning.bg-success.bg-danger{
+    padding:0.275rem 0.75rem;
+    border-radius: 0.2rem;
+}

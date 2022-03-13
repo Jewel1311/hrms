@@ -2,23 +2,56 @@
 
 {% block content %} 
 
-<div class="jtable">
-<table id='tableid1'>
-    <thead>
-        <th>Leave Type</th>
-        <th>From</th>
-        <th>To</th>
-    </thead>
-    <tbody>
-        {% for leave in leave %}
-        <tr>
-            <td>{{ leave.leave_type }}</td>
-            <td>{{ leave.from_date }}</td>
-            <td>{{ leave.to_date }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-</div>
+{% if leave|length > 0 %}
+        <table id='tableid1' class="jtable">
+            <thead>
+                <th>Leave Type</th>
+                <th>From</th>
+                <th>From Session</th>
+                <th>To</th>
+                <th>To Session</th> 
+                <th>Status</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                {% for leave in leave %}
+                <tr>
+                    <td>{{ leave.leave_type|title }}</td>
+                    <td>{{ leave.from_date }}</td>
+                    <td>{{ leave.from_session|title}}</td>
+                    <td>{{ leave.to_date }}</td>
+                    <td>{{ leave.to_session|title}}</td>
+
+                    <!-- for status colors  -->
+                        {% if leave.approval == 'approved' %}
+                        <td><div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                    {{leave.approval}}
+                            </div>
+                        </td>
+                        {% elif leave.approval == 'not approved' %}
+                        <td><div class="bg-danger" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                    {{leave.approval}}
+                            </div>
+                        </td>
+                        {% else %}
+                        <td><div class="bg-warning" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                            {{leave.approval}}
+                        </div>
+                        </td>
+                        {% endif %}
+
+
+                 <td><a href="#"class="custom-style-button">View</i></a></td>
+                </tr>
+
+                {% endfor %} 
+            </tbody>
+        </table>
+{% else %}
+<center>
+    <p class="alert alert-info mt-5"> No Leave Requests </p>
+</center>
+{% endif %}
+
 {% endblock content %}
 

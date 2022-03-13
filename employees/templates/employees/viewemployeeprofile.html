@@ -32,11 +32,8 @@
                                     <div class="col-md-12">{{ employee.pin }}</div>
                                     <div class="col-md-12 mt-2"><b>Date of Birth : </b>{{ employee.dob }}</div>
                                     <div class="col-md-12 mt-2"><b>Mobile : </b>{{ employee.phone }}</div>
-                                    {% if employee.gender == 'm' %}
-                                      <div class="col-md-12 mt-2"><b>Gender : </b>Male</div>
-                                    {% elif employee.gender == 'f' %}
-                                       <div class="col-md-12 mt-2"><b>Gender : </b>Female</div>
-                                    {% endif %}
+                                    <div class="col-md-12 mt-2"><b>Gender : </b>{{ employee.gender }}</div>
+
                                    
                                 </div>    
                             
