@@ -1,0 +1,99 @@
+{% extends "admin/admin-home.html" %}
+
+{% block page %} 
+
+    <div class="container" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+
+        <div class="row ">
+            <!-- company details  -->
+            <div class="container col-md-5 ">
+                <div class="col-md-12 p-3">
+
+                    <div class="row"> 
+                        {% if employee.employeeprofile.photo.url %}  
+                        <a href="/media/{{ employee.employeeprofile.photo }}"><img src="{{ employee.employeeprofile.photo.url }}" class="img-thumbnail" width="150" height="150" > </a>  
+                        {% endif %}
+                    </div>
+
+                    <div class="row mt-3" style="color: #e43c5c;">
+                        <h4>{{ employee.first_name | upper}} {{ employee.middle_name | upper}} {{ employee.last_name | upper}}</h4>
+                    </div>
+
+                    <div class="row">
+                        <h5>{{ designation.designation }}</h5>
+                    </div>
+
+                    <div class="row mt-3 ">
+                        <b>Department : </b> <div class="pl-2"> {{ department.department_name }} </div>
+                    </div>
+
+                    <div class="row">
+                        <b>Employee Id : </b> <div class="pl-2"> {{ employee.id }} </div>
+                    </div>
+                    <div class="row">
+                        <b>Joined Date : </b> <div class="pl-2"> {{ employee.date_joined|date }} </div>
+                    </div>
+                    <div class="row">
+                        <b>Mail : </b> <div class="pl-2"> {{ employee.email }} </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- personal details  -->
+            <div class="container col-md-6">
+
+                <div class="col-md-12 p-3">
+                    <h5 style="border-bottom:2px solid #e43c5c ;">Personal Details </h5>
+
+                    <div class=" mt-2">
+                        <b>Address :</b>
+                        <div >{{employee.employeeprofile.addressline1}}</div>
+                        <div >{{employee.employeeprofile.place}}</div>
+                        <div >{{employee.employeeprofile.city}} {{employee.employeeprofile.state}}</div>
+                        <div >{{employee.employeeprofile.pin}}</div>
+                    </div>
+
+                    <div class="mt-2">
+                        <div class="d-flex mt-1">
+                            <b>Date of Birth :</b><div class="pl-2">{{employee.employeeprofile.dob}}</div>
+                        </div>
+                        <div class="d-flex mt-1">
+                            <b>Mobile :</b><div class="pl-2">{{employee.employeeprofile.phone}}</div>
+                        </div>
+                        <div class="d-flex mt-1">
+                            <b>Gender :</b><div class="pl-2">{{employee.employeeprofile.gender}}</div>
+                        </div>
+
+                    </div>
+
+                    <h5 class="mt-3" style="border-bottom:2px solid #e43c5c ;">Salary Details </h5>
+                        <div class="d-flex mt-1">
+                            <b>Basic Salary :</b><div class="pl-2">{{salary.basic_pay }}</div>
+                        </div>
+
+                        <div class="mt-2 d-flex">
+                            {% if salary.hra %}
+                            <div class="d-flex"><i class="bi bi-check-circle"></i><b class="ml-1 mr-3">HRA</b></div>
+                            {% endif %}
+                            {% if salary.ta %}
+                            <div class="d-flex"><i class="bi bi-check-circle"></i><b class="ml-1 mr-3">TA</b></div>
+                            {% endif %}
+                            {% if salary.pf %}
+                            <div class="d-flex"><i class="bi bi-check-circle"></i><b class="ml-1 mr-3">PF</b></div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="ml-auto"><a href="#" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
+                            <div class="ml-5"><a href="#" style="color: #e43c5c; font-size: 1.5rem;"><i class="bi bi-trash-fill"></i></a></div>
+                        </div>
+                </div>
+
+            </div>
+
+        </div>
+
+      
+    </div>
+
+{% endblock page %}
+

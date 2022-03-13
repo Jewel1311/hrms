@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from admin.forms import AddEmployeeForm, DesignationForm, SalaryForm
 from django.contrib import messages
+from admin.models import Designations, Salary
 from base.models import Department
 from employees.models import EmployeeDesignation
 
@@ -66,4 +67,15 @@ def view_employee(request):
 @login_required
 def employee_detail(request,emp_id):
     employee = Newuser.objects.get(id = emp_id)
-    return render(request, 'admin/employee-detail.hmtl',{'employee':employee})
+    #to get designation of employee from EmployeeDesignation
+    desig_obj = EmployeeDesignation.objects.get(user = emp_id)
+    designation = Designations.objects.get(id = desig_obj.designation_id )
+
+    #to get department of employee from EmployeeDesignation
+
+    dep_obj = EmployeeDesignation.objects.get(user = emp_id)
+    department = Department.objects.get(id = dep_obj.department_id )
+
+    salary = Salary.objects.get(user = emp_id)  
+    
+    return render(request, 'admin/employee-detail.html',{ 'employee':employee, 'designation':designation, 'department':department,'salary':salary})
