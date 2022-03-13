@@ -8,7 +8,7 @@
                     <div class="row">
                         <div class="col-md-4" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                            <div>
-                            <img src="/media/{{ employee.photo }}" class="rounded-circle" width="120px" height="120px">
+                            <a href="/media/{{ employee.photo }}"><img src="{{ employee.photo.url }}" class="rounded-circle" width="120" height="120" > </a>  
                             <center>
                             <div class="mt-2"><b>{{ user.first_name | title}} {{ user.middle_name | title}}
                                 {{ user.last_name | title}} </b></div>
@@ -20,7 +20,7 @@
 
                            <div class="col-md-8">
                                 <div class="row">
-                                    <div class="ml-auto"><a href="#" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
+                                    <div class="ml-auto"><a href="{%url 'employee_profile' %}" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
                                 </div>
                                     <div class="col-md-12 mb-2"><b>Employee ID : </b>{{ user.id }}</div>
                                     <div class="col-md-12 mb-2"><b>Department : </b>{{ department | title }}</div>
