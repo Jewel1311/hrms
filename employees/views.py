@@ -1,9 +1,12 @@
-import datetime 
+import datetime
+from sre_constants import SUCCESS
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
 from admin.models import Designations
 from base.models import Department
-
 from employees.forms import LeaveForm
 from .models import EmployeeDesignation, Leave
 from .models import Attendance, EmployeeProfile
@@ -189,11 +192,27 @@ def apply_leave(request):
          messages.success(request, f'Leave Applied')
       return redirect('apply_leave')
    else:  
-      leave_form = LeaveForm()
-      return render(request, 'employees/apply_leave.html',{ 'leave_form': leave_form })
+      form = LeaveForm()
+      return render(request, 'employees/apply_leave.html',{ 'form': form })
 
 # view leave
 @login_required
 def view_leave(request):
-   leave = Leave.objects.filter(user = request.user).order_by('-id')
-   return render(request,'employees/view_leave.html',{'leave':leave})
+   leaves = Leave.objects.filter(user = request.user).order_by('-id')
+   return render(request,'employees/view_leave.html',{'leaves':leaves })
+
+#to get the detail view of attendance 
+
+@login_required
+def leave_detail(request,slug):
+    leave = Leave.objects.get(id = slug)
+    return render(request, 'employees/leave_detail.html',{ 'leave':leave })
+
+#edit leave 
+class EditLeave(SuccessMessageMixin,UpdateView):
+   model = Leave
+   form_class = LeaveForm
+   template_name = 'employees/apply_leave.html'
+   success_message = "Leave Edited Successfully"
+
+   

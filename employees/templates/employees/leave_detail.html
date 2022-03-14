@@ -1,0 +1,31 @@
+{% extends "employees/employee-home.html" %}
+
+{% block content %} 
+
+<div class="container d-flex flex-column align-items-center" >
+ <div class="col-md-6 p-3" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+    <center>
+    <h5 style="color: #e43c5c;">Leave Details</h5>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}
+   </center>
+    <div class="row">
+        <div class="ml-auto mr-2"><a href="{% url 'leave_edit' leave.pk %}" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
+    </div>
+   <div class="mt-1"><b class="pr-2">Leave Type</b><div class=" p-2" style="background-color: #DADDE2">{{ leave.leave_type|title }}</div></div>
+   <div class="mt-3"><b class="pr-2">From Date</b><div class="p-2" style="background-color: #DADDE2">{{ leave.from_date }}</div></div>
+   <div class="mt-3"><b class="pr-2">From Session</b><div class="p-2" style="background-color: #DADDE2">{{ leave.from_session|title}}</div></div>
+   <div class="mt-3"><b class="pr-2">To Date</b><div class="p-2" style="background-color: #DADDE2">{{ leave.to_date }}</div></div>
+   <div class="mt-3"><b class="pr-2">To Session</b><div class="p-2" style="background-color: #DADDE2">{{ leave.to_session|title }}</div></div>
+   <div class="mt-3"><b class="pr-2">Applied On</b><div class="p-2" style="background-color: #DADDE2">{{ leave.applied_date }}</div></div>
+   <div class="mt-3"><b class="pr-2">Reason</b><div class="p-2" style="background-color: #DADDE2">{{ leave.reason }}</div></div>
+ </div>
+  
+</div>
+{% endblock content %}
+

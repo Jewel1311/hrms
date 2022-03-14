@@ -1,6 +1,7 @@
 from datetime import date
 from django.db import models
 from PIL import Image
+from django.urls import reverse
 from admin.models import Designations
 from base.models import Department
 from users.models import Newuser
@@ -50,6 +51,9 @@ class Leave(models.Model):
     applied_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
     approval = models.CharField(max_length=12,default='pending')
+
+    def get_absolute_url(self):
+        return reverse ("leave_detail",kwargs={"slug":self.id})
 
 #to store the employees designation and department  
 class EmployeeDesignation(models.Model):

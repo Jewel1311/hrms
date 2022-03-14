@@ -2,7 +2,7 @@
 
 {% block content %} 
 
-{% if leave|length > 0 %}
+{% if leaves|length > 0 %}
         <table id='tableid1' class="jtable">
             <thead>
                 <th>Leave Type</th>
@@ -14,7 +14,7 @@
                 <th>Action</th>
             </thead>
             <tbody>
-                {% for leave in leave %}
+                {% for leave in leaves %}
                 <tr>
                     <td>{{ leave.leave_type|title }}</td>
                     <td>{{ leave.from_date }}</td>
@@ -41,7 +41,7 @@
                         {% endif %}
 
 
-                 <td><a href="#"class="custom-style-button">View</i></a></td>
+                 <td><a href="{{ leave.get_absolute_url }}"class="custom-style-button">View</a></td>
                 </tr>
 
                 {% endfor %} 

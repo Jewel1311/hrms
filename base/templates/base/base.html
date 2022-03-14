@@ -52,7 +52,9 @@
      <script type="text/javascript" src="{% static 'DataTables/datatables.min.js' %}"></script>
      <script>
         $(document).ready(function(){
-        $('#tableid1').DataTable();
+        $('#tableid1').DataTable({
+        "aaSorting": []
+        });
         });
      </script>
 </body>

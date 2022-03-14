@@ -10,4 +10,6 @@ urlpatterns = [
     path('attendance_view/', views.attendance_view , name='attendance_view'),
     path('apply_leave/', views.apply_leave , name='apply_leave'),
     path('view_leave/', views.view_leave , name='view_leave'),
+    path('leave_detail/<slug:slug>/',views.leave_detail, name='leave_detail'),
+    path('leave_edit/<int:pk>/',views.EditLeave.as_view(), name='leave_edit'),
 ]
