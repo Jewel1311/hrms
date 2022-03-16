@@ -14,10 +14,30 @@
     {% endfor %}
       {% endif %}
    </center>
+   {% if leave.approval == 'pending' %}
     <div class="row">
         <div class="ml-auto mr-2"><a href="{% url 'leave_edit' leave.pk %}" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
     </div>
-   <div class="mt-1"><b class="pr-2">Leave Type</b><div class=" p-2" style="background-color: #DADDE2">{{ leave.leave_type|title }}</div></div>
+    {% endif %}
+     <!-- for status colors  -->
+     {% if leave.approval == 'approved' %}
+     <div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                  {{leave.approval}}
+          </div>
+  
+      {% elif leave.approval == 'not approved' %}
+      <div class="bg-danger" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                  {{leave.approval}}
+          </div>
+      
+      {% else %}
+      <div class="bg-warning " style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+          {{leave.approval}}
+      </div>
+     
+      {% endif %}
+
+   <div class="mt-2"><b class="pr-2">Leave Type</b><div class=" p-2" style="background-color: #DADDE2">{{ leave.leave_type|title }}</div></div>
    <div class="mt-3"><b class="pr-2">From Date</b><div class="p-2" style="background-color: #DADDE2">{{ leave.from_date }}</div></div>
    <div class="mt-3"><b class="pr-2">From Session</b><div class="p-2" style="background-color: #DADDE2">{{ leave.from_session|title}}</div></div>
    <div class="mt-3"><b class="pr-2">To Date</b><div class="p-2" style="background-color: #DADDE2">{{ leave.to_date }}</div></div>

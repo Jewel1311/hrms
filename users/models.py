@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import  ValidationError
 from django.contrib.auth.models import AbstractUser,BaseUserManager
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 
@@ -77,11 +78,8 @@ class Newuser(AbstractUser):
     #     super().save(*args, **kwargs)                  # save the user
     
 
-
     def __str__(self):
         return self.email
-
-
 #profile for applicants
 
 class ApplicantProfile(models.Model):

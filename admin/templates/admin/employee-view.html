@@ -33,7 +33,7 @@
                     {% endif %}
                     {%endfor %}
 
-                    <td><a href="{% url 'employee_detail' employee.id %}"class="custom-style-button">View</i></a></td>
+                    <td><a href="{% url 'employee_detail' employee.pk %}"class="custom-style-button">View</i></a></td>
                 </tr>
                 {% endfor %}
             </tbody>

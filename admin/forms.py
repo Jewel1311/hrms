@@ -20,6 +20,11 @@ class AddEmployeeForm(UserRegistrationForm):
             model = Newuser
             fields = [ 'first_name','middle_name','last_name','email']
 
+class EditEmployeeForm(forms.ModelForm): 
+        class Meta:
+            model = Newuser
+            fields = [ 'first_name','middle_name','last_name','email']
+        
 
 # add employee salary details
 
