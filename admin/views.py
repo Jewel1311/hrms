@@ -1,4 +1,5 @@
 from dataclasses import field
+import logging
 from statistics import mode
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -82,6 +83,7 @@ def employee_detail(request,pk):
     return render(request, 'admin/employee-detail.html',{ 'employee':employee, 'designation':designation, 'department':department,'salary':salary})
 
 #edit employee 
+@login_required
 def employee_edit(request,pk):
 
     #get the instance that we are updateing currently
@@ -98,6 +100,7 @@ def employee_edit(request,pk):
             employee.save()
             salary.save()
             designation.save()
+            messages.success(request,f'Changes Saved for the Employee')
             return redirect(employee_detail,pk)
         else:
             return redirect(employee_detail,pk)
@@ -111,4 +114,10 @@ def employee_edit(request,pk):
         return render(request, 'admin/edit_employee.html', {'reg_form':reg_form, 'salary_form':salary_form, 'desig_form':desig_form })
     
 
- 
+#  Delete an employee 
+@login_required
+def delete_employee(requset,pk):
+    employee = Newuser.objects.get(id=pk)
+    employee.delete()
+    messages.success(requset,f'Employee Deleted')
+    return redirect('view_employee')

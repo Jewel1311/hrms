@@ -1,6 +1,17 @@
 {% extends "admin/admin-home.html" %}
 
 {% block page %} 
+<center>
+    <!-- start messages  -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}            
+     <!-- end messages  -->
+    </center>
 
     <div class="container" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
 
@@ -66,6 +77,8 @@
 
                     </div>
 
+                   <!-- salary details  -->
+
                     <h5 class="mt-3" style="border-bottom:2px solid #e43c5c ;">Salary Details </h5>
                         <div class="d-flex mt-1">
                             <b>Basic Salary :</b><div class="pl-2">{{salary.basic_pay }}</div>
@@ -83,17 +96,46 @@
                             {% endif %}
                         </div>
                         <div class="row">
+
                             <div class="ml-auto"><a href="{% url 'employee_edit' employee.pk %}" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
-                            <div class="ml-5"><a href="#" style="color: #e43c5c; font-size: 1.5rem;"><i class="bi bi-trash-fill"></i></a></div>
+
+                            <div class="ml-5"><buton type="button"style="color: #e43c5c; font-size: 1.5rem;" data-toggle="modal" data-target="#exampleModal"><i class="bi bi-trash-fill"></i></buton></div>
+
                         </div>
                 </div>
 
             </div>
 
         </div>
-
       
     </div>
 
+
+
+     <!-- Delete message Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Employee</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{% url 'delete_employee' employee.pk %}">
+              {% csrf_token %}
+              <div>Are you sure you want to delete <b>{{ employee.first_name|title}} {{ employee.middle_name|title}} {{ employee.last_name|title}}</b> ?</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="custom-style-button">Yes, Delete</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+  <!-- end delete message modal  -->
+    
 {% endblock page %}
 
