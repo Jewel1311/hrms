@@ -1,12 +1,12 @@
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, SalaryForm
+from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, JobForm, SalaryForm
 from django.contrib import messages
 from admin.models import Designations, Salary
-from base.models import Department
+from base.models import Department, Jobs
 from employees.models import EmployeeDesignation
 from users.models import Newuser
 
@@ -155,7 +155,7 @@ def designation_edit(request,pk):
         designation = Designations(id = pk)
         designation.designation = request.POST['designation']
         designation.save()
-        messages.success(request,f'Designation Edited')
+        messages.success(request,f'Designation Updated')
         return redirect('designations')
     else:
         edit = Designations.objects.get(id = pk)
@@ -168,7 +168,7 @@ def department_edit(request,pk):
         department = Department(id = pk)
         department.department_name = request.POST['department']
         department.save()
-        messages.success(request,f'Department Edited')
+        messages.success(request,f'Department Updated')
         return redirect('department')
     else:
         edit = Department.objects.get(id = pk)
@@ -197,3 +197,41 @@ class DeleteDesignation(SuccessMessageMixin,DeleteView):
         print(id)
         return get_object_or_404(Designations, id=id)
    
+# job add for applicant 
+def add_jobs(request):
+    if request.method == "POST":
+        form = JobForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,f'Job Added')
+        else:
+            messages.success(request,f'Cannot Add Job')
+        return redirect('add_jobs')
+
+    else:    
+        form = JobForm() 
+        return render(request, 'admin/add_jobs.html',{'form':form })
+
+# view all the jobs
+def view_all_jobs(request):
+    jobs = Jobs.objects.all()
+    return render(request, 'admin/view_jobs.html',{ 'jobs':jobs })
+
+#detailed job view
+def job_detail_view(request,slug):
+    job_id = Jobs.objects.get(id = slug)
+    return render(request, 'admin/admin_jobdetail_view.html',{'job_id': job_id})
+
+#edit Job
+class EditJob(SuccessMessageMixin,UpdateView):
+   model = Jobs
+   form_class = JobForm
+   template_name = 'admin/add_jobs.html'
+   success_message = "Job Updated"
+
+@login_required
+def delete_job(requset,pk):
+    job = Jobs.objects.get(id=pk)
+    job.delete()
+    messages.success(requset,f'Job Deleted')
+    return redirect('view_all_jobs')

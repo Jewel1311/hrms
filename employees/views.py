@@ -183,11 +183,12 @@ def apply_leave(request):
    if request.method == "POST":
       leave_form = LeaveForm(request.POST)
       if leave_form.is_valid():
-         print(leave_form.cleaned_data['leave_type'])
          leave = leave_form.save(False)
          leave.user = request.user
          leave.save()
-         messages.success(request, f'Leave Applied')
+         messages.success(request, f'Leave Applied')   
+      else:
+         messages.warning(request, f'Cannot Apply Leave')
       return redirect('apply_leave')
    else:  
       form = LeaveForm()
@@ -211,6 +212,6 @@ class EditLeave(SuccessMessageMixin,UpdateView):
    model = Leave
    form_class = LeaveForm
    template_name = 'employees/apply_leave.html'
-   success_message = "Leave Edited Successfully"
+   success_message = "Leave Updated"
 
    

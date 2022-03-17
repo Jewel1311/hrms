@@ -1,0 +1,51 @@
+{% extends "admin/admin-home.html" %}
+
+{% block page %} 
+<center>
+    <!-- start messages  -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}            
+     <!-- end messages  -->
+    </center>
+
+  <!-- add Jobs  -->
+    <div class="row mr-auto mb-3"><a href="{% url 'add_jobs' %}" class=" ml-auto custom-style-button" style="border-radius: 20px"><i class="bi bi-plus-lg"></i> Add Jobs</a></div>
+
+{% if jobs|length > 0 %}
+        <table class="jtable" id='tableid1'>
+            <thead>
+                <th>ID</th>
+                <th>Job Title</th>
+                <th>Location</th>
+                <th>Posted </th>
+                <th>Withdrawal</th>
+                <th>Department</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.id }}</td>
+                    <td>{{ job.job_title }}</td>
+                    <td>{{ job.location|title }}</td>
+                    <td>{{ job.posted_on}}</td>
+                    <td>{{ job.withdraw_date }}</td>
+                    <td>{{ job.department }}</td>
+                    <td><a href="{{ job.get_absolute_url }}"class="custom-style-button">View</i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No Jobs Added </p>
+        </center>
+{% endif %}
+{% endblock page %}
+
