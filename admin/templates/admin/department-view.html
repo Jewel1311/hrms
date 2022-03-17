@@ -1,0 +1,80 @@
+{% extends "admin/admin-home.html" %}
+
+{% block page %} 
+<center>
+    <!-- start messages  -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}            
+     <!-- end messages  -->
+    </center>
+
+  <!-- add employee  -->
+    <div class="row mr-auto mb-3"><button class=" ml-auto custom-style-button" style="border-radius: 20px"  data-toggle="modal" data-target="#exampleModalCenter"><i class="bi bi-plus-lg"></i> Add Department</button></div>
+
+{% if departments|length > 0 %}
+        <table class="jtable" id='tableid1'>
+            <thead style="text-align: center;">
+                <th>Department Id</th>
+                <th>Department Name</th>
+                <th>Action</th>
+            </thead>
+            <tbody style="text-align: center;">
+                {% for department in departments %}
+                <tr>
+                    <td>{{ department.id }}</td>
+                    <td>{{ department.department_name|title }}</td>
+                    <td>
+                       <div class="d-inline-block">
+                         <div class="d-flex">
+                              <div class="ml-auto"><a href="{% url 'department_edit' department.pk %}" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
+                              
+                              <div class="ml-5"><a href="{% url 'delete_department' department.pk %}" style="color: #e43c5c; font-size: 1.5rem;"><i class="bi bi-trash-fill"></i></buton></div>
+                   
+                             
+                        </div>
+                      </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No Departments Added</p>
+        </center>
+{% endif %}
+
+  
+  <!-- Modal  for add department-->
+  <div class="modal fade"  id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Add Department</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+              {% csrf_token %}
+              <strong>Department Name </strong>
+           <input type="text" class="form-control" name="department">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="custom-style-button">Add</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal  -->
+{% endblock page %}
+

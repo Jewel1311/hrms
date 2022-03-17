@@ -1,7 +1,7 @@
-from dataclasses import field
-import logging
-from statistics import mode
-from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, SalaryForm
 from django.contrib import messages
@@ -121,3 +121,79 @@ def delete_employee(requset,pk):
     employee.delete()
     messages.success(requset,f'Employee Deleted')
     return redirect('view_employee')
+
+# department 
+@login_required
+def department(request):
+    if request.method == "POST":
+        department = Department()
+        department.department_name = request.POST['department']
+        department.save()
+        messages.success(request,f'Department Added')
+        return redirect('department')
+    else:
+        departments = Department.objects.all()
+        return render(request, 'admin/department-view.html',{'departments':departments})
+
+# Designations 
+@login_required
+def designations(request):
+    if request.method == "POST":
+        designation = Designations()
+        designation.designation = request.POST['designation']
+        designation.save()
+        messages.success(request,f'Designation Added')
+        return redirect('designations')
+    else:
+        designations = Designations.objects.all()
+        return render(request, 'admin/designation.html',{'designations':designations})
+
+# Edit Designation 
+@login_required
+def designation_edit(request,pk):
+    if request.method == "POST":
+        designation = Designations(id = pk)
+        designation.designation = request.POST['designation']
+        designation.save()
+        messages.success(request,f'Designation Edited')
+        return redirect('designations')
+    else:
+        edit = Designations.objects.get(id = pk)
+        return render(request, 'admin/designation_edit.html',{'edit': edit})
+
+# Edit Department 
+@login_required
+def department_edit(request,pk):
+    if request.method == "POST":
+        department = Department(id = pk)
+        department.department_name = request.POST['department']
+        department.save()
+        messages.success(request,f'Department Edited')
+        return redirect('department')
+    else:
+        edit = Department.objects.get(id = pk)
+        return render(request, 'admin/department_edit.html',{'edit': edit})
+
+# delete Department
+class DeleteDepartment(SuccessMessageMixin,DeleteView):
+    template_name = 'admin/department_delete.html'
+    success_message = "Department Deleted"
+    success_url = reverse_lazy('department')
+
+    def get_object(self):
+        id =  self.kwargs.get("pk")
+        print(id)
+        return get_object_or_404(Department, id=id)
+   
+
+# delete Designation
+class DeleteDesignation(SuccessMessageMixin,DeleteView):
+    template_name = 'admin/designation_delete.html'
+    success_message = "Designation Deleted"
+    success_url = reverse_lazy('designations')
+
+    def get_object(self):
+        id =  self.kwargs.get("pk")
+        print(id)
+        return get_object_or_404(Designations, id=id)
+   

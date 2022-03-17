@@ -74,6 +74,16 @@
             <li>
                 <a href="#">Portfolio</a>
             </li>
+              <!-- Designations  -->
+              <li class="{% if url_name == 'designations' %} active {% endif %}">
+                <a href="{% url 'designations' %}"> <i class="bi bi-person-badge"></i> <span class="ml-2">Designations</span></a>  
+            </li>
+
+            <!-- Department  -->
+            <li class="{% if url_name == 'department' %} active {% endif %}">
+                <a href="{% url 'department' %}"> <i class="bi bi-building"></i> <span class="ml-2">Department</span></a>  
+            </li>
+
             <li>
                 <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> <span class="ml-2">Logout </span></a>
             </li>

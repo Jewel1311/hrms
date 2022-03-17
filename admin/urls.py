@@ -7,4 +7,10 @@ urlpatterns = [
     path('employee_detail/<int:pk>/',views.employee_detail, name='employee_detail'),
     path('employee_edit/<int:pk>/',views.employee_edit, name='employee_edit'),
     path('delete_employee/<int:pk>/',views.delete_employee, name='delete_employee'),
+    path('department/',views.department, name='department'),
+    path('designations/',views.designations, name='designations'),
+    path('designation_edit/<int:pk>/',views.designation_edit, name='designation_edit'),
+    path('department_edit/<int:pk>/',views.department_edit, name='department_edit'),
+    path('delete_department/<int:pk>/',views.DeleteDepartment.as_view(), name='delete_department'),
+    path('delete_designation/<int:pk>/',views.DeleteDesignation.as_view(), name='delete_designation'),
 ]

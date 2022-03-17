@@ -12,6 +12,10 @@
       {% endif %}            
      <!-- end messages  -->
     </center>
+
+  <!-- add employee  -->
+    <div class="row mr-auto mb-3"><a href="{% url 'add_employee' %}" class=" ml-auto custom-style-button" style="border-radius: 20px"><i class="bi bi-person-plus-fill"></i> Add Employee</a></div>
+
 {% if employees|length > 0 %}
         <table class="jtable" id='tableid1'>
             <thead>
