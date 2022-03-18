@@ -36,9 +36,6 @@
                     <li class =" {% if url_name == 'view_employee'  %} active {% endif %}">
                         <a href="{% url 'view_employee' %}">View Employees</a>
                     </li>
-                    <li>
-                        <a href="#">Page 3</a>
-                    </li>
                 </ul>
             </li>
 
@@ -74,18 +71,9 @@
             <li>
                 <a href="#">Portfolio</a>
             </li>
-              <!-- Designations  -->
-              <li class="{% if url_name == 'designations' %} active {% endif %}">
-                <a href="{% url 'designations' %}"> <i class="bi bi-person-badge"></i> <span class="ml-2">Designations</span></a>  
-            </li>
 
-            <!-- Department  -->
-            <li class="{% if url_name == 'department' %} active {% endif %}">
-                <a href="{% url 'department' %}"> <i class="bi bi-building"></i> <span class="ml-2">Department</span></a>  
-            </li>
-
-            <!-- applicants  -->
-            <li class =" {% if url_name == 'add_jobs'  %} active {% elif url_name == 'view_all_jobs' %} active{% endif %}">
+              <!-- applicants  -->
+              <li class =" {% if url_name == 'add_jobs'  %} active {% elif url_name == 'view_all_jobs' %} active{% elif url_name == 'view_applicants' %}active{% endif %}">
 
                 <a href="#applicantSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-person-lines-fill"></i> <span class="ml-2">Applicants </span></a>
                 
@@ -96,11 +84,23 @@
                     <li class="{% if url_name == 'view_all_jobs' %} active {% endif %}">
                         <a href="{% url 'view_all_jobs' %}">Jobs</a>
                     </li>
-                    <li>
-                        <a href="#">Page 3</a>
+                    <li class="{% if url_name == 'view_applicants' %} active {% endif %}">
+                        <a href="{% url 'view_applicants' %}">Applicants</a>
                     </li>
                 </ul>
             </li>
+
+              <!-- Designations  -->
+              <li class="{% if url_name == 'designations' %} active {% endif %}">
+                <a href="{% url 'designations' %}"> <i class="bi bi-person-badge"></i> <span class="ml-2">Designations</span></a>  
+            </li>
+
+            <!-- Department  -->
+            <li class="{% if url_name == 'department' %} active {% endif %}">
+                <a href="{% url 'department' %}"> <i class="bi bi-building"></i> <span class="ml-2">Department</span></a>  
+            </li>
+
+          
 
             <li>
                 <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> <span class="ml-2">Logout </span></a>

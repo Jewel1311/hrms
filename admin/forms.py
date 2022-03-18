@@ -7,9 +7,7 @@ from users.models import Newuser
 from base.models import Jobs
 
 LOCATION_CHOICES =(
-    ('Kerala', 'Kerala'),
-    ('Banglore', 'Banglore'),
-    ('Chennai', 'Chennai'),
+    ('Kochi,Kerala', 'Kochi,Kerala'),
 )
 # add employee registration details
 

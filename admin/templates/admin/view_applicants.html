@@ -1,0 +1,48 @@
+{% extends "admin/admin-home.html" %}
+
+{% block page %} 
+<center>
+    <!-- start messages  -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}            
+     <!-- end messages  -->
+    </center>
+
+{% if applicants|length > 0 %}
+        <table class="jtable" id='tableid1'>
+            <thead>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>State</th>
+                <th>Last Apply</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                {% for applicant in applicants %}
+                <tr>
+                    <td>{{ applicant.first_name|title }}</td>
+                    <td>{{ applicant.last_name|title }}</td>
+                    <td>{{ applicant.email}}</td>
+                    <td>{{ applicant.applicantprofile.gender|title }}</td>
+                    <td>{{ applicant.applicantprofile.state|title }}</td>
+                    <td>{{ applicant.applicantprofile.last_apply }}</td>
+                    <td><a href="#"class="custom-style-button">View</i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No Applicants Registered </p>
+        </center>
+{% endif %}
+{% endblock page %}
+

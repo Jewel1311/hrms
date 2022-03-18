@@ -84,12 +84,12 @@ class Newuser(AbstractUser):
 
 class ApplicantProfile(models.Model):
     GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Others'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Nil', 'Nil'),
     )
     user=models.OneToOneField(Newuser,unique=True,on_delete=models.CASCADE)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     dob=models.DateField(null=True)
     addressline1 = models.CharField(max_length= 60,default='')
     place=models.CharField(max_length=60)

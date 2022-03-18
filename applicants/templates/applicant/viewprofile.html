@@ -58,9 +58,9 @@
                                     <div class="col-md-12">{{ applicant.pin }}</div>
                                     <div class="col-md-12"><b>Date of Birth : </b>{{ applicant.dob }}</div>
                                     <div class="col-md-12 mt-2"><b>Mobile : </b>{{ applicant.phone }}</div>
-                                    {% if applicant.gender == 'm' %}
+                                    {% if applicant.gender == 'Male' %}
                                       <div class="col-md-12 mt-2"><b>Gender : </b>Male</div>
-                                    {% elif applicant.gender == 'f' %}
+                                    {% elif applicant.gender == 'Female' %}
                                        <div class="col-md-12 mt-2"><b>Gender : </b>Female</div>
                                     {% endif %}
                                     <div class="col-md-12 mt-2"><b>CV : </b><a href= "/media/{{ applicant.cv }} ">{{ applicant.cv }}</a></div>

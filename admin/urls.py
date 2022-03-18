@@ -18,4 +18,5 @@ urlpatterns = [
     path('job_detail_view/<slug:slug>/',views.job_detail_view, name='job_detail_view'),
     path('edit_job/<int:pk>/',views.EditJob.as_view(), name='edit_job'),
     path('delete_job/<int:pk>/',views.delete_job, name='delete_job'),
+    path('view_applicants/',views.view_applicants, name='view_applicants'),
 ]

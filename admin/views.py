@@ -235,3 +235,7 @@ def delete_job(requset,pk):
     job.delete()
     messages.success(requset,f'Job Deleted')
     return redirect('view_all_jobs')
+
+def view_applicants(request):
+    applicants = Newuser.objects.filter(is_applicant=True)
+    return render(request,'admin/view_applicants.html',{ 'applicants':applicants})
