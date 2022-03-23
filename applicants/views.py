@@ -79,7 +79,7 @@ def apply_now(request,job_id):
             messages.success(request, f'Your application has been submitted successfully')
             return render(request, 'applicant/applied.html',{'applied':applied})
          else:
-            messages.warning(request, f'You can only apply for a new profile after {90-diff} days')
+            messages.warning(request, f'You can only apply for a new job after {90-diff} days')
             return redirect('jobs')
 
 

@@ -1,6 +1,7 @@
-from datetime import date
+import datetime
 from django.db import models
 from PIL import Image
+from django.forms import ValidationError
 from django.urls import reverse
 from admin.models import Designations
 from base.models import Department
@@ -39,13 +40,16 @@ class Attendance(models.Model):
     shift = models.CharField(max_length=10,default='')
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
 
-
+#to check if the date is a past date
+def validate_date(date):
+    if date < datetime.date.today():
+        raise ValidationError("Date cannot be in the past")
 
 class Leave(models.Model):
     leave_type = models.CharField(max_length=20)
-    from_date = models.DateField()
+    from_date = models.DateField(validators=[validate_date])
     from_session = models.CharField(max_length=10)
-    to_date = models.DateField()
+    to_date = models.DateField(validators=[validate_date])
     to_session = models.CharField(max_length=10)
     reason = models.TextField()
     applied_date = models.DateTimeField(auto_now_add=True)

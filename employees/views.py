@@ -186,10 +186,10 @@ def apply_leave(request):
          leave = leave_form.save(False)
          leave.user = request.user
          leave.save()
-         messages.success(request, f'Leave Applied')   
+         messages.success(request, f'Leave Applied') 
+         return redirect('apply_leave')  
       else:
-         messages.warning(request, f'Cannot Apply Leave')
-      return redirect('apply_leave')
+         return render(request, 'employees/apply_leave.html',{ 'form': leave_form })
    else:  
       form = LeaveForm()
       return render(request, 'employees/apply_leave.html',{ 'form': form })

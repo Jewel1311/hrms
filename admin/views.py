@@ -204,10 +204,9 @@ def add_jobs(request):
         if form.is_valid():
             form.save()
             messages.success(request,f'Job Added')
+            return redirect('add_jobs')
         else:
-            messages.success(request,f'Cannot Add Job')
-        return redirect('add_jobs')
-
+            return render(request, 'admin/add_jobs.html',{'form':form })
     else:    
         form = JobForm() 
         return render(request, 'admin/add_jobs.html',{'form':form })

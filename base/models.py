@@ -1,7 +1,8 @@
+import datetime
 from django.db import models
+from django.forms import ValidationError
 from django.urls import reverse
 
-from admin.models import Salary
 
 
 class Department(models.Model):
@@ -14,14 +15,18 @@ class Department(models.Model):
     def __str__(self):
         return self.department_name
 
-
+#to check if the date is a past date
+def validate_date(date):
+    if date < datetime.date.today():
+        raise ValidationError("Date cannot be in the past")
+        
 class Jobs(models.Model):
     job_title = models.CharField(max_length=60)
     job_description = models.TextField()
     skills = models.TextField(default='')
     location = models.CharField(max_length=60)
     posted_on = models.DateField(auto_now_add=True)
-    withdraw_date = models.DateField()
+    withdraw_date = models.DateField(validators=[validate_date])
     salary = models.BigIntegerField(null=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     
