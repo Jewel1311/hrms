@@ -1,4 +1,6 @@
 import datetime
+from operator import mod
+from urllib import request
 from django.db import models
 from PIL import Image
 from django.forms import ValidationError
@@ -65,4 +67,16 @@ class EmployeeDesignation(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     user = models.ForeignKey(Newuser,on_delete=models.CASCADE)
 
- 
+
+# to store attendance regulaization
+class AttendanceRegularization(models.Model):
+    date = models.DateField()
+    old_entry = models.TimeField()
+    new_entry = models.TimeField()
+    old_exit = models.TimeField()
+    new_exit = models.TimeField()
+    reason = models.TextField()
+    status = models.CharField(max_length=12,default='pending')
+    user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
+    attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE)
+    

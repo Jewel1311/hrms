@@ -21,7 +21,7 @@
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;"> 
           
-    <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
+    <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'jobs' %}">HRMS</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span><i class="bi bi-list mobile-nav-toggle" style="color: white;"></i></span>
     </button>
@@ -58,7 +58,7 @@
           <p class="col-md-3"><b>Applied on : </b>{{ applications.applied_date }}</p>
         </div>
         <p>{{ applications.job.location | title }}</p>
-        
+        <a href="{% url 'applied_details' applications.job.id %}" class="custom-style-button mt-2 mb-2 ">Show Details </a>
       </div>
     </div>
   </div>

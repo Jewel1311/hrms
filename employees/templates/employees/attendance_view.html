@@ -1,7 +1,16 @@
 {% extends "employees/employee-home.html" %}
 
 {% block content %} 
+
 <center>
+    {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{message.tags}} mt-2">
+              {{ message }}
+          </div>
+          {% endfor %}
+   {% endif %}
+
     <form method="POST" class="mt-2">
         {% csrf_token %}
         <select name="shift" class="dropdown-style">
@@ -11,24 +20,25 @@
         <button type="submit" class="custom-style-button">Show</button>
     </form>
 </center>
+
 {% if attendance|length > 0 %}
         <div >
         <table class="jtable" id='tableid1'>
-            <thead>
+            <thead style="text-align: center;">
                 <th>Date</th>
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Shift</th>
-                <th style="text-align: center;">Action</th>
+                <th>Action</th>
             </thead>
-            <tbody>
+            <tbody  style="text-align: center;">
                 {% for attendance in attendance %}
                 <tr>
-                    <td>{{ attendance.attendance_date }}</td>
+                    <td> {{ attendance.attendance_date }}</td>
                     <td>{{ attendance.entry_time }}</td>
                     <td>{{ attendance.exit_time }}</td>
                     <td>{{ attendance.shift|title}}</td>
-                    <td style="text-align: center;"><a href="#" class="custom-style-button">Request Change</a></td>
+                    <td><a href="{% url 'attendance_regularization' attendance.pk %}" class="custom-style-button"> Regularize </a></td>
                 </tr>
                 {% endfor %}
             </tbody>

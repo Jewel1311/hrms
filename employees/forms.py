@@ -1,5 +1,5 @@
 from django import forms
-from .models import Leave
+from .models import AttendanceRegularization, Leave
 
 LEAVE_CHOICES =(
     ('casual leave', 'Casual Leave'),
@@ -26,3 +26,14 @@ class LeaveForm(forms.ModelForm):
     class Meta:
         model = Leave
         fields = ['leave_type','from_date','from_session','to_date','to_session','reason']
+
+class TimePickerInput(forms.TimeInput):
+        input_type = 'time'
+
+class RegularizeForm(forms.ModelForm):
+    new_entry = forms.TimeField( label="New Entry Time",widget=TimePickerInput(attrs={'class':'form-control'}))
+    new_exit = forms.TimeField(label="New Exit Time",widget=TimePickerInput(attrs={'class':'form-control'}))
+    reason =  forms.CharField(label="Reason",widget=forms.Textarea(attrs={'class':'form-control','rows':1}))
+    class Meta:
+        model = AttendanceRegularization
+        fields = ['new_entry','new_exit','reason']

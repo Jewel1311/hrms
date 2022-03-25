@@ -23,7 +23,7 @@
             <li class="{% if url_name == 'employee-home' %} active {% endif %}">
               <a  href="{% url 'employee-home' %}" ><i class="bi bi-house-door-fill"></i> <span class="ml-2">Dashboard </span></a> 
             </li>
-            <li class =" {% if url_name == 'morning_shift'  %} active {% elif url_name == 'night_shift' %}active  {% elif url_name == 'attendance_view' %}active {% endif %}">
+            <li class =" {% if url_name == 'morning_shift'  %} active {% elif url_name == 'night_shift' %}active  {% elif url_name == 'attendance_view' %}active {% elif url_name == 'regularization_requests' %}active {% endif %}">
 
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-calendar-check"></i> <span class="ml-2">Attendance </span></a>
 
@@ -36,6 +36,9 @@
                     </li>
                     <li class="{% if url_name == 'attendance_view' %} active {% endif %}">
                         <a  href="{% url 'attendance_view' %}">Attendance View</a>
+                    </li>
+                    <li class="{% if url_name == 'regularization_requests' %} active {% endif %}">
+                        <a  href="{% url 'regularization_requests' %}">Regularizations</a>
                     </li>
                 </ul>
             </li>

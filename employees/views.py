@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from admin.models import Designations
 from base.models import Department
-from employees.forms import LeaveForm
-from .models import EmployeeDesignation, Leave
+from employees.forms import LeaveForm, RegularizeForm
+from .models import AttendanceRegularization, EmployeeDesignation, Leave
 from .models import Attendance, EmployeeProfile
 from django.contrib import messages
 
@@ -215,3 +215,38 @@ class EditLeave(SuccessMessageMixin,UpdateView):
    success_message = "Leave Updated"
 
    
+@login_required
+def attendance_regularization(request,pk):   
+   form = RegularizeForm()
+   attendance = Attendance.objects.get(id = pk)
+   context = {
+         'attendance':attendance,
+         'form' :form
+   }
+   if request.method == "POST":
+      reg_form = RegularizeForm(request.POST)
+      if reg_form.is_valid():
+         regulization = reg_form.save(False)
+         regulization.date = attendance.attendance_date
+         regulization.old_entry = attendance.entry_time
+         regulization.old_exit = attendance.exit_time
+         regulization.user = request.user
+         regulization.attendance = attendance
+         regulization.save()
+         messages.success(request,f'Regulization Requested')
+         return redirect('attendance_view')
+      else:
+         return render(request,'employees/attendance_regularization.html',context)
+
+   else:
+      return render(request,'employees/attendance_regularization.html',context)
+
+#to view the regulization requests
+@login_required
+def regularization_requests(request):
+   requests = AttendanceRegularization.objects.filter(user = request.user)
+   print(requests)
+   context = {
+      'requests':requests,
+   }
+   return render(request,'employees/regularization_requests.html',context)

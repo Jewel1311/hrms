@@ -43,6 +43,10 @@ def job_detail(request, job_id):
     context = { 'job_id':job_id }
     return render(request,'applicant/jobdetail.html',context)
 
+def applied_details(request, job_id):
+    job_id = Jobs.objects.get(id=job_id)
+    context = { 'job_id':job_id }
+    return render(request,'applicant/applied_details.html',context)
 
 
 @login_required

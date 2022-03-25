@@ -2,21 +2,15 @@
 
    {% block title %}
    <title>
-   {% if user.is_authenticated %}
-    
-         Applicant-Home
+
+          Applicant-Home
    
-   {% else %}
-      
-         Job-detail
-   {% endif %}
   </title>
    {% endblock title %}
 
 {% block body %}
- <!-- topbar -->
- <!-- if user is not logged in show this navbar -->
- {% if user.is_authenticated %}
+
+
 
  <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;"> 
           
@@ -47,28 +41,6 @@
 </div>
 </nav>
 
- <!-- if user is logged in show this navbar -->
-
-{% else %}
- <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #082032;">
-        
-        <a class="navbar-brand" style="color: white; font-weight: bold; padding:0.2rem" href="{% url 'index' %}">HRMS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span><i class="bi bi-list mobile-nav-toggle" style="color: white;"></i></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        
-            <div class="navbar-nav">
-                <a class="custom-link" style="color: white;" href="{% url 'register' %}">Register</a>
-                <a class="custom-link" style="color: white;" href="{% url 'login' %}">Login</a>
-        
-        </div>
-      </div>
-  </nav>
-
-{% endif %}
-
   <div class="row mx-5">
     <div class="col-sm-12">
 
@@ -95,8 +67,5 @@
             <p>{{ job_id.withdraw_date }}</p>
         </div>
     </div>
-    <center> 
-        <a href="{% url 'apply_confirmation' job_id.id %}" class="custom-style-button mt-2 mb-2 ">Apply Now </a>
-    </center>
     {% endblock body %}
 
