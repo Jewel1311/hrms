@@ -16,8 +16,7 @@
 {% if applicants|length > 0 %}
         <table class="jtable" id='tableid1'>
             <thead>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Gender</th>
                 <th>State</th>
@@ -27,8 +26,7 @@
             <tbody>
                 {% for applicant in applicants %}
                 <tr>
-                    <td>{{ applicant.first_name|title }}</td>
-                    <td>{{ applicant.last_name|title }}</td>
+                    <td><b>{{ applicant.first_name|title }} {{ applicant.middle_name|title }} {{ applicant.last_name|title }} </b></td>
                     <td>{{ applicant.email}}</td>
                     <td>{{ applicant.applicantprofile.gender|title }}</td>
                     <td>{{ applicant.applicantprofile.state|title }}</td>

@@ -1,0 +1,72 @@
+{% extends "admin/admin-home.html" %}
+
+{% block page %} 
+<center>
+    <!-- start messages  -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}            
+     <!-- end messages  -->
+    </center>
+
+{% if applications|length > 0 %}
+<center><h5 style="color:#e43c5c;">Applications for {{ job.job_title}}</h5></center>
+        <table class="jtable" id='tableid1'>
+            <thead style="text-align: center;">
+                <th>Name</th>
+                <th>Email</th>
+                <th>Applied Date</th>
+                <th>CV</th>
+                <th>Status</th>
+                <th>Action</th>
+            </thead>
+            <tbody style="text-align: center;">
+                {% for application in applications %}
+                <tr>
+                    <td>
+                        <a href="#"><b style="color:rgb(60, 60, 214);">{{ application.user.first_name|title }} {{ application.user.middle_name|title }} {{ application.user.last_name|title }}</b>
+                         </a>
+                    </td>
+                    <td>{{ application.user.email}}</td>
+                    <td>{{ application.applied_date }}</td>
+                    <td style=" color:rgb(60, 60, 214);"><a href="{{application.user.applicantprofile.cv.url }}">{{application.user.applicantprofile.cv }}</a> </td>
+                    
+                    <!-- for status colors  -->
+                    {% if application.selected == 'accepted' %}
+                    <td><div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                {{ application.selected|title }}
+                        </div>
+                    </td>
+                    {% elif application.selected == 'rejected' %}
+                    <td><div class="bg-danger" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                {{ application.selected|title }}
+                        </div>
+                    </td>
+                    {% else %}
+                    <td><div class="bg-warning" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                        {{ application.selected|title }}
+                    </div>
+                    </td>
+                    {% endif %}
+
+
+                    <td>
+                        <a href="{% url 'applicant_status' application.id job.id 'accept' %}"class="btn btn-success">Accept</i></a>
+                        <a href="{% url 'applicant_status' application.id job.id 'reject' %}"class="btn btn-danger">Reject</i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No applications submitted </p>
+        </center>
+{% endif %}
+{% endblock page %}
+

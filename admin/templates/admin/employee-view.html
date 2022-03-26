@@ -19,10 +19,9 @@
 {% if employees|length > 0 %}
         <table class="jtable" id='tableid1'>
             <thead>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>Name</th>
                 <th>Email</th>
+                <th>ID</th>
                 <th>Gender</th>
                 <th>Designation</th>
                 <th>Department</th>
@@ -31,10 +30,15 @@
             <tbody>
                 {% for employee in employees %}
                 <tr>
-                    <td>{{ employee.id }}</td>
-                    <td>{{ employee.first_name|title }}</td>
-                    <td>{{ employee.last_name|title }}</td>
+                    <td>
+                        {% if employee.employeeprofile %}
+                        <a href="/media/{{ employee.employeeprofile.photo }}"><img src="{{ employee.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+                        {% endif %}
+
+                         <b>{{employee.first_name|title }} {{ employee.middle_name|title }} {{ employee.last_name|title }}</b>
+                    </td>
                     <td>{{ employee.email}}</td>
+                    <td>{{ employee.id }}</td>
                     <td>{{ employee.employeeprofile.gender|title }}</td>
 
                     <!-- getting the dept and designation from employeedesignation table  -->

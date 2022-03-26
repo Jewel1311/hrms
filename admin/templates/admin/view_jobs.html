@@ -18,7 +18,7 @@
 
 {% if jobs|length > 0 %}
         <table class="jtable" id='tableid1'>
-            <thead>
+            <thead  style="text-align: center;">
                 <th>ID</th>
                 <th>Job Title</th>
                 <th>Location</th>
@@ -27,7 +27,7 @@
                 <th>Department</th>
                 <th>Action</th>
             </thead>
-            <tbody>
+            <tbody  style="text-align: center;">
                 {% for job in jobs %}
                 <tr>
                     <td>{{ job.id }}</td>
@@ -36,7 +36,9 @@
                     <td>{{ job.posted_on}}</td>
                     <td>{{ job.withdraw_date }}</td>
                     <td>{{ job.department }}</td>
-                    <td><a href="{{ job.get_absolute_url }}"class="custom-style-button">View</i></a></td>
+                    <td><a href="{{ job.get_absolute_url }}"class="custom-style-button">View</i></a>
+                        <a href="{% url 'applications' job.pk %}"class="custom-style-button">Applications</i></a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

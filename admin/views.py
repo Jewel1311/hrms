@@ -1,3 +1,4 @@
+import logging
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -6,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, JobForm, SalaryForm
 from django.contrib import messages
 from admin.models import Designations, Salary
+from applicants.models import Applications
 from base.models import Department, Jobs
 from employees.models import EmployeeDesignation
 from users.models import Newuser
@@ -198,6 +200,7 @@ class DeleteDesignation(SuccessMessageMixin,DeleteView):
         return get_object_or_404(Designations, id=id)
    
 # job add for applicant 
+@login_required
 def add_jobs(request):
     if request.method == "POST":
         form = JobForm(request.POST)
@@ -212,11 +215,13 @@ def add_jobs(request):
         return render(request, 'admin/add_jobs.html',{'form':form })
 
 # view all the jobs
+@login_required
 def view_all_jobs(request):
     jobs = Jobs.objects.all()
     return render(request, 'admin/view_jobs.html',{ 'jobs':jobs })
 
 #detailed job view
+@login_required
 def job_detail_view(request,slug):
     job_id = Jobs.objects.get(id = slug)
     return render(request, 'admin/admin_jobdetail_view.html',{'job_id': job_id})
@@ -228,13 +233,39 @@ class EditJob(SuccessMessageMixin,UpdateView):
    template_name = 'admin/add_jobs.html'
    success_message = "Job Updated"
 
+#delete job by admin
 @login_required
-def delete_job(requset,pk):
+def delete_job(request,pk):
     job = Jobs.objects.get(id=pk)
     job.delete()
-    messages.success(requset,f'Job Deleted')
+    messages.success(request,f'Job Deleted')
     return redirect('view_all_jobs')
 
+#view applicants by admin
+@login_required
 def view_applicants(request):
     applicants = Newuser.objects.filter(is_applicant=True)
     return render(request,'admin/view_applicants.html',{ 'applicants':applicants})
+
+@login_required
+def applications(request,pk):
+    applications = Applications.objects.filter(job = pk)
+    job = Jobs.objects.get(id = pk)
+    context = {
+        'applications':applications,
+        'job':job
+    }
+    return render(request, 'admin/view_applications.html',context)
+
+#to accept the applicant 
+@login_required
+def applicant_status(request,id,jobid,btn):
+    applicant = Applications.objects.get(id = id)
+    if btn == 'accept':
+        applicant.selected = 'accepted'
+        messages.success(request,f'Applicant Accepted')
+    elif btn == 'reject':
+        applicant.selected = 'rejected'
+        messages.warning(request,f'Applicant Rejected')
+    applicant.save()
+    return redirect('applications', pk= jobid)

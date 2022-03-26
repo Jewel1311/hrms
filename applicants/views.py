@@ -167,7 +167,7 @@ def applied(request):
 
 @login_required
 def interviews(request):
-   applications = Applications.objects.filter(user = request.user)
+   applications = Applications.objects.filter(user = request.user,selected = 'accepted')
    interviews = Interviews.objects.filter()
    context = {
       'applications':applications,

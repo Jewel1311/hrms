@@ -34,7 +34,6 @@ def employee_profile(request):
          
          if request.FILES: 
             photo = request.FILES['photo']
-            print(mobile)
 
          if len(mobile)!=10:
             messages.warning(request, f'Phone number must be 10 digits')
@@ -257,7 +256,7 @@ def attendance_regularization(request,pk):
 #to view the regulization requests
 @login_required
 def regularization_requests(request):
-   requests = AttendanceRegularization.objects.filter(user = request.user)
+   requests = AttendanceRegularization.objects.filter(user = request.user).order_by('-id')
    print(requests)
    context = {
       'requests':requests,

@@ -5,7 +5,7 @@ from users.models import Newuser
 
 class Applications(models.Model):
     applied_date = models.DateField(auto_now_add = True)
-    selected = models.BooleanField(default=False)
+    selected = models.CharField(max_length=12,default='pending')
     user = models.ForeignKey(Newuser,on_delete=models.CASCADE )
     job = models.ForeignKey(Jobs, on_delete=models.CASCADE)
 
