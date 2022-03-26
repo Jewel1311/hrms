@@ -12,6 +12,7 @@ urlpatterns = [
     path('view_leave/', views.view_leave , name='view_leave'),
     path('leave_detail/<slug:slug>/',views.leave_detail, name='leave_detail'),
     path('leave_edit/<int:pk>/',views.EditLeave.as_view(), name='leave_edit'),
-    path('attendace_regularization/<int:pk>/',views.attendance_regularization, name='attendance_regularization'),
+    path('regularization/',views.selected_attendance, name='selected_attendance'),
+    path('attendace_regularization/<str:pk>/',views.attendance_regularization, name='attendance_regularization'),
     path('attendace_regularization/',views.regularization_requests, name='regularization_requests'),
 ]

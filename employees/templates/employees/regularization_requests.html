@@ -3,6 +3,7 @@
 {% block content %} 
 
 <center>
+    <h5 style="color: #e43c5c;">Regularization Requests</h5>
     {% if messages %}
           {% for message in messages %}
           <div class="alert alert-{{message.tags}} mt-2">
@@ -21,6 +22,7 @@
                 <th>New Entry</th>
                 <th>Old Exit</th>
                 <th>New Exit</th>
+                <th>Shift</th>
                 <th>Reason</th>
                 <th>Status</th>
             </thead>
@@ -32,8 +34,25 @@
                     <td>{{ request.new_entry }}</td>
                     <td>{{ request.old_exit }}</td>
                     <td>{{ request.new_exit }}</td>
+                    <td>{{ request.attendance.shift|title }}</td>
                     <td>{{ request.reason }}</td>
-                    <td>{{ request.status }}</td>
+                    <!-- for status colors  -->
+                    {% if leave.approval == 'approved' %}
+                    <td><div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                {{ request.status|title }}
+                        </div>
+                    </td>
+                    {% elif leave.approval == 'rejected' %}
+                    <td><div class="bg-danger" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                {{ request.status|title }}
+                        </div>
+                    </td>
+                    {% else %}
+                    <td><div class="bg-warning" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                        {{ request.status|title }}
+                    </div>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

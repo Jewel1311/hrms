@@ -1,4 +1,5 @@
 import datetime
+from distutils.log import log
 from django.views.generic import UpdateView
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -187,7 +188,7 @@ def apply_leave(request):
          leave.user = request.user
          leave.save()
          messages.success(request, f'Leave Applied') 
-         return redirect('apply_leave')  
+         return redirect('view_leave')  
       else:
          return render(request, 'employees/apply_leave.html',{ 'form': leave_form })
    else:  
@@ -214,9 +215,21 @@ class EditLeave(SuccessMessageMixin,UpdateView):
    template_name = 'employees/apply_leave.html'
    success_message = "Leave Updated"
 
-   
+#to get id of selected attendance
 @login_required
-def attendance_regularization(request,pk):   
+def selected_attendance(request):
+   if request.method == "POST":
+      id = request.POST['regularize']
+      if id:
+         return redirect('attendance_regularization', pk=id)
+      else:
+         messages.warning(request, f'Select an attendance to regularize')
+         return redirect('attendance_view')
+
+
+#to regularize   
+@login_required
+def attendance_regularization(request,pk):  
    form = RegularizeForm()
    attendance = Attendance.objects.get(id = pk)
    context = {
@@ -234,7 +247,7 @@ def attendance_regularization(request,pk):
          regulization.attendance = attendance
          regulization.save()
          messages.success(request,f'Regulization Requested')
-         return redirect('attendance_view')
+         return redirect('regularization_requests')
       else:
          return render(request,'employees/attendance_regularization.html',context)
 

@@ -1,6 +1,16 @@
 {% extends "employees/employee-home.html" %}
 
 {% block content %} 
+<center>
+    <h5 style="color: #e43c5c;">Leave Details</h5>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}
+</center>
 
 <!-- apply leave  -->
 <div class="row mr-auto mb-3"><a href="{% url 'apply_leave' %}" class=" ml-auto custom-style-button" style="border-radius: 20px"><i class="bi bi-calendar2-plus mr-1"></i> Apply Leave</a></div>
@@ -28,17 +38,17 @@
                     <!-- for status colors  -->
                         {% if leave.approval == 'approved' %}
                         <td><div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
-                                    {{leave.approval}}
+                                    {{leave.approval|title}}
                             </div>
                         </td>
-                        {% elif leave.approval == 'not approved' %}
+                        {% elif leave.approval == 'rejected' %}
                         <td><div class="bg-danger" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
-                                    {{leave.approval}}
+                                    {{leave.approval|title}}
                             </div>
                         </td>
                         {% else %}
                         <td><div class="bg-warning" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
-                            {{leave.approval}}
+                            {{leave.approval|title}}
                         </div>
                         </td>
                         {% endif %}

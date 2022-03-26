@@ -58,6 +58,16 @@
         });
      </script>
 
+     <script>
+        $(document).ready(function(){
+        $('#tableid2').DataTable({
+        "aaSorting": []
+        });
+
+
+        });  
+     </script>
+
      <!-- for static modal  -->
      <script>
       $(document).ready(function(){
@@ -65,5 +75,31 @@
       });
   </script>
 
+<!-- for selecting row and getting first value  -->
+<script type="text/javascript">
+  $(document).ready(function() {
+     var table = $('#tableid2').DataTable();
+  
+     $('#tableid2 tbody').on( 'click', 'tr', function () {
+         if ( $(this).hasClass('selected') ) {
+             $(this).removeClass('selected');
+         }
+         else {
+             table.$('tr.selected').removeClass('selected');
+             $(this).addClass('selected');
+         }
+
+         var currentRow=$(this).closest("tr"); //get current row
+         var col1=currentRow.find("td:eq(0)").text(); // get current row 1st TD value
+         document.getElementById("regular").value = col1
+
+         
+     } );
+     
+   
+  
+  
+ } );
+ </script>
 </body>
 </html>
