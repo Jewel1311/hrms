@@ -1,5 +1,7 @@
+import datetime
 from operator import mod
 from django.db import models
+from django.forms import ValidationError
 from base.models import Department, Jobs
 from users.models import Newuser
 
@@ -9,9 +11,12 @@ class Applications(models.Model):
     user = models.ForeignKey(Newuser,on_delete=models.CASCADE )
     job = models.ForeignKey(Jobs, on_delete=models.CASCADE)
 
+def validate_date(date):
+    if date < datetime.date.today():
+        raise ValidationError("Date cannot be in the past")
 
 class Interviews(models.Model):
-    interview_date = models.DateField()
+    interview_date = models.DateField(validators=[validate_date])
     start_time = models.TimeField()
     end_time = models.TimeField()
     department = models.ForeignKey(Department, on_delete=models.CASCADE)

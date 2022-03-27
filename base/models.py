@@ -1,4 +1,5 @@
 import datetime
+from pyexpat import model
 from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
@@ -28,6 +29,7 @@ class Jobs(models.Model):
     posted_on = models.DateField(auto_now_add=True)
     withdraw_date = models.DateField(validators=[validate_date])
     salary = models.BigIntegerField(null=True)
+    scheduled = models.BooleanField(default=False)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     
     class Meta:

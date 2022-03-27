@@ -73,7 +73,7 @@
             </li>
 
               <!-- applicants  -->
-              <li class =" {% if url_name == 'add_jobs'  %} active {% elif url_name == 'view_all_jobs' %} active{% elif url_name == 'view_applicants' %}active{% endif %}">
+              <li class =" {% if url_name == 'add_jobs'  %} active {% elif url_name == 'view_all_jobs' %} active{% elif url_name == 'view_applicants' %}active{% elif url_name == 'check_schedule' %} active {% endif %}">
 
                 <a href="#applicantSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-person-lines-fill"></i> <span class="ml-2">Applicants </span></a>
                 
@@ -86,6 +86,9 @@
                     </li>
                     <li class="{% if url_name == 'view_applicants' %} active {% endif %}">
                         <a href="{% url 'view_applicants' %}">Applicants</a>
+                    </li>
+                    <li class="{% if url_name == 'check_schedule' %} active {% endif %}">
+                        <a href="{% url 'check_schedule' %}">Schedule Interview</a>
                     </li>
                 </ul>
             </li>
@@ -105,13 +108,14 @@
             <li>
                 <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> <span class="ml-2">Logout </span></a>
             </li>
+
         </ul>
     </nav>
 {% endwith %}
     <!-- Page Content  -->
     <div id="content">
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
 
                 <button type="button" id="sidebarCollapse" class="btn btn-info" style="background-color: #082032;">

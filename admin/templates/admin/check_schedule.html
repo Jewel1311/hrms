@@ -1,0 +1,70 @@
+{% extends "admin/admin-home.html" %}
+
+{% block page %} 
+<center>
+    <!-- start messages  -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}            
+     <!-- end messages  -->
+     <h5 style="color:#e43c5c;">Jobs to Schedule Interview</h5>
+    </center>
+
+
+{% if jobs|length > 0 %}
+        <table class="jtable" id='tableid1'>
+            <thead  style="text-align: center;">
+                <th>Job Title</th>
+                <th>Location</th>
+                <th>Posted </th>
+                <th>Withdrawn</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Action</th>
+            </thead>
+            <tbody  style="text-align: center;">
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.job_title }}</td>
+                    <td>{{ job.location|title }}</td>
+                    <td>{{ job.posted_on}}</td>
+                    <td>{{ job.withdraw_date}}</td>
+                    <td>{{ job.department }}</td>
+
+                    {% if job.scheduled == True %}
+                    <td><div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                        Scheduled
+                        </div>
+                    </td>
+                    {% else %}
+                    <td><div class="bg-warning" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                        Pending
+                        </div>
+                    </td>
+                    {% endif %}
+
+                    {% if job.scheduled == True %}
+                    <td> 
+                          <div class="ml-auto"><a href="#" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div> 
+                    </td> 
+                    {% else %}
+                    <td>
+                        <a href="{% url 'add_interview' job.pk %}"class="custom-style-button">Schedule Interview</i></a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No job available for Interview Scheduling</p>
+        </center>
+{% endif %}
+{% endblock page %}
+

@@ -1,6 +1,4 @@
 import datetime
-from distutils.log import log
-from urllib.request import Request 
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required

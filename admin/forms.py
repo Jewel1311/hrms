@@ -1,5 +1,6 @@
 from django import forms
 from admin.models import Designations,Salary
+from applicants.models import Interviews
 from base.models import Department
 from employees.models import  EmployeeDesignation
 from users.forms import UserRegistrationForm
@@ -53,6 +54,7 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 # to add jobs 
+
 class JobForm(forms.ModelForm):
         job_title = forms.CharField(widget=forms.TextInput(attrs = {'class':'form-control '}),required =True)
         job_description = forms.CharField(widget=forms.Textarea(attrs = {'class':'form-control','rows':4}),required=True)
@@ -64,3 +66,21 @@ class JobForm(forms.ModelForm):
         class Meta:
                 model = Jobs
                 fields = ['job_title','job_description','location','withdraw_date','skills','salary','department']
+
+
+
+
+class TimePickerInput(forms.TimeInput):
+        input_type = 'time'
+
+#interview form
+
+class InterviewForm(forms.ModelForm):
+    interview_date = forms.DateField(widget=DateInput(attrs = {'class':'form-control '}),required=True)
+    start_time =  forms.TimeField(widget=TimePickerInput(attrs={'class':'form-control'}),required=True)
+    end_time = forms.TimeField(widget=TimePickerInput(attrs={'class':'form-control'}),required=True)
+    description = forms.CharField(widget= forms.Textarea(attrs={'class':'form-control','rows':4}),required =True)
+    class Meta:
+        model = Interviews
+        fields = ['interview_date','start_time','end_time','description']
+

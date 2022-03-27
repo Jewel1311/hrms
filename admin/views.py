@@ -1,13 +1,14 @@
-import logging
+import datetime
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, JobForm, SalaryForm
+from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, InterviewForm, JobForm, SalaryForm
 from django.contrib import messages
 from admin.models import Designations, Salary
-from applicants.models import Applications
+from applicants.models import Applications, Interviews
+from applicants.views import interviews
 from base.models import Department, Jobs
 from employees.models import EmployeeDesignation
 from users.models import Newuser
@@ -261,11 +262,42 @@ def applications(request,pk):
 @login_required
 def applicant_status(request,id,jobid,btn):
     applicant = Applications.objects.get(id = id)
+    user = applicant.user.first_name +' '+ applicant.user.middle_name +' '+ applicant.user.last_name 
     if btn == 'accept':
         applicant.selected = 'accepted'
-        messages.success(request,f'Applicant Accepted')
+        messages.success(request,f'{user} Accepted')
     elif btn == 'reject':
         applicant.selected = 'rejected'
-        messages.warning(request,f'Applicant Rejected')
+        messages.warning(request,f'{user} Rejected')
     applicant.save()
     return redirect('applications', pk= jobid)
+
+#to check if any interview is ready to be scheduled
+@login_required
+def check_schedule(request):
+    jobs = Jobs.objects.filter(withdraw_date__lte=datetime.date.today())
+    context = {
+        'jobs':jobs
+    }
+    return render(request,'admin/check_schedule.html',context)
+
+
+#scheule interview
+@login_required
+def add_interview(request,pk):
+    if request.method =="POST":
+        form = InterviewForm(request.POST)
+        if form.is_valid():
+            interview = form.save(False)
+            job = Jobs.objects.get(id=pk)
+            job.scheduled = True
+            interview.job = job
+            interview.department = job.department
+            interview.save()
+            messages.success(request,f'Interview added')
+            return redirect('check_schedule')
+        else:
+            return render(request,'admin/add_interview.html',{'form':form})
+    else:
+        form = InterviewForm()
+        return render(request,'admin/add_interview.html',{'form':form})
