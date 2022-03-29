@@ -1,0 +1,30 @@
+{% extends "admin/admin-home.html" %}
+{% block page %} 
+ <!-- Modal  for edit -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
+ data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Cancel Interview</h5>
+          <a href="{% url 'check_schedule' %}" class="close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+              {% csrf_token %}
+              <div>Do you really want cancel the scheduled interview for <b>{{ interview.job.job_title }}</b></div>
+        </div>
+        <div class="modal-footer">
+          <a href="{% url 'check_schedule' %}" class="btn btn-secondary">Close</a>
+          <button type="submit" class="custom-style-button">Yes, Cancel</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal  -->
+
+{% endblock page %}
+

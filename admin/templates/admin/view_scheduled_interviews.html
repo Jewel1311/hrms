@@ -1,0 +1,44 @@
+{% extends "admin/admin-home.html" %}
+{% block page %} 
+ <!-- Modal  for edit -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
+ data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+    <!-- start messages  -->
+    <center>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{message.tags}} mt-2">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}  
+    </center>          
+    <!-- end messages  -->
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">{{ interview.job.job_title }}</h5>
+          <a href="{% url 'check_schedule' %}" class="close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+        </div>
+        <div class="modal-body">
+            <div class="mt-2">Interview Date :<b> {{interview.interview_date}}</b></div>
+            <div class="mt-2">Start time :<b> {{interview.start_time}}</b></div>
+            <div class="mt-2">End time :<b> {{interview.end_time}}</b></div>
+            <div class="mt-2">Department :<b> {{interview.department}}</b></div>
+            <div class="mt-2"><b>Details :</b></div> 
+            <div class="mt-1">{{interview.description}}</div>
+        </div>
+        <div class="modal-footer">
+          <a href="{% url 'check_schedule' %}" class="btn btn-secondary">Close</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal  -->
+
+{% endblock page %}
+

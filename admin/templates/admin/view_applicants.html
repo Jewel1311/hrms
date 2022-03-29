@@ -14,7 +14,7 @@
     </center>
 
 {% if applicants|length > 0 %}
-        <table class="jtable" id='tableid1'>
+        <table class="jtable" id='tableid2'>
             <thead>
                 <th>Name</th>
                 <th>Email</th>
@@ -31,7 +31,11 @@
                     <td>{{ applicant.applicantprofile.gender|title }}</td>
                     <td>{{ applicant.applicantprofile.state|title }}</td>
                     <td>{{ applicant.applicantprofile.last_apply }}</td>
-                    <td><a href="#"class="custom-style-button">View</i></a></td>
+                    <td>
+                        {% if applicant.applicantprofile %}
+                        <a href="{% url 'applicant_details' applicant.pk %}"class="custom-style-button">View</i></a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

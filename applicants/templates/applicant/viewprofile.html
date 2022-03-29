@@ -41,9 +41,11 @@
                      <div class="row">
                         <div class="col-md-4" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                            <div>
+                             <center>
                             <img src="{% static 'images/applicant.png' %}" width="120px" height="120px">
                             <div class="mt-2"><b>{{ applicant.user.first_name | title}} {{ applicant.user.middle_name | title}}
                                 {{ applicant.user.last_name | title}} </b></div>
+                              </center>
                             </div>
                         </div>
 

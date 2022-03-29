@@ -1,0 +1,67 @@
+{% extends "admin/admin-home.html" %}
+{% load static %}
+{% block page %}
+ 
+<center><h5 style="color:#e43c5c;">Applicant Details</h5></center>
+ <div class="container mb-4" style="width: 50%;margin-top: 5rem;"> 
+                <div class="box-1 mt-3" style="display:block; min-width: 300px;">
+                     <div class="row">
+                        <div class="col-md-4" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                           <div>
+                            <center>
+                            <img src="{% static 'images/applicant.png' %}" width="120px" height="120px">
+                            <div class="mt-2"><b>{{ applicant.user.first_name | title}} {{ applicant.user.middle_name | title}}
+                                {{ applicant.user.last_name | title}} </b></div>
+                            </center>
+                            </div>
+                        </div>
+
+                                <div>
+                                    <div class="col-md-12">{{ applicant.addressline1 }}</div>
+                                    <div class="col-md-12">{{ applicant.place }}</div>
+                                    <div class="col-md-12">{{ applicant.city }},{{ applicant.state }}</div>
+                                    <div class="col-md-12">{{ applicant.pin }}</div>
+                                    <div class="col-md-12"><b>Date of Birth : </b>{{ applicant.dob }}</div>
+                                    <div class="col-md-12 mt-2"><b>Mobile : </b>{{ applicant.phone }}</div>
+                                    {% if applicant.gender == 'Male' %}
+                                      <div class="col-md-12 mt-2"><b>Gender : </b>Male</div>
+                                    {% elif applicant.gender == 'Female' %}
+                                       <div class="col-md-12 mt-2"><b>Gender : </b>Female</div>
+                                    {% endif %}
+                                    <div class="col-md-12 mt-2"><b>CV : </b><a href= "/media/{{ applicant.cv }} " style="color:rgb(60, 60, 214)">{{ applicant.cv }}</a></div>
+                                </div>   
+                </div>
+                <div class="row"> 
+                        <div class="ml-auto mr-5"><buton type="button"style="color:#e43c5c; font-size: 1.5rem;" data-toggle="modal" data-target="#exampleModal"><i class="bi bi-trash-fill"></i></buton></div>
+                </div> 
+            </div>
+        </div>
+
+
+
+            <!-- Delete message Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Employee</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{% url 'delete_applicants' applicant.user.pk %}">
+              {% csrf_token %}
+              <div>Are you sure you want to delete  <b>{{ applicant.user.first_name|title}} {{ applicant.user.middle_name|title}} {{ applicant.user.last_name|title}}</b> ?</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="custom-style-button">Yes, Delete</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+  <!-- end delete message modal  -->
+  
+ {% endblock page %}

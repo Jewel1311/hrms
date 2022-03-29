@@ -1,4 +1,5 @@
 import datetime
+from distutils.log import log
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -8,10 +9,9 @@ from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, Inte
 from django.contrib import messages
 from admin.models import Designations, Salary
 from applicants.models import Applications, Interviews
-from applicants.views import interviews
 from base.models import Department, Jobs
 from employees.models import EmployeeDesignation
-from users.models import Newuser
+from users.models import ApplicantProfile, Newuser
 
 
 @login_required
@@ -248,9 +248,23 @@ def view_applicants(request):
     applicants = Newuser.objects.filter(is_applicant=True)
     return render(request,'admin/view_applicants.html',{ 'applicants':applicants})
 
+#view applicant details
+@login_required
+def applicant_details(request,pk):
+    applicant = ApplicantProfile.objects.get(user=pk)
+    return render(request, 'admin/view_applicant_details.html',{'applicant':applicant})
+
+#  Delete an applicant
+@login_required
+def delete_applicants(requset,pk):
+    applicant = Newuser.objects.get(id=pk)
+    applicant.delete()
+    messages.success(requset,f'Applicant Deleted')
+    return redirect('view_applicants')
+
 @login_required
 def applications(request,pk):
-    applications = Applications.objects.filter(job = pk)
+    applications = Applications.objects.filter(job = pk).order_by('-applied_date')
     job = Jobs.objects.get(id = pk)
     context = {
         'applications':applications,
@@ -275,7 +289,7 @@ def applicant_status(request,id,jobid,btn):
 #to check if any interview is ready to be scheduled
 @login_required
 def check_schedule(request):
-    jobs = Jobs.objects.filter(withdraw_date__lte=datetime.date.today())
+    jobs = Jobs.objects.filter(withdraw_date__lt=datetime.date.today()).order_by('-withdraw_date')
     context = {
         'jobs':jobs
     }
@@ -285,19 +299,66 @@ def check_schedule(request):
 #scheule interview
 @login_required
 def add_interview(request,pk):
-    if request.method =="POST":
+    job = Jobs.objects.get(id=pk)
+    if request.method =="POST": 
         form = InterviewForm(request.POST)
         if form.is_valid():
             interview = form.save(False)
-            job = Jobs.objects.get(id=pk)
-            job.scheduled = True
             interview.job = job
             interview.department = job.department
+            job.scheduled = True
+            job.save()
             interview.save()
             messages.success(request,f'Interview added')
             return redirect('check_schedule')
         else:
-            return render(request,'admin/add_interview.html',{'form':form})
+            return render(request,'admin/add_interview.html',{'form':form,'job':job})
     else:
         form = InterviewForm()
-        return render(request,'admin/add_interview.html',{'form':form})
+        return render(request,'admin/add_interview.html',{'form':form,'job':job})
+
+#view scheduled interviews
+@login_required
+def scheduled_interviews(request,pk):
+    interview = Interviews.objects.get(job=pk)
+    return render(request,'admin/view_scheduled_interviews.html',{'interview':interview})
+
+#edit scheduled interviews 
+@login_required
+def edit_interviews(request,pk):
+    interview = Interviews.objects.get(job=pk)  #take the interview with the given job id
+    job = Jobs.objects.get(id =pk)  #get job to display job title in template
+    if request.method == "POST":
+        form = InterviewForm(request.POST,instance=interview) 
+        if form.is_valid():
+            form.save()
+            messages.success(request,f'Interview Edited')
+            return redirect('scheduled_interviews',pk=pk)
+        else:
+            return render(request,'admin/add_interview.html',{'form':form,'job':job})
+        
+    else:
+        form = InterviewForm(instance=interview)
+        return render(request,'admin/add_interview.html',{'form':form,'job':job})
+
+@login_required
+def selected_applicants(request,pk):
+    applications = Applications.objects.filter(job = pk, selected ='accepted')
+    return render(request, 'admin/view_selected_applicants.html',{'applications':applications})
+
+#cancel a scheduled interview
+@login_required 
+def cancel_interview(request,pk):
+    if request.method == "POST":
+        interview = Interviews.objects.get(job=pk)
+        job = Jobs.objects.get(id=pk)
+        job.scheduled = False
+        job.save()
+        interview.delete()
+        messages.success(request,f'Interview for {job.job_title} cancelled')
+        return redirect('check_schedule')
+
+    else:
+        interview = Interviews.objects.get(job=pk) 
+        return render(request, 'admin/cancel_interview.html',{'interview':interview})
+
