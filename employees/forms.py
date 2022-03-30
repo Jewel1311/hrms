@@ -23,9 +23,10 @@ class LeaveForm(forms.ModelForm):
     to_date = forms.DateField(widget=DateInput(attrs = {'class':'form-control '}),required=True)
     to_session =  forms.CharField(widget= forms.Select(attrs= {'class':'form-control'},choices=SESSION_CHOICES),initial='session 2',required =True)
     reason = forms.CharField(widget= forms.Textarea(attrs={'class':'form-control','rows':3}),required =True)
+    attachments = forms.FileField(label="Attachments (.pdf,.docx),size less than 2mb",widget=forms.FileInput(attrs={'class':'form-control'}),required = False)
     class Meta:
         model = Leave
-        fields = ['leave_type','from_date','from_session','to_date','to_session','reason']
+        fields = ['leave_type','from_date','from_session','to_date','to_session','reason','attachments']
 
 class TimePickerInput(forms.TimeInput):
         input_type = 'time'

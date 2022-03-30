@@ -89,7 +89,7 @@
                         <li class="nav-item mr-3"> <a href="{% url 'view_employee_profile' %}">{{ user.first_name|title}} {{ user.middle_name|title}} {{ user.last_name|title}} </a>
                         </li>
 
-                        <li class="nav-item mr-2"> <a href="{% url 'view_employee_profile' %}"><img src="{{ user.employeeprofile.photo.url }}" class="rounded-circle" style="border:1px solid #082032;" width="40px" height="40px"> </a> 
+                        <li class="nav-item mr-2"> <a href="{% url 'view_employee_profile' %}"><img src="{{ user.employeeprofile.photo.url }}" class="rounded-circle"  width="40px" height="40px"> </a> 
                         </li>
                         
                     </ul>

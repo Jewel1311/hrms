@@ -1,6 +1,5 @@
 import datetime
-from operator import mod
-from urllib import request
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from PIL import Image
 from django.forms import ValidationError
@@ -57,6 +56,7 @@ class Leave(models.Model):
     applied_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
     approval = models.CharField(max_length=12,default='pending')
+    attachments =  models.FileField(validators=[FileExtensionValidator(allowed_extensions=['pdf','docx'])],default='')
 
     def get_absolute_url(self):
         return reverse ("leave_detail",kwargs={"slug":self.id})
@@ -80,3 +80,12 @@ class AttendanceRegularization(models.Model):
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
     attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE)
     
+
+#Leave counter
+class LeaveCounter(models.Model):
+    cl = models.FloatField()
+    el = models.FloatField()
+    lp = models.FloatField()
+    sl = models.FloatField()
+    date = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(Newuser, on_delete=models.CASCADE)

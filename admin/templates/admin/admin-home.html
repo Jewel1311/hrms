@@ -54,11 +54,13 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Leave</a>
+
+            <li class =" {% if url_name == '#'  %} active  {% endif %}">
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-calendar2-minus"></i> <span class="ml-2">Leave </span></a>
+
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
-                        <a href="#">Apply Leave</a>
+                        <a href="{% url 'admin_view_leaves' %}">Leave Requests</a>
                     </li>
                     <li>
                         <a href="#">Page 2</a>

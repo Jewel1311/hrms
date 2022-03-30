@@ -11,8 +11,9 @@
       {% endif %}
 
     </center>
-        <div class="container d-flex flex-column align-items-center mt-2" >
-            <form method="POST" class="pl-5 pr-5 pt-2 pb-2" style=" box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+  
+    <div class="container d-flex flex-column align-items-center mt-2" >
+            <form method="POST" enctype="multipart/form-data" class="pl-5 pr-5 pt-2 pb-2" style=" box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
                 {% csrf_token %}
             {{ form | crispy}}
             <center>

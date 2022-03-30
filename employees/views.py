@@ -181,8 +181,13 @@ def attendance_view(request):
 @login_required
 def apply_leave(request):
    if request.method == "POST":
-      leave_form = LeaveForm(request.POST)
+      leave_form = LeaveForm(request.POST, request.FILES)
       if leave_form.is_valid():
+         if request.FILES:
+            file = request.FILES['attachments']
+            if file.size > 2000000:
+               messages.warning(request, f'File size should be less than 2 mb')
+               return render(request, 'employees/apply_leave.html',{ 'form': leave_form }) 
          leave = leave_form.save(False)
          leave.user = request.user
          leave.save()

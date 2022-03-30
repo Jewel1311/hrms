@@ -33,8 +33,7 @@
                         {% csrf_token %}
                         
                             <div class="col-md-12"><label class="labels">Profile Photo</label><br>
-                                {% if employee.photo %} <img class= "rounded-circle" src= "/media/{{ employee.photo }} " height="80px" width="80px">
-                                Current Photo : <a href="/media/{{ employee.photo }}">{{ employee.photo }}</a> 
+                                {% if employee.photo %} <a href="/media/{{ employee.photo }}"><img class= "rounded-circle" src= "/media/{{ employee.photo }} " height="80px" width="80px"></a>
                                 {% else %}
                                 <img src="/media/default/profile.png" height="80px" width="80px">
                                 {% endif %}

@@ -10,7 +10,8 @@ from django.contrib import messages
 from admin.models import Designations, Salary
 from applicants.models import Applications, Interviews
 from base.models import Department, Jobs
-from employees.models import EmployeeDesignation
+from base.views import leave_counter
+from employees.models import EmployeeDesignation, Leave, LeaveCounter
 from users.models import ApplicantProfile, Newuser
 
 
@@ -40,6 +41,7 @@ def add_employee(request):
             designation = desig_form.save(False)
             designation.user =user 
 
+            LeaveCounter.objects.create(cl=0,el=0,lp=0,sl=0,user=user)
             salary.save()
             designation.save()
 
@@ -362,3 +364,15 @@ def cancel_interview(request,pk):
         interview = Interviews.objects.get(job=pk) 
         return render(request, 'admin/cancel_interview.html',{'interview':interview})
 
+#to view the leaves
+@login_required
+def admin_view_leaves(request):
+    leaves = Leave.objects.all().order_by('-id')
+    obj = EmployeeDesignation.objects.all() #for the department of employee
+    return render(request,'admin/admin_view_leaves.html',{'leaves':leaves,'obj':obj})
+
+@login_required
+def admin_leave_detail(request,pk):
+    leave = Leave.objects.get(id = pk)
+    counter = LeaveCounter.objects.get(user = leave.user)
+    return render(request,'admin/admin_leave_detail.html',{'leave':leave,'counter':counter})

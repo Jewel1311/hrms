@@ -29,4 +29,6 @@ urlpatterns = [
     path('edit_interviews/<int:pk>/',views.edit_interviews, name='edit_interviews'),
     path('selected_applicants/<int:pk>/',views.selected_applicants, name='selected_applicants'),
     path('cancel_interview/<int:pk>/',views.cancel_interview, name='cancel_interview'),
+    path('admin_view_leaves/',views.admin_view_leaves, name='admin_view_leaves'),
+    path('admin_leave_detail/<int:pk>/',views.admin_leave_detail, name='admin_leave_detail'),
 ]

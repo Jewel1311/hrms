@@ -14,5 +14,3 @@ class UserRegistrationForm(UserCreationForm):
         class Meta:
             model = Newuser
             fields = [ 'first_name','middle_name','last_name','email' ]
-       
-
