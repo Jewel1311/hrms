@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from admin.models import Designations
+from admin.tasks import get_balance
 from base.models import Department
 from employees.forms import LeaveForm, RegularizeForm
 from .models import AttendanceRegularization, EmployeeDesignation, Leave
@@ -183,11 +184,20 @@ def apply_leave(request):
    if request.method == "POST":
       leave_form = LeaveForm(request.POST, request.FILES)
       if leave_form.is_valid():
+
          if request.FILES:
             file = request.FILES['attachments']
             if file.size > 2000000:
                messages.warning(request, f'File size should be less than 2 mb')
                return render(request, 'employees/apply_leave.html',{ 'form': leave_form }) 
+
+         #leave balance check
+         leave_type =request.POST['leave_type']
+         balance = get_balance(leave_type,request.user)
+         if balance:
+            messages.warning(request, f'You have no {leave_type.upper()} available')
+            return render(request, 'employees/apply_leave.html',{ 'form': leave_form }) 
+
          leave = leave_form.save(False)
          leave.user = request.user
          leave.save()

@@ -12,6 +12,39 @@ def get_month():
     month = datetime.date.today().month
     return month
 
+def get_balance(leave_type,user):
+    cl=0
+    el=0
+    sl=0
+    leave = LeaveCounter.objects.filter(date__year=get_year(),user=user)
+    if leave_type == 'casual leave':
+        for leave in leave:
+            cl = cl + leave.cl
+        if cl >= 12:
+            return True
+        else:
+            return False
+
+    elif leave_type == 'earned leave':
+        for leave in leave:
+            el = el + leave.el
+        if el >= 12:
+            return True
+        else:
+            return False
+
+    elif leave_type == 'sick_leave':
+        for leave in leave:
+            sl = sl + leave.sl
+        
+        if el >= 15:
+            return True
+        else:
+            return False
+
+    else:
+        return
+
 # to take the yearly leave
 def counter(leave):
     cl=0

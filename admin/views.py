@@ -405,7 +405,7 @@ def approve_leave(request,pk):
         return redirect('admin_leave_detail',pk=pk)
         
     else:
-        messages.success(request,f'Already Approved')
+        messages.info(request,f'Already Approved')
         return redirect('admin_leave_detail',pk=pk)
 
 @login_required
@@ -425,14 +425,26 @@ def reject_leave(request,pk):
         count.save()
         leave.approval = 'rejected'
         leave.save()
-        messages.success(request,f'Leave Rejected')
+        messages.warning(request,f'Leave Rejected')
         return redirect('admin_leave_detail',pk=pk)
         
     else:
         if leave.approval == 'rejected':
-            messages.success(request,f'Already Rejected')
+            messages.info(request,f'Already Rejected')
         else:
             leave.approval = 'rejected'
-            messages.success(request,f'Leave Rejected')
+            messages.warning(request,f'Leave Rejected')
 
         return redirect('admin_leave_detail',pk=pk)
+
+def leave_history(request):
+    leaves = LeaveCounter.objects.filter(date__year=get_year())
+    obj = EmployeeDesignation.objects.all()
+    context = {
+        'leaves':leaves,
+        'obj':obj
+    }
+    return render(request, 'admin/leave_history.html', context)
+
+# @login_required
+# def leave_history_detail(request):

@@ -38,3 +38,4 @@ class RegularizeForm(forms.ModelForm):
     class Meta:
         model = AttendanceRegularization
         fields = ['new_entry','new_exit','reason']
+
