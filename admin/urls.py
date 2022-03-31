@@ -34,5 +34,6 @@ urlpatterns = [
     path('approve_leave/<int:pk>/',views.approve_leave, name='approve_leave'),
     path('reject_leave/<int:pk>/',views.reject_leave, name='reject_leave'),
     path('leave_history/',views.leave_history, name='leave_history'),
+    path('leave_history_detail/<int:pk>/',views.leave_history_detail, name='leave_history_detail'),
     
 ]

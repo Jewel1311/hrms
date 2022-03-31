@@ -1,7 +1,7 @@
 import datetime
-from .tasks import counter, get_month,get_year,set_leave
+from .tasks import get_month,get_year,set_leave
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView,UpdateView,ListView
+from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
@@ -11,7 +11,7 @@ from admin.models import Designations, Salary
 from applicants.models import Applications, Interviews
 from base.models import Department, Jobs
 from base.views import leave_counter
-from employees.models import EmployeeDesignation, Leave, LeaveCounter
+from employees.models import EmployeeDesignation, Leave, LeaveCounter, YearCounter
 from users.models import ApplicantProfile, Newuser
 
 
@@ -376,7 +376,7 @@ def admin_leave_detail(request,pk):
     leave = Leave.objects.get(id = pk)
     #get current months leave counter
     month_counter = LeaveCounter.objects.get(date__month=get_month(),date__year=get_year(),user=leave.user) 
-    year_counter = counter(leave) # call function in tasks.py
+    year_counter = YearCounter.objects.get(date__year=get_year(),user=leave.user)
     context = {
         'leave':leave,
         'month_counter':month_counter,
@@ -390,15 +390,21 @@ def approve_leave(request,pk):
     if leave.approval != 'approved':
         number = set_leave(leave)  #return the  number of days
         count = LeaveCounter.objects.get(date__month=get_month(),date__year=get_year(),user=leave.user)
+        count1 = YearCounter.objects.get(date__year=get_year(),user=leave.user)
         if leave.leave_type == 'casual leave':
             count.cl = count.cl + number
+            count1.cl = count1.cl + number
         elif leave.leave_type == 'earned leave':
             count.el = count.el + number
+            count1.el = count1.el + number
         elif leave.leave_type == 'loss of pay':
             count.lp = count.lp + number
+            count1.lp = count1.lp + number
         elif leave.leave_type == 'sick leave':
             count.sl = count.sl + number
+            count1.sl = count1.sl + number
         count.save()
+        count1.save()
         leave.approval = 'approved'
         leave.save()
         messages.success(request,f'Leave Approved')
@@ -414,15 +420,21 @@ def reject_leave(request,pk):
     if leave.approval == 'approved':
         number = set_leave(leave)  #return the  number of days
         count = LeaveCounter.objects.get(date__month=get_month(),date__year=get_year(),user=leave.user)
+        count1 = YearCounter.objects.get(date__year=get_year(),user=leave.user)
         if leave.leave_type == 'casual leave':
             count.cl = count.cl - number
+            count1.cl = count1.cl - number
         elif leave.leave_type == 'earned leave':
             count.el = count.el - number
+            count1.el = count1.el - number
         elif leave.leave_type == 'loss of pay':
             count.lp = count.lp - number
+            count1.lp = count1.lp - number
         elif leave.leave_type == 'sick leave':
             count.sl = count.sl - number
+            count1.sl = count1.sl - number
         count.save()
+        count1.save()
         leave.approval = 'rejected'
         leave.save()
         messages.warning(request,f'Leave Rejected')
@@ -438,7 +450,7 @@ def reject_leave(request,pk):
         return redirect('admin_leave_detail',pk=pk)
 
 def leave_history(request):
-    leaves = LeaveCounter.objects.filter(date__year=get_year())
+    leaves = YearCounter.objects.filter(date__year=get_year())  
     obj = EmployeeDesignation.objects.all()
     context = {
         'leaves':leaves,
@@ -446,5 +458,14 @@ def leave_history(request):
     }
     return render(request, 'admin/leave_history.html', context)
 
-# @login_required
-# def leave_history_detail(request):
+@login_required
+def leave_history_detail(request,pk):
+    year = YearCounter.objects.get(date__year=get_year(),user=pk)
+    month = LeaveCounter.objects.filter(date__year=get_year(),user=pk) 
+    employee = Newuser.objects.get(id=pk)   
+    context = {
+        'year':year,
+        'month':month,
+        'employee':employee
+    }
+    return render(request,'admin/leave_history_detail.html', context)

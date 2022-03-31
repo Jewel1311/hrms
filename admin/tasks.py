@@ -1,4 +1,4 @@
-from employees.models import LeaveCounter
+from employees.models import LeaveCounter, YearCounter
 import datetime
 
 
@@ -12,32 +12,25 @@ def get_month():
     month = datetime.date.today().month
     return month
 
-def get_balance(leave_type,user):
-    cl=0
-    el=0
-    sl=0
-    leave = LeaveCounter.objects.filter(date__year=get_year(),user=user)
-    if leave_type == 'casual leave':
-        for leave in leave:
-            cl = cl + leave.cl
-        if cl >= 12:
+def get_balance(leave_form,user):
+    leave = YearCounter.objects.get(date__year=get_year(),user=user)
+    saved = leave_form.save(False)
+    number = set_leave(saved)
+    
+    if leave_form.cleaned_data['leave_type'] == 'casual leave':
+        if leave.cl + number >= 12:
             return True
         else:
             return False
 
-    elif leave_type == 'earned leave':
-        for leave in leave:
-            el = el + leave.el
-        if el >= 12:
+    elif leave_form.cleaned_data['leave_type'] == 'earned leave':
+        if leave.el + number >= 12:
             return True
         else:
             return False
 
-    elif leave_type == 'sick_leave':
-        for leave in leave:
-            sl = sl + leave.sl
-        
-        if el >= 15:
+    elif leave_form.cleaned_data['leave_type'] == 'sick_leave': 
+        if leave.sl + number >= 15:
             return True
         else:
             return False
@@ -45,20 +38,16 @@ def get_balance(leave_type,user):
     else:
         return
 
-# to take the yearly leave
-def counter(leave):
-    cl=0
-    el=0
-    lp=0
-    sl=0
-    leave = LeaveCounter.objects.filter(date__year=get_year(),user=leave.user)  
-    for leave in leave:
-        cl = cl + leave.cl
-        el = el + leave.el
-        lp = lp + leave.lp
-        sl = sl + leave.sl
-    year_counter=[cl,el,lp,sl]
-    return year_counter
+# to set the yearly leave
+def set_year_counter(leave):
+    year = YearCounter.objects.get(date__year=get_year(),user=leave.user)
+    leaves = LeaveCounter.objects.filter(date__year=get_year(),user=leave.user)  
+    for leave in leaves:
+        year.cl = year.cl + leave.cl
+        year.el = year.el + leave.el
+        year.lp = year.lp + leave.lp
+        year.sl =year.sl + leave.sl
+
 
 #return from date number if from date not equal to to date
 def from_number(leave):

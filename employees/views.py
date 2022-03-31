@@ -192,10 +192,10 @@ def apply_leave(request):
                return render(request, 'employees/apply_leave.html',{ 'form': leave_form }) 
 
          #leave balance check
-         leave_type =request.POST['leave_type']
-         balance = get_balance(leave_type,request.user)
+         balance = get_balance(leave_form,request.user)
+         leave_type = leave_form.cleaned_data['leave_type']
          if balance:
-            messages.warning(request, f'You have no {leave_type.upper()} available')
+            messages.warning(request, f'Please check your {leave_type.upper()} availability')
             return render(request, 'employees/apply_leave.html',{ 'form': leave_form }) 
 
          leave = leave_form.save(False)

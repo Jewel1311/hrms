@@ -89,3 +89,12 @@ class LeaveCounter(models.Model):
     sl = models.FloatField()
     date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
+    
+#yearly count of leave
+class YearCounter(models.Model):
+    cl = models.FloatField()
+    el = models.FloatField()
+    lp = models.FloatField()
+    sl = models.FloatField()
+    date = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
