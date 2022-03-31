@@ -1,23 +1,39 @@
 {% extends "admin/admin-home.html" %}
 
 {% block page %} 
+<center>
+  <h5 style="color: #e43c5c;">Leave Details</h5>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{message.tags}} mt-2">
+      {{ message }}
+  </div>
+  {% endfor %}
+    {% endif %}
+ </center>
 <div class="container">
+<div class="mb-2">
+      <a href="/media/{{ leave.user.employeeprofile.photo }}"><img src="{{ leave.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+
+      <a href="{% url 'employee_detail' leave.user.pk %}"><b>{{ leave.user.first_name|title}} {{ leave.user.middle_name|title}} {{ leave.user.last_name|title}}</b></a>
+</div>
+
 <div class="row mb-3">
-    <div class="col-md-6">
-      <div class="mb-2"><b>Current Month</b></div>
+    <div class="col-md-6 ">
+      <div class="mb-2"><b>Current Month ({% now "F" %})</b></div>
         <!-- counts  -->
       <div>
-            <div class="custom-style-button" style="background-color:#253b46;">
-              CL : <span class="">{{ counter.cl }}</span>
+            <div class="custom-style-button" style="background-color:#345363;">
+              CL : <span class="">{{ month_counter.cl }}</span>
             </div>
-            <div class="custom-style-button" style="background-color:#253b46 ;">
-              EL : <span class="">{{ counter.el }}</span>
+            <div class="custom-style-button" style="background-color:#345363 ;">
+              EL : <span class="">{{ month_counter.el }}</span>
             </div>
-            <div class="custom-style-button" style="background-color:#253b46 ;">
-              LOP : <span class="">{{ counter.lp }}</span>
+            <div class="custom-style-button" style="background-color:#345363 ;">
+              LOP : <span class="">{{ month_counter.lp }}</span>
             </div>
-            <div class="custom-style-button" style="background-color:#253b46 ;">
-              SL : <span class="">{{ counter.lp }}</span>
+            <div class="custom-style-button" style="background-color:#345363 ;">
+              SL : <span class="">{{ month_counter.sl }}</span>
             </div>
       </div>
 
@@ -25,9 +41,19 @@
 
 
       <div class="col-md-6">
-        <div class="mb-2"><b>Current Year</b></div>
-        <div class="custom-style-button">
-          CL : <span class="">{{ counter.cl }}</span>
+        <div class="mb-2"><b>Total ({% now "Y" %})</b></div>
+        <div class="custom-style-button"  style="background-color:#e43c5c">
+          <!-- to take value form list  -->
+          CL : <span class="">{{ year_counter.0 }}</span>   
+        </div>
+        <div class="custom-style-button"  style="background-color:#e43c5c">
+          EL : <span class="">{{ year_counter.1 }}</span>
+        </div>
+        <div class="custom-style-button"  style="background-color:#e43c5c">
+          LOP : <span class="">{{ year_counter.2 }}</span>
+        </div>
+        <div class="custom-style-button"  style="background-color:#e43c5c">
+          SL : <span class="">{{ year_counter.3 }}</span>
         </div>
       </div>
 
@@ -38,16 +64,6 @@
 
 <div class="container d-flex flex-column align-items-center" >
  <div class="col-md-12 p-3" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
-    <center>
-    <h5 style="color: #e43c5c;">Leave Details</h5>
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{message.tags}} mt-2">
-        {{ message }}
-    </div>
-    {% endfor %}
-      {% endif %}
-   </center>
    <!-- for status colors  -->
    {% if leave.approval == 'approved' %}
    <div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
@@ -67,8 +83,8 @@
     {% endif %}
      
  <div class="row">
-      <div class=" col-md-6 mt-3"><b class="pr-2">Leave Type</b><div class=" p-2" style="background-color: #DADDE2">{{ leave.leave_type|title }}</div></div>
-      <div class=" col-md-6 mt-3"><b class="pr-2">Applied On</b><div class="p-2" style="background-color: #DADDE2">{{ leave.applied_date }}</div></div>
+      <div class=" col-md-6 mt-2"><b class="pr-2">Leave Type</b><div class=" p-2" style="background-color: #DADDE2">{{ leave.leave_type|title }}</div></div>
+      <div class=" col-md-6 mt-2"><b class="pr-2">Applied On</b><div class="p-2" style="background-color: #DADDE2">{{ leave.applied_date }}</div></div>
    
   </div>
   <div class="row">
@@ -85,7 +101,12 @@
 
   <div class="mt-3"><b class="pr-2">Attachments</b><div class="p-2" style="background-color: #DADDE2"><a href="/media/{{ leave.attachments }} " style="color:rgb(77, 77, 250);">{{ leave.attachments }}</a></div></div>
   {% endif %}
-
+  <div class="row">
+    <div class="ml-auto mt-2">
+      <a href="{% url 'approve_leave' leave.pk %}" class="btn btn-success mr-2">Approve</a>
+      <a href="{% url 'reject_leave' leave.pk %}" class="btn btn-danger mr-3">Reject</a>
+    </div>
+  </div>
  </div>
   
 </div>

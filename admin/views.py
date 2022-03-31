@@ -1,7 +1,7 @@
 import datetime
-from distutils.log import log
+from .tasks import counter, get_month,get_year,set_leave
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView,UpdateView
+from django.views.generic import DeleteView,UpdateView,ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
@@ -65,7 +65,7 @@ def add_employee(request):
 # view the employees in table 
 @login_required
 def view_employee(request):
-    employees = Newuser.objects.filter(is_employee = True)
+    employees = Newuser.objects.filter(is_employee = True).order_by('first_name')
     obj = EmployeeDesignation.objects.all()
     
     return render(request, 'admin/employee-view.html',{'employees':employees,'obj':obj})
@@ -374,5 +374,65 @@ def admin_view_leaves(request):
 @login_required
 def admin_leave_detail(request,pk):
     leave = Leave.objects.get(id = pk)
-    counter = LeaveCounter.objects.get(user = leave.user)
-    return render(request,'admin/admin_leave_detail.html',{'leave':leave,'counter':counter})
+    #get current months leave counter
+    month_counter = LeaveCounter.objects.get(date__month=get_month(),date__year=get_year(),user=leave.user) 
+    year_counter = counter(leave) # call function in tasks.py
+    context = {
+        'leave':leave,
+        'month_counter':month_counter,
+        'year_counter':year_counter
+    }
+    return render(request,'admin/admin_leave_detail.html',context)
+
+@login_required
+def approve_leave(request,pk):
+    leave = Leave.objects.get(id=pk)
+    if leave.approval != 'approved':
+        number = set_leave(leave)  #return the  number of days
+        count = LeaveCounter.objects.get(date__month=get_month(),date__year=get_year(),user=leave.user)
+        if leave.leave_type == 'casual leave':
+            count.cl = count.cl + number
+        elif leave.leave_type == 'earned leave':
+            count.el = count.el + number
+        elif leave.leave_type == 'loss of pay':
+            count.lp = count.lp + number
+        elif leave.leave_type == 'sick leave':
+            count.sl = count.sl + number
+        count.save()
+        leave.approval = 'approved'
+        leave.save()
+        messages.success(request,f'Leave Approved')
+        return redirect('admin_leave_detail',pk=pk)
+        
+    else:
+        messages.success(request,f'Already Approved')
+        return redirect('admin_leave_detail',pk=pk)
+
+@login_required
+def reject_leave(request,pk):
+    leave = Leave.objects.get(id=pk)
+    if leave.approval == 'approved':
+        number = set_leave(leave)  #return the  number of days
+        count = LeaveCounter.objects.get(date__month=get_month(),date__year=get_year(),user=leave.user)
+        if leave.leave_type == 'casual leave':
+            count.cl = count.cl - number
+        elif leave.leave_type == 'earned leave':
+            count.el = count.el - number
+        elif leave.leave_type == 'loss of pay':
+            count.lp = count.lp - number
+        elif leave.leave_type == 'sick leave':
+            count.sl = count.sl - number
+        count.save()
+        leave.approval = 'rejected'
+        leave.save()
+        messages.success(request,f'Leave Rejected')
+        return redirect('admin_leave_detail',pk=pk)
+        
+    else:
+        if leave.approval == 'rejected':
+            messages.success(request,f'Already Rejected')
+        else:
+            leave.approval = 'rejected'
+            messages.success(request,f'Leave Rejected')
+
+        return redirect('admin_leave_detail',pk=pk)

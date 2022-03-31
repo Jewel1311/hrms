@@ -1,5 +1,5 @@
 import datetime
-from tabnanny import check
+from admin.tasks import get_month,get_year
 from django.shortcuts import render
 from .models import Jobs
 from users.models import Newuser
@@ -13,9 +13,7 @@ def index(request):
 
 # to update the leave counter every month
 def leave_counter():
-    month = datetime.date.today().month
-    year = datetime.date.today().year
-    check = LeaveCounter.objects.filter(date__month__gte=month,date__year__gte=year).count()
+    check = LeaveCounter.objects.filter(date__month__gte=get_month(),date__year__gte=get_year()).count()
     if check == 0:
           employees = Newuser.objects.filter(is_employee = True)
           for employee in employees:
