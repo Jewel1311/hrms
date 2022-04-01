@@ -1,6 +1,9 @@
 import datetime
+from importlib.metadata import entry_points
 from multiprocessing import context
-from .tasks import get_month,get_year, leave_marked,set_leave
+
+from employees.forms import AdminLeaveForm
+from .tasks import get_balance, get_month,get_year, leave_marked,set_leave
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -481,15 +484,22 @@ def leave_history_detail(request,pk):
     return render(request,'admin/leave_history_detail.html', context)
 
 @login_required
-def admin_attendance_view(request):
+def admin_attendance_view(request,user=None):
     if request.method == "POST":
       shift = request.POST['shift']
-      attendance =  Attendance.objects.filter(shift = shift).order_by('-attendance_date')
+      if user:
+            attendance =  Attendance.objects.filter(shift = shift,user=user).exclude(entry_time = None).order_by('-attendance_date')
+      else:
+            attendance =  Attendance.objects.filter(shift = shift).exclude(entry_time = None).order_by('-attendance_date')
       return render(request, 'admin/admin_attendance_view.html',{'attendance':attendance,'shift':shift})
 
     else:
-      attendance =  Attendance.objects.filter(shift='morning').order_by('-attendance_date')
-      return render(request, 'admin/admin_attendance_view.html',{'attendance':attendance})
+        if user:
+            attendance =  Attendance.objects.filter(shift='morning',user=user).exclude(entry_time = None).order_by('-attendance_date')
+        else:
+            attendance =  Attendance.objects.filter(shift='morning').exclude(entry_time = None).order_by('-attendance_date')
+
+        return render(request, 'admin/admin_attendance_view.html',{'attendance':attendance})
 
 
 @login_required
@@ -546,3 +556,52 @@ def single_employee_leave(request,pk):
             'attendance':attendance
         }
         return render(request,'admin/admin_single_employee_leave.html',context)
+
+# to add leave by admin
+@login_required
+def admin_leave_apply(request,pk):
+    attendance = Attendance.objects.get(id=pk)
+    count = YearCounter.objects.get(user = attendance.user)
+    if request.method == "POST":
+      leave_form = AdminLeaveForm(request.POST)
+      if leave_form.is_valid():
+         #leave balance check
+         balance = get_balance(leave_form,attendance.user)
+         leave_type = leave_form.cleaned_data['leave_type']
+         if balance:
+            messages.warning(request, f'Please check your {leave_type.upper()} availability')
+            return render(request, 'admin/admin_leave_apply.html',{ 'form': leave_form,'attendance':attendance,'count':count }) 
+
+         leave = leave_form.save(False)
+         leave.from_date = attendance.attendance_date
+         leave.to_date = attendance.attendance_date
+         leave.reason = "Leave Added by admin"
+         leave.user = attendance.user
+         leave.save()
+         return redirect('approve_leave', pk=leave.pk)  
+      else:
+         return render(request, 'admin/admin_leave_apply.html',{ 'form': leave_form, 'attendance':attendance,'count':count })
+    else:  
+      form = AdminLeaveForm()
+      return render(request, 'admin/admin_leave_apply.html',{ 'form': form, 'attendance':attendance,'count':count})
+
+#exit time not marked
+def exit_missing(request):
+    if request.method == "POST":
+        filter = request.POST['filter']
+        if filter == 'today':
+            #todays attendance missing
+            attendance =  Attendance.objects.filter(attendance_date =datetime.date.today(),shift='morning',exit_time=None).exclude(entry_time = None).order_by('attendance_date')
+        
+        elif filter == 'month':
+            #this months attendance missing
+            attendance =  Attendance.objects.filter(exit_time=None, attendance_date__month=get_month(),shift='morning').exclude(entry_time = None).order_by('attendance_date')
+
+        elif filter == 'all':
+            attendance =  Attendance.objects.filter(exit_time=None, shift='morning').exclude(entry_time = None).order_by('attendance_date')
+            
+        return render(request, 'admin/exit_time_missing.html',{'attendance':attendance,'filter':filter})
+
+    else:
+        attendance =  Attendance.objects.filter(exit_time=None, attendance_date = datetime.date.today(),shift='morning').exclude(entry_time = None).order_by('attendance_date')
+        return render(request, 'admin/exit_time_missing.html',{'attendance':attendance})

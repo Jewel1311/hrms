@@ -40,15 +40,16 @@
             </li>
 
 
-            <li class =" ">
+            <li class =" {% if url_name == 'admin_attendance_view'  %} active {% elif url_name == 'admin_missing_regular' %}active   {% endif %}">
+
                 <a href="#attendanceSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-calendar-check"></i> <span class="ml-2">Attendance</span></a>
 
                 <ul class="collapse list-unstyled" id="attendanceSubmenu">
-                    <li class="">
+                    <li class =" {% if url_name == 'admin_attendance_view'  %} active {% endif %}">
                         <a  href="{% url 'admin_attendance_view' %}">Attendance View</a>
                     </li>
-                    <li class="">
-                        <a  href="{% url 'admin_missing_regular' %}">Missing Regular</a>
+                    <li class="{% if url_name == 'admin_missing_regular'  %} active {% endif %}">
+                        <a  href="{% url 'admin_missing_regular' %}">Regular Unmarked</a>
                     </li>
                     <li class="">
                         <a  href="#"></a>

@@ -28,6 +28,15 @@ class LeaveForm(forms.ModelForm):
         model = Leave
         fields = ['leave_type','from_date','from_session','to_date','to_session','reason','attachments']
 
+
+class AdminLeaveForm(forms.ModelForm):
+    leave_type = forms.CharField(widget=forms.Select(choices=LEAVE_CHOICES,attrs = {'class':'form-control '}),required =True)
+    from_session =  forms.CharField(widget= forms.Select(choices=SESSION_CHOICES ,attrs= {'class':'form-control '}),required =True)
+    to_session =  forms.CharField(widget= forms.Select(attrs= {'class':'form-control'},choices=SESSION_CHOICES),initial='session 2',required =True)
+    class Meta:
+        model = Leave
+        fields = ['leave_type','from_session','to_session']
+
 class TimePickerInput(forms.TimeInput):
         input_type = 'time'
 

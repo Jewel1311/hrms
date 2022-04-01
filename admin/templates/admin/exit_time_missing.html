@@ -10,8 +10,19 @@
           </div>
           {% endfor %}
    {% endif %}
-   <h5 class="mb-3" style="color: #e43c5c;"> Unmarked Attendance View </h5>
+   <h5 class="mb-3" style="color: #e43c5c;">Regular Attendance Exit Missing </h5>
+
+    <form method="POST" class="mt-2">
+        {% csrf_token %}
+        <select name="filter" class="dropdown-style">
+            <option value="today" {% if filter == 'today'%}selected{% endif %}>Today</option>
+            <option value="month"{% if filter == 'month'%}selected{% endif %}>This Month</option>
+            <option value="all" {% if filter == 'all'%}selected{% endif %}>All</option>
+        </select>
+        <button type="submit" class="custom-style-button" style="border-radius:20px" >Show</button>
+    </form>
 </center>
+
 
 {% if attendance|length > 0 %}
         <div >
@@ -22,6 +33,7 @@
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Shift</th>
+                <th style="text-align: center;">Action</th>
             </thead>
             <tbody>
                 {% for attendance in attendance %}
@@ -31,12 +43,17 @@
 
                         <a href="{% url 'employee_detail' attendance.user.pk %}"><b>{{ attendance.user.first_name|title}} {{ attendance.user.middle_name|title}} {{ attendance.user.last_name|title}}</b></a>
                     </td>
+
                     <td> {{ attendance.attendance_date }}</td>
-                    <td>{% if attendance.entry_time == None %}
+
+                    <td>
+                        {% if attendance.entry_time == None %}
                         <div style="color: #e43c5c;">Missing</div>
                         {% else %}
                         {{ attendance.entry_time }}
-                        {% endif %}</td>
+                        {% endif %}
+                    </td>
+
                     <td>
                         {% if attendance.exit_time == None %}
                         <div style="color: #e43c5c;">Missing</div>
@@ -44,9 +61,16 @@
                         {{ attendance.exit_time }}
                         {% endif %}
                     </td>
-                    <td>{{ attendance.shift|title}}</td>
-                </tr>
-                {% endfor %}
+
+                    <td>{{ attendance.shift|title}}</td>  
+                    
+                  
+                    <td style="text-align: center;">
+                        <div style="font-size: 1.6rem; color: #0ccc19;" ><a href="#"><i class="bi bi-calendar-check"></i></a></div>
+                    </td>
+
+              </tr>
+              {% endfor %}
             </tbody>
         </table>
         </div>
