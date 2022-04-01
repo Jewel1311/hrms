@@ -2,7 +2,7 @@
 
 {% block page %} 
 <center>
-    <h5 style="color: #e43c5c;">Leave Details</h5>
+    <h5 class="mb-3" style="color: #e43c5c;">Leave Details</h5>
     {% if messages %}
     {% for message in messages %}
     <div class="alert alert-{{message.tags}} mt-2">
@@ -10,6 +10,17 @@
     </div>
     {% endfor %}
       {% endif %}
+
+
+      <form method="POST" class="mt-2">
+        {% csrf_token %}
+        <select name="filter" class="dropdown-style">
+            <option value="month"{% if filter == 'month'%}selected{% endif %}>This Month</option>
+            <option value="all" {% if filter == 'all'%}selected{% endif %}>All</option>
+        </select>
+        <button type="submit" class="custom-style-button" style="border-radius:20px" >Show</button>
+    </form>
+
 </center>
 
 

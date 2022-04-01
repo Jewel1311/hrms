@@ -1,6 +1,6 @@
-{% extends "employees/employee-home.html" %}
+{% extends "admin/admin-home.html" %}
 
-{% block content %} 
+{% block page %} 
 
 <center>
     {% if messages %}
@@ -10,9 +10,7 @@
           </div>
           {% endfor %}
    {% endif %}
-
    <h5 class="mb-3" style="color: #e43c5c;"> Attendance View </h5>
-
     <form method="POST" class="mt-2">
         {% csrf_token %}
         <select name="shift" class="dropdown-style">
@@ -22,26 +20,25 @@
         <button type="submit" class="custom-style-button" style="border-radius:20px">Show</button>
     </form>
 </center>
-<form method="POST" action="{% url 'selected_attendance' %}">
-    {% csrf_token %}
-    <input type="hidden" name="regularize" id="regular">
-<div class="row mr-auto mb-3"><button type="submit" class=" ml-auto custom-style-button" style="border-radius: 20px"><i class="bi bi-calendar-check mr-1"></i>Regularize Attendance</button></div>
-</form>
 
 {% if attendance|length > 0 %}
         <div >
         <table class="jtable" id='tableid2'>
-            <thead style="text-align: center;">
-                <th>ID</th>
+            <thead>
+                <th>Employee</th>
                 <th>Date</th>
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Shift</th>
             </thead>
-            <tbody  style="text-align: center;">
+            <tbody>
                 {% for attendance in attendance %}
                 <tr>
-                    <td> {{ attendance.id }}</td>
+                    <td>
+                        <a href="/media/{{ attendance.user.employeeprofile.photo }}"><img src="{{ attendance.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+
+                        <a href="{% url 'employee_detail' attendance.user.pk %}"><b>{{ attendance.user.first_name|title}} {{ attendance.user.middle_name|title}} {{ attendance.user.last_name|title}}</b></a>
+                    </td>
                     <td> {{ attendance.attendance_date }}</td>
                     <td>{{ attendance.entry_time }}</td>
                     <td>
@@ -59,10 +56,10 @@
         </div>
 {%else%}
         <center>
-            <p class="alert alert-info mt-5"> You Haven't marked any shifts </p>
+            <p class="alert alert-info mt-5"> No attendance Marked </p>
         </center>
 {% endif %}
 
 
-{% endblock content %}
+{% endblock page %}
 

@@ -35,5 +35,8 @@ urlpatterns = [
     path('reject_leave/<int:pk>/',views.reject_leave, name='reject_leave'),
     path('leave_history/',views.leave_history, name='leave_history'),
     path('leave_history_detail/<int:pk>/',views.leave_history_detail, name='leave_history_detail'),
+    path('admin_attendance_view/', views.admin_attendance_view , name='admin_attendance_view'),
+    path('admin_missing_regular/', views.admin_missing_regular , name='admin_missing_regular'),
+    path('admin_employee_attendance_missing/<int:pk>/', views.single_employee_leave , name='single_employee_leave'),
     
 ]

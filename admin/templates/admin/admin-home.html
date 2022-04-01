@@ -40,17 +40,18 @@
             </li>
 
 
-            <li class =" {% if url_name == 'morning_shift'  %} active {% elif url_name == 'night_shift' %}active  {% elif url_name == 'attendance_view' %}active {% endif %}">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Attendance</a>
-                <ul class="collapse list-unstyled" id="homeSubmenu">
-                    <li class="{% if url_name == 'morning_shift' %} active {% endif %}">
-                        <a  href="#">Morning Shift</a>
+            <li class =" ">
+                <a href="#attendanceSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-calendar-check"></i> <span class="ml-2">Attendance</span></a>
+
+                <ul class="collapse list-unstyled" id="attendanceSubmenu">
+                    <li class="">
+                        <a  href="{% url 'admin_attendance_view' %}">Attendance View</a>
                     </li>
-                    <li class="{% if url_name == 'night_shift' %} active {% endif %}">
-                        <a  href="#">Night Shift</a>
+                    <li class="">
+                        <a  href="{% url 'admin_missing_regular' %}">Missing Regular</a>
                     </li>
-                    <li class="{% if url_name == 'attendance_view' %} active {% endif %}">
-                        <a  href="#">Attendance View</a>
+                    <li class="">
+                        <a  href="#"></a>
                     </li>
                 </ul>
             </li>

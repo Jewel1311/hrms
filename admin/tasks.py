@@ -1,5 +1,6 @@
-from employees.models import LeaveCounter, YearCounter
+from employees.models import Leave, LeaveCounter, YearCounter
 import datetime
+from django.db.models import Q
 
 
 #returns the current year
@@ -79,3 +80,17 @@ def set_leave(leave):
             diff = 0
         total =  f_no + e_no + diff
         return total
+
+#check if user have an approved leave
+def leave_marked(emp,date):
+    leaves = Leave.objects.filter(Q(from_date__month= date.month) | Q(to_date__month= date.month), user=emp).exclude(approval='rejected')
+    if leaves:
+        for leave in leaves:
+            if leave.from_date != leave.to_date:
+                day_count = (leave.to_date - leave.from_date).days + 1
+                for single_date in (leave.from_date + datetime.timedelta(n) for n in range(day_count)):
+                    if single_date == date:
+                        return True
+            else:
+                if leave.from_date == date:
+                    return True

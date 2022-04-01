@@ -3,14 +3,23 @@ from admin.tasks import get_month,get_year
 from django.shortcuts import render
 from .models import Jobs
 from users.models import Newuser
-from employees.models import LeaveCounter, YearCounter
+from employees.models import Attendance, LeaveCounter, YearCounter
 
 def index(request):
      
      jobs = Jobs.objects.filter(withdraw_date__gte=datetime.date.today()).order_by('-posted_on')[:3]
+     create_attendance()
      leave_counter()
      year_counter()
      return render(request, 'base/index.html',{'jobs':jobs})
+
+# to create attendance column for everyday
+def create_attendance():
+     check = Attendance.objects.filter(attendance_date__gte=datetime.date.today()).count()
+     if check == 0:
+          employees = Newuser.objects.filter(is_employee = True)
+          for employee in employees:
+               Attendance.objects.create(attendance_date=datetime.date.today(),entry_time=None,exit_time=None,shift='morning',user=employee) 
 
 # to update the leave counter every month
 def leave_counter():

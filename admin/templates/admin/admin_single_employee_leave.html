@@ -1,0 +1,61 @@
+{% extends "admin/admin-home.html" %}
+
+{% block page %} 
+
+<center>
+    {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{message.tags}} mt-2">
+              {{ message }}
+          </div>
+          {% endfor %}
+   {% endif %}
+   <h5 class="mb-3" style="color: #e43c5c;"> Attendance View </h5>
+</center>
+
+{% if attendance|length > 0 %}
+        <div >
+        <table class="jtable" id='tableid2'>
+            <thead>
+                <th>Employee</th>
+                <th>Date</th>
+                <th>Entry Time</th>
+                <th>Exit Time</th>
+                <th>Shift</th>
+            </thead>
+            <tbody>
+                {% for attendance in attendance %}
+                <tr>
+                    <td>
+                        <a href="/media/{{ attendance.user.employeeprofile.photo }}"><img src="{{ attendance.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+
+                        <a href="{% url 'employee_detail' attendance.user.pk %}"><b>{{ attendance.user.first_name|title}} {{ attendance.user.middle_name|title}} {{ attendance.user.last_name|title}}</b></a>
+                    </td>
+                    <td> {{ attendance.attendance_date }}</td>
+                    <td>{% if attendance.entry_time == None %}
+                        <div style="color: #e43c5c;">Missing</div>
+                        {% else %}
+                        {{ attendance.entry_time }}
+                        {% endif %}</td>
+                    <td>
+                        {% if attendance.exit_time == None %}
+                        <div style="color: #e43c5c;">Missing</div>
+                        {% else %}
+                        {{ attendance.exit_time }}
+                        {% endif %}
+                    </td>
+                    <td>{{ attendance.shift|title}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No Missing Attendance </p>
+        </center>
+{% endif %}
+
+
+{% endblock page %}
+

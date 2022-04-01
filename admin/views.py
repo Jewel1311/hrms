@@ -1,5 +1,6 @@
 import datetime
-from .tasks import get_month,get_year,set_leave
+from multiprocessing import context
+from .tasks import get_month,get_year, leave_marked,set_leave
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -11,7 +12,7 @@ from admin.models import Designations, Salary
 from applicants.models import Applications, Interviews
 from base.models import Department, Jobs
 from base.views import leave_counter
-from employees.models import EmployeeDesignation, Leave, LeaveCounter, YearCounter
+from employees.models import Attendance, EmployeeDesignation, Leave, LeaveCounter, YearCounter
 from users.models import ApplicantProfile, Newuser
 
 
@@ -367,9 +368,18 @@ def cancel_interview(request,pk):
 #to view the leaves
 @login_required
 def admin_view_leaves(request):
-    leaves = Leave.objects.all().order_by('-id')
     obj = EmployeeDesignation.objects.all() #for the department of employee
-    return render(request,'admin/admin_view_leaves.html',{'leaves':leaves,'obj':obj})
+    if request.method == "POST":
+        filter = request.POST['filter']
+        if filter == 'month':
+            leaves = Leave.objects.filter(from_date__month = get_month()).order_by('from_date')
+        elif filter =='all':
+            leaves = Leave.objects.filter(from_date__month = get_month()).order_by('from_date')
+        return render(request,'admin/admin_view_leaves.html',{'leaves':leaves,'obj':obj,'filter':filter})
+
+    else:
+        leaves = Leave.objects.all().order_by('from_date')
+        return render(request,'admin/admin_view_leaves.html',{'leaves':leaves,'obj':obj})
 
 @login_required
 def admin_leave_detail(request,pk):
@@ -469,3 +479,70 @@ def leave_history_detail(request,pk):
         'employee':employee
     }
     return render(request,'admin/leave_history_detail.html', context)
+
+@login_required
+def admin_attendance_view(request):
+    if request.method == "POST":
+      shift = request.POST['shift']
+      attendance =  Attendance.objects.filter(shift = shift).order_by('-attendance_date')
+      return render(request, 'admin/admin_attendance_view.html',{'attendance':attendance,'shift':shift})
+
+    else:
+      attendance =  Attendance.objects.filter(shift='morning').order_by('-attendance_date')
+      return render(request, 'admin/admin_attendance_view.html',{'attendance':attendance})
+
+
+@login_required
+def admin_missing_regular(request):
+    if request.method == "POST":
+        filter = request.POST['filter']
+        if filter == 'today':
+            #todays attendance missing
+            attendance =  Attendance.objects.filter(attendance_date =datetime.date.today(),shift='morning',entry_time=None).order_by('-attendance_date')
+            for attendance in attendance:
+                flag = leave_marked(attendance.user,attendance.attendance_date)
+                if flag:
+                    attendance.leave = True
+                    attendance.save()
+                attendance =  Attendance.objects.filter(attendance_date =datetime.date.today(),shift='morning',entry_time=None).order_by('-attendance_date')
+        
+        elif filter == 'month':
+            #this months attendance missing
+            attendance =  Attendance.objects.filter(entry_time=None, attendance_date__month=get_month(),shift='morning').order_by('-attendance_date')
+            for attendance in attendance:
+                flag = leave_marked(attendance.user,attendance.attendance_date)
+                if flag:
+                    attendance.leave = True
+                    attendance.save()
+            attendance =  Attendance.objects.filter(entry_time=None, attendance_date__month=get_month(),shift='morning').order_by('-attendance_date')
+
+
+        elif filter == 'all':
+            attendance =  Attendance.objects.filter(entry_time=None, shift='morning').order_by('-attendance_date')
+            for attendance in attendance:
+                flag = leave_marked(attendance.user,attendance.attendance_date)
+                if flag:
+                    attendance.leave = True
+                    attendance.save()
+            attendance =  Attendance.objects.filter(entry_time=None, shift='morning').order_by('-attendance_date')
+            
+        return render(request, 'admin/admin_missing_regular.html',{'attendance':attendance,'filter':filter})
+
+    else:
+        attendance =  Attendance.objects.filter(entry_time=None, attendance_date = datetime.date.today(),shift='morning').order_by('-attendance_date')
+        for attendance in attendance:
+                flag = leave_marked( attendance.user,attendance.attendance_date)
+                if flag:
+                    attendance.leave = True
+                    attendance.save()
+        attendance =  Attendance.objects.filter(entry_time=None, attendance_date = datetime.date.today(),shift='morning').order_by('-attendance_date')
+        return render(request, 'admin/admin_missing_regular.html',{'attendance':attendance})
+
+# attendance view for a single employee
+@login_required
+def single_employee_leave(request,pk):
+        attendance =  Attendance.objects.filter(shift='morning',entry_time=None,user=pk).order_by('-id')
+        context = {
+            'attendance':attendance
+        }
+        return render(request,'admin/admin_single_employee_leave.html',context)

@@ -100,11 +100,9 @@ def view_employee_profile(request):
 def morning_shift(request):
       if request.method == "POST":
             if 'entry' in request.POST:
-               morning_shift = Attendance()
-               morning_shift.attendance_date = datetime.date.today()
+               morning_shift = Attendance.objects.get(user=request.user,attendance_date=datetime.date.today())
                morning_shift.entry_time = datetime.datetime.now().time()
                morning_shift.shift = 'morning'
-               morning_shift.user = request.user
                morning_shift.save()
                return redirect('morning_shift')
 
@@ -171,11 +169,11 @@ def night_shift(request):
 def attendance_view(request):
    if request.method == "POST":
       shift = request.POST['shift']
-      attendance =  Attendance.objects.filter(user = request.user,shift = shift)
+      attendance =  Attendance.objects.filter(user = request.user,shift = shift).order_by('-attendance_date')
       return render(request, 'employees/attendance_view.html',{'attendance':attendance,'shift':shift})
 
    else:
-      attendance =  Attendance.objects.filter(user = request.user,shift='morning')
+      attendance =  Attendance.objects.filter(user = request.user,shift='morning').order_by('-attendance_date')
       return render(request, 'employees/attendance_view.html',{'attendance':attendance})
 
 #apply leave 

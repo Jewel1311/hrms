@@ -39,6 +39,7 @@ class Attendance(models.Model):
     entry_time = models.TimeField(null=True)
     exit_time = models.TimeField(null=True)
     shift = models.CharField(max_length=10,default='')
+    leave = models.BooleanField(default=False)
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
 
 #to check if the date is a past date
