@@ -1,0 +1,79 @@
+{% extends "admin/admin-home.html" %}
+
+{% block page %} 
+
+<center>
+    {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{message.tags}} mt-2">
+              {{ message }}
+          </div>
+          {% endfor %}
+   {% endif %}
+   <h5 class="mb-3" style="color: #e43c5c;"> Attendance Regularization </h5>
+    
+</center>
+
+{% if attendance|length > 0 %}
+        <div >
+        <table class="jtable" id='tableid2'>
+            <thead>
+                <th>Employee</th>
+                <th>Date</th>
+                <th>Old Entry</th>
+                <th>New Entry</th>
+                <th>Old Exit</th>
+                <th>New Exit</th>
+                <th>Shift</th>
+                <th>Status</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                {% for attendance in attendance %}
+                <tr>
+                    <td>
+                        <a href="/media/{{ attendance.user.employeeprofile.photo }}"><img src="{{ attendance.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+
+                        <a href="{% url 'employee_detail' attendance.user.pk %}"><b>{{ attendance.user.first_name|title}} {{ attendance.user.middle_name|title}} {{ attendance.user.last_name|title}}</b></a>
+                    </td>
+                    <td> {{ attendance.date }}</td>
+                    <td>{{ attendance.old_entry }}</td>
+                    <td>{{ attendance.new_entry }}</td>
+                    <td>{{ attendance.old_exit }}</td>
+                    <td>{{ attendance.new_exit }}</td>
+                    <td>{{ attendance.shift|title }}</td>
+                    
+
+                    {% if attendance.status == 'approved' %}
+                    <td><div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                {{ attendance.status|title }}
+                        </div>
+                    </td>
+                    {% elif attendance.status == 'rejected' %}
+                    <td><div class="bg-danger" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                {{ attendance.status|title }}
+                        </div>
+                    </td>
+                    {% else %}
+                    <td><div class="bg-warning" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                        {{ attendance.status|title }}
+                    </div>
+                    </td>
+                    {% endif %}
+
+                    <td><a href="{% url 'apply_regularization' attendance.pk %}" class="custom-style-button">Details</a></td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No Regularization Requested </p>
+        </center>
+{% endif %}
+
+
+{% endblock page %}
+

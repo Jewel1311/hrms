@@ -69,3 +69,10 @@ class AdminEmpAttendance(forms.ModelForm):
     class Meta:
         model = Attendance
         fields = ['attendance_date','shift','entry_time','exit_time']
+
+class AdminRegularizationForm(forms.ModelForm):
+    new_entry = forms.TimeField( label="New Entry Time",widget=TimePickerInput(attrs={'class':'form-control'}),required=True)
+    new_exit = forms.TimeField(label="New Exit Time",widget=TimePickerInput(attrs={'class':'form-control'}),required=True)
+    class Meta:
+        model = AttendanceRegularization
+        fields = ['new_entry','new_exit']

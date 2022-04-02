@@ -1,5 +1,5 @@
 import datetime
-from admin.tasks import get_month,get_year
+from admin.tasks import get_year
 from django.shortcuts import render
 from .models import Jobs
 from users.models import Newuser
@@ -23,11 +23,18 @@ def create_attendance():
 
 # to update the leave counter every month
 def leave_counter():
-    check = LeaveCounter.objects.filter(date__month__gte=get_month(),date__year__gte=get_year()).count()
+    check = LeaveCounter.objects.filter(date__year__gte=get_year()).count()
     if check == 0:
+         year = get_year()
+         i = 1
+         while i<=12:
+          date = datetime.date(year,i,1)
           employees = Newuser.objects.filter(is_employee = True)
+          
           for employee in employees:
-               LeaveCounter.objects.create(cl=0,el=0,lp=0,sl=0,user=employee)   
+               LeaveCounter.objects.create(cl=0,el=0,lp=0,sl=0,date=date,user=employee)  
+                      
+          i = i+1
 
 # to updat the leave counter every year
 def year_counter():
@@ -35,4 +42,5 @@ def year_counter():
     if check == 0:
           employees = Newuser.objects.filter(is_employee = True)
           for employee in employees:
-               YearCounter.objects.create(cl=0,el=0,lp=0,sl=0,user=employee)  
+               YearCounter.objects.create(cl=0,el=0,lp=0,sl=0,user=employee) 
+                

@@ -37,12 +37,12 @@
                     <td>{{ request.attendance.shift|title }}</td>
                     <td>{{ request.reason }}</td>
                     <!-- for status colors  -->
-                    {% if leave.approval == 'approved' %}
+                    {% if request.status == 'approved' %}
                     <td><div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
                                 {{ request.status|title }}
                         </div>
                     </td>
-                    {% elif leave.approval == 'rejected' %}
+                    {% elif request.status == 'rejected' %}
                     <td><div class="bg-danger" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
                                 {{ request.status|title }}
                         </div>

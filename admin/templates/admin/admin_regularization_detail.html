@@ -1,0 +1,95 @@
+{% extends "admin/admin-home.html" %}
+{% load crispy_forms_tags %}
+{% block page %} 
+<center>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}
+    <h5 style="color: #e43c5c;">Regularization Details</h5>
+    </center>
+    <div class="d-flex flex-column align-items-center">
+        <div class="col-md-6 mt-2" >
+
+          
+            <form method="POST" class="pl-5 pr-5 pt-3 pb-3" style=" box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+
+              <div class="m-2 ">
+                <a href="/media/{{ attendance.user.employeeprofile.photo }}"><img src="{{ attendance.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+          
+                <a href="{% url 'employee_detail' attendance.user.pk %}"><b>{{ attendance.user.first_name|title}} {{ attendance.user.middle_name|title}} {{ attendance.user.last_name|title}}</b></a>
+            </div>
+
+            {% if attendance.status == 'approved' %}
+                    <div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                {{ attendance.status|title }}
+                        </div>
+                    
+                    {% elif attendance.status == 'rejected' %}
+                  <div class="bg-danger" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                {{ attendance.status|title }}
+                        </div>
+                    
+                    {% else %}
+                    <div class="bg-warning" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                        {{ attendance.status|title }}
+                    </div>
+                {% endif %}
+
+              <div class="mt-4 mb-2"><b>Attendance Date :</b> {{ attendance.date }}</div>
+              <div class="mb-2"><b>Shift :</b>{{ attendance.shift | title }}</div>
+              <div class="mb-2"><b>Old Entry :</b> {{ attendance.old_entry }}</div>
+              <div class="mb-2"><b>Old Exit :</b>{{ attendance.old_exit }}</div>
+              <div class="mb-2"><b>Reason : </b>{{ attendance.reason }}</div>
+                {% csrf_token %}
+            {{ form | crispy }}
+          
+          <div class="row">
+             <div class="ml-auto">
+               {% if attendance.status == 'pending' %}
+              <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#exampleModal">Reject</button>
+               <button type="submit" class="btn btn-success mr-3">Approve</button>
+               {% endif %}
+              </div>
+          </div>
+        </form>
+        </div>
+    </div>
+
+
+     <!-- Delete message Modal -->
+     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Employee</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{% url 'reject_regularization' attendance.pk %}">
+                {% csrf_token %}
+                <div>Are you sure you want to reject the request?</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="custom-style-button">Yes,Reject</button>
+          </div>
+      </form>
+        </div>
+      </div>
+    </div>
+    <!-- end delete message modal  -->
+
+
+{% endblock page %}
+
+
+
+
+
+

@@ -254,6 +254,7 @@ def attendance_regularization(request,pk):
          regulization.date = attendance.attendance_date
          regulization.old_entry = attendance.entry_time
          regulization.old_exit = attendance.exit_time
+         regulization.shift = attendance.shift
          regulization.user = request.user
          regulization.attendance = attendance
          regulization.save()

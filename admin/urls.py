@@ -45,5 +45,9 @@ urlpatterns = [
     path('exit_missing_mark/<int:pk>/', views.exit_missing_mark , name='exit_missing_mark'),
     path('night_unmarked/', views.night_unmarked , name='night_unmarked'),
     path('add_employee_attendance/<int:pk>/', views.add_emp_attendance , name='add_emp_attendance'),
+    path('admin_attendance_regularization/', views.admin_regularize, name='admin_regularize'),
+    path('admin_apply_regularization/<int:pk>/', views.apply_regularization, name='apply_regularization'),
+    path('admin_reject_regularization/<int:pk>/', views.reject_regularization, name='reject_regularization'),
+
 
 ]

@@ -14,7 +14,7 @@
 
 <div class="container d-flex justify-content-center">
 
-<div class=" mt-2 d-flex flex-column pb-3 pt-3 pl-5 pr-5" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+<div class=" col-md-12 mt-2  pb-3 pt-3 pl-5 pr-5" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
   <div class="m-2">
     <a href="/media/{{ employee.employeeprofile.photo }}"><img src="{{ employee.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
   
@@ -23,7 +23,8 @@
   <div class="ml-auto" style="color: rgb(77, 77, 250);"><a href="{% url 'admin_view_leaves' employee.pk %}">Details</a></div>
             <!-- total year  -->
             <div class="mt-2"><b> {% now "Y" %}, Year Total</b></div>
-            <div class="pb-2" style="border-bottom:2px solid black ;">
+            <div class=" row pb-2" style="border-bottom:2px solid black ;">
+              <div>
                   <div class="custom-style-button m-2"  style="background-color:#e43c5c">
                     <!-- to take value form list  -->
                     CL : <span class="">{{ year.cl }}</span>   
@@ -37,25 +38,31 @@
                   <div class="custom-style-button m-2"  style="background-color:#e43c5c">
                     SL : <span class="">{{ year.sl }}</span>
                   </div>
+                </div>
+
             </div>
             <!-- per month  -->
-            {% for month in month %}
-              <b class="mt-2">{{ month.date|date:"F" }} {% now "Y" %}</b>
-              <div >
-                <div class="custom-style-button m-2" style="background-color:#345363;">
-                  CL : <span class="">{{ month.cl }}</span>
+            <div class="row">
+              {% for month in month %}
+              <div class="col-md-6 mt-2 ">
+              <b style="color:#904D91">{{ month.date|date:"F" }} {% now "Y" %}</b>
+                <div class="row">
+                    <div class="custom-style-button m-2" style="background-color:#345363;">
+                      CL : <span class="">{{ month.cl }}</span>
+                    </div>
+                    <div class="custom-style-button  m-2" style="background-color:#345363 ;">
+                      EL : <span class="">{{ month.el }}</span>
+                    </div>
+                    <div class="custom-style-button  m-2" style="background-color:#345363 ;">
+                      LOP : <span class="">{{ month.lp }}</span>
+                    </div>
+                    <div class="custom-style-button  m-2" style="background-color:#345363 ;">
+                      SL : <span class="">{{ month.sl }}</span>
+                    </div>
                 </div>
-                <div class="custom-style-button  m-2" style="background-color:#345363 ;">
-                  EL : <span class="">{{ month.el }}</span>
                 </div>
-                <div class="custom-style-button  m-2" style="background-color:#345363 ;">
-                  LOP : <span class="">{{ month.lp }}</span>
-                </div>
-                <div class="custom-style-button  m-2" style="background-color:#345363 ;">
-                  SL : <span class="">{{ month.sl }}</span>
-                </div>
-              </div>
             {% endfor %}
+            </div>
 </div>
 
   

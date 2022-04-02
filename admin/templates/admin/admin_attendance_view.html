@@ -40,7 +40,13 @@
                         <a href="{% url 'employee_detail' attendance.user.pk %}"><b>{{ attendance.user.first_name|title}} {{ attendance.user.middle_name|title}} {{ attendance.user.last_name|title}}</b></a>
                     </td>
                     <td> {{ attendance.attendance_date }}</td>
-                    <td>{{ attendance.entry_time }}</td>
+                    <td>
+                        {% if attendance.entry_time == None %}
+                        <div style="color: #e43c5c;">Missing</div>
+                        {% else %}
+                        {{ attendance.entry_time }}
+                        {% endif %}
+                    </td>
                     
                     <td>
                         {% if attendance.exit_time == None %}

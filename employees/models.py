@@ -1,4 +1,5 @@
 import datetime
+from operator import mod
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from PIL import Image
@@ -78,6 +79,7 @@ class AttendanceRegularization(models.Model):
     old_exit = models.TimeField()
     new_exit = models.TimeField()
     reason = models.TextField()
+    shift = models.CharField(max_length=10,default='')
     status = models.CharField(max_length=12,default='pending')
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
     attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE)
@@ -89,7 +91,7 @@ class LeaveCounter(models.Model):
     el = models.FloatField()
     lp = models.FloatField()
     sl = models.FloatField()
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
     
 #yearly count of leave

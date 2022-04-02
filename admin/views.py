@@ -1,8 +1,7 @@
 import datetime
-from importlib.metadata import entry_points
-from operator import attrgetter
-from employees.forms import AdminAttendanceForm, AdminEmpAttendance, AdminLeaveForm
-from .tasks import get_balance, get_month,get_year, leave_marked,set_leave
+from employees.forms import AdminAttendanceForm, AdminEmpAttendance, AdminLeaveForm, AdminRegularizationForm
+from employees.views import attendance_regularization
+from .tasks import get_balance, get_month,get_year, leave_approval, leave_marked, leave_reject,set_leave
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -14,7 +13,7 @@ from admin.models import Designations, Salary
 from applicants.models import Applications, Interviews
 from base.models import Department, Jobs
 from base.views import leave_counter
-from employees.models import Attendance, EmployeeDesignation, Leave, LeaveCounter, YearCounter
+from employees.models import Attendance, AttendanceRegularization, EmployeeDesignation, Leave, LeaveCounter, YearCounter
 from users.models import ApplicantProfile, Newuser
 
 
@@ -44,9 +43,23 @@ def add_employee(request):
             designation = desig_form.save(False)
             designation.user =user 
 
-            LeaveCounter.objects.create(cl=0,el=0,lp=0,sl=0,user=user)
+           #to create month counter
+            year = get_year()
+            i = 1
+            while i<=12:
+                date = datetime.date(year,i,1)
+                LeaveCounter.objects.create(cl=0,el=0,lp=0,sl=0,date=date,user=user)       
+                i = i+1
+
+            #to create year
+            YearCounter.objects.create(cl=0,el=0,lp=0,sl=0,user=user) 
+
+            #to create the attendance for that day
+            Attendance.objects.create(attendance_date=datetime.date.today(),entry_time=None,exit_time=None,shift='morning',user=user)
+
             salary.save()
             designation.save()
+
 
             messages.success(request,f'Employee added')
             reg_form = AddEmployeeForm()
@@ -375,21 +388,21 @@ def admin_view_leaves(request,user=None):
         filter = request.POST['filter']
         if filter == 'month':
             if user:
-                leaves = Leave.objects.filter(from_date__month = get_month(),user=user).order_by('from_date')
+                leaves = Leave.objects.filter(from_date__month = get_month(),user=user).order_by('-applied_date')
             else:
-                leaves = Leave.objects.filter(from_date__month = get_month()).order_by('from_date')
+                leaves = Leave.objects.filter(from_date__month = get_month()).order_by('-applied_date')
         elif filter =='all':
             if user:
-                leaves = Leave.objects.filter(user=user).order_by('from_date')
+                leaves = Leave.objects.filter(user=user).order_by('-applied_date')
             else:
-                leaves = Leave.objects.all().order_by('from_date')
+                leaves = Leave.objects.all().order_by('-applied_date')
         return render(request,'admin/admin_view_leaves.html',{'leaves':leaves,'obj':obj,'filter':filter})
 
     else:
         if user:
-                leaves = Leave.objects.filter(user=user).order_by('from_date')
+                leaves = Leave.objects.filter(user=user).order_by('-applied_date')
         else:
-                leaves = Leave.objects.all().order_by('from_date')
+                leaves = Leave.objects.all().order_by('-applied_date')
         return render(request,'admin/admin_view_leaves.html',{'leaves':leaves,'obj':obj})
 
 @login_required
@@ -437,25 +450,7 @@ def admin_leave_edit(request,pk):
 def approve_leave(request,pk):
     leave = Leave.objects.get(id=pk)
     if leave.approval != 'approved':
-        number = set_leave(leave)  #return the  number of days
-        count = LeaveCounter.objects.get(date__month=get_month(),date__year=get_year(),user=leave.user)
-        count1 = YearCounter.objects.get(date__year=get_year(),user=leave.user)
-        if leave.leave_type == 'casual leave':
-            count.cl = count.cl + number
-            count1.cl = count1.cl + number
-        elif leave.leave_type == 'earned leave':
-            count.el = count.el + number
-            count1.el = count1.el + number
-        elif leave.leave_type == 'loss of pay':
-            count.lp = count.lp + number
-            count1.lp = count1.lp + number
-        elif leave.leave_type == 'sick leave':
-            count.sl = count.sl + number
-            count1.sl = count1.sl + number
-        count.save()
-        count1.save()
-        leave.approval = 'approved'
-        leave.save()
+        leave_approval(leave)
         messages.success(request,f'Leave Approved')
         return redirect('admin_leave_detail',pk=pk)
         
@@ -467,25 +462,7 @@ def approve_leave(request,pk):
 def reject_leave(request,pk):
     leave = Leave.objects.get(id=pk)
     if leave.approval == 'approved':
-        number = set_leave(leave)  #return the  number of days
-        count = LeaveCounter.objects.get(date__month=get_month(),date__year=get_year(),user=leave.user)
-        count1 = YearCounter.objects.get(date__year=get_year(),user=leave.user)
-        if leave.leave_type == 'casual leave':
-            count.cl = count.cl - number
-            count1.cl = count1.cl - number
-        elif leave.leave_type == 'earned leave':
-            count.el = count.el - number
-            count1.el = count1.el - number
-        elif leave.leave_type == 'loss of pay':
-            count.lp = count.lp - number
-            count1.lp = count1.lp - number
-        elif leave.leave_type == 'sick leave':
-            count.sl = count.sl - number
-            count1.sl = count1.sl - number
-        count.save()
-        count1.save()
-        leave.approval = 'rejected'
-        leave.save()
+        leave_reject(leave)
         messages.warning(request,f'Leave Rejected')
         return redirect('admin_leave_detail',pk=pk)
         
@@ -752,3 +729,44 @@ def add_emp_attendance(request,pk):
                     return redirect('admin_attendance_view',user=pk)
     else:
         return render(request,'admin/admin_emp_attendance.html',context)
+
+# Attendance regularization 
+@login_required
+def admin_regularize(request):
+    attendance = AttendanceRegularization.objects.all()
+    context = {
+        'attendance':attendance
+    }
+    return render(request,'admin/admin_regularization.html',context)
+
+#apply regualrization
+def apply_regularization(request,pk):
+    attendance = AttendanceRegularization.objects.get(id=pk)
+    id = attendance.attendance_id
+    print(id)
+    form = AdminRegularizationForm(instance=attendance)
+    context = {
+        'attendance':attendance,
+        'form':form
+    }
+    if request.method == "POST":
+        form = AdminRegularizationForm(request.POST, instance=attendance)
+        if form.is_valid():
+            old_attendance = Attendance.objects.get(id=id) 
+            old_attendance.entry_time = form.cleaned_data['new_entry']
+            old_attendance.exit_time = form.cleaned_data['new_exit']
+            old_attendance.save()
+            attendance.status = 'approved'
+            attendance.save()
+            messages.success(request, f'Regularization Approved')
+            return redirect('admin_regularize')
+
+    return render(request,'admin/admin_regularization_detail.html', context)
+
+@login_required
+def reject_regularization(request,pk):
+    attendance = AttendanceRegularization.objects.get(id=pk)
+    attendance.status = 'rejected'
+    attendance.save()
+    messages.warning(request, f'Regularization rejected')
+    return redirect('admin_regularize')
