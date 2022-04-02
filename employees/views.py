@@ -1,5 +1,4 @@
 import datetime
-from distutils.log import log
 from django.views.generic import UpdateView
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required

@@ -51,9 +51,11 @@
                         
                         <div class="row mt-3" style="color:rgb(77, 77, 250);">
                             <!-- attendance History  -->
-                            <a class="mr-3" href="{% url 'admin_attendance_view' employee.pk %}">Attendance History</a>
+                            <a class="mr-2"  href="{% url 'admin_attendance_view' employee.pk %}">Attendance History</a>
                             <!-- leave History  -->
-                            <a href="{% url 'leave_history_detail' employee.pk %}">Leave History</a>
+                            <a class="mr-2 pl-2 pr-2" style="border-left:2px solid black; border-right:2px solid black;" href="{% url 'leave_history_detail' employee.pk %}">Leave History</a>
+                            <!-- add attendance  -->
+                            <a href="{% url 'add_emp_attendance' employee.pk %}"><i class="bi bi-plus-lg"></i> Add Attendance</a>
                         </div>
 
             

@@ -20,7 +20,7 @@
   
     <a href="{% url 'employee_detail' employee.pk %}"><b>{{ employee.first_name|title}} {{ employee.middle_name|title}} {{ employee.last_name|title}}</b></a>
   </div>
-  <div class="ml-auto" style="color: rgb(77, 77, 250);"><a href="{% url 'single_employee_leave' employee.pk %}">Details</a></div>
+  <div class="ml-auto" style="color: rgb(77, 77, 250);"><a href="{% url 'admin_view_leaves' employee.pk %}">Details</a></div>
             <!-- total year  -->
             <div class="mt-2"><b> {% now "Y" %}, Year Total</b></div>
             <div class="pb-2" style="border-bottom:2px solid black ;">

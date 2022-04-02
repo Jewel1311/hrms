@@ -52,7 +52,7 @@
                         <a  href="{% url 'admin_missing_regular' %}">Regular Unmarked</a>
                     </li>
                     <li class="">
-                        <a  href="#"></a>
+                        <a  href="{% url 'night_unmarked' %}">Night Unmarked</a>
                     </li>
                 </ul>
             </li>
@@ -66,9 +66,6 @@
                     </li>
                     <li class="{% if url_name == 'leave_history'  %} active {% endif %}">
                         <a href="{% url 'leave_history' %}">Leave History</a>
-                    </li>
-                    <li>
-                        <a href="#">Page 3</a>
                     </li>
                 </ul>
             </li>

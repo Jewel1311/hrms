@@ -30,6 +30,7 @@ urlpatterns = [
     path('selected_applicants/<int:pk>/',views.selected_applicants, name='selected_applicants'),
     path('cancel_interview/<int:pk>/',views.cancel_interview, name='cancel_interview'),
     path('admin_view_leaves/',views.admin_view_leaves, name='admin_view_leaves'),
+    path('admin_view_leaves/<int:user>/',views.admin_view_leaves, name='admin_view_leaves'),
     path('admin_leave_detail/<int:pk>/',views.admin_leave_detail, name='admin_leave_detail'),
     path('approve_leave/<int:pk>/',views.approve_leave, name='approve_leave'),
     path('reject_leave/<int:pk>/',views.reject_leave, name='reject_leave'),
@@ -38,8 +39,11 @@ urlpatterns = [
     path('admin_attendance_view/', views.admin_attendance_view , name='admin_attendance_view'),
     path('admin_attendance_view/<int:user>/', views.admin_attendance_view , name='admin_attendance_view'),
     path('admin_missing_regular/', views.admin_missing_regular , name='admin_missing_regular'),
-    path('exit_tme_missing/', views.exit_missing , name='exit_tme_missing'),
-    path('admin_employee_attendance_missing/<int:pk>/', views.single_employee_leave , name='single_employee_leave'),
+    path('exit_time_missing/', views.exit_missing , name='exit_time_missing'),
     path('admin_leave_apply/<int:pk>/', views.admin_leave_apply , name='admin_leave_apply'),
-    
+    path('admin_leave_edit/<int:pk>/', views.admin_leave_edit , name='admin_leave_edit'),
+    path('exit_missing_mark/<int:pk>/', views.exit_missing_mark , name='exit_missing_mark'),
+    path('night_unmarked/', views.night_unmarked , name='night_unmarked'),
+    path('add_employee_attendance/<int:pk>/', views.add_emp_attendance , name='add_emp_attendance'),
+
 ]

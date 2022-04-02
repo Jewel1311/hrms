@@ -1,8 +1,7 @@
 import datetime
 from importlib.metadata import entry_points
-from multiprocessing import context
-
-from employees.forms import AdminLeaveForm
+from operator import attrgetter
+from employees.forms import AdminAttendanceForm, AdminEmpAttendance, AdminLeaveForm
 from .tasks import get_balance, get_month,get_year, leave_marked,set_leave
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView,UpdateView
@@ -370,18 +369,27 @@ def cancel_interview(request,pk):
 
 #to view the leaves
 @login_required
-def admin_view_leaves(request):
+def admin_view_leaves(request,user=None):
     obj = EmployeeDesignation.objects.all() #for the department of employee
     if request.method == "POST":
         filter = request.POST['filter']
         if filter == 'month':
-            leaves = Leave.objects.filter(from_date__month = get_month()).order_by('from_date')
+            if user:
+                leaves = Leave.objects.filter(from_date__month = get_month(),user=user).order_by('from_date')
+            else:
+                leaves = Leave.objects.filter(from_date__month = get_month()).order_by('from_date')
         elif filter =='all':
-            leaves = Leave.objects.filter(from_date__month = get_month()).order_by('from_date')
+            if user:
+                leaves = Leave.objects.filter(user=user).order_by('from_date')
+            else:
+                leaves = Leave.objects.all().order_by('from_date')
         return render(request,'admin/admin_view_leaves.html',{'leaves':leaves,'obj':obj,'filter':filter})
 
     else:
-        leaves = Leave.objects.all().order_by('from_date')
+        if user:
+                leaves = Leave.objects.filter(user=user).order_by('from_date')
+        else:
+                leaves = Leave.objects.all().order_by('from_date')
         return render(request,'admin/admin_view_leaves.html',{'leaves':leaves,'obj':obj})
 
 @login_required
@@ -396,6 +404,34 @@ def admin_leave_detail(request,pk):
         'year_counter':year_counter
     }
     return render(request,'admin/admin_leave_detail.html',context)
+
+# to edit admin added leave    
+@login_required
+def admin_leave_edit(request,pk):
+    attendance = Leave.objects.get(id = pk)  #leave is renamed to attendance
+    #get current months leave counter
+    leave_form = AdminLeaveForm(instance=attendance)
+    month_counter = LeaveCounter.objects.get(date__month=get_month(),date__year=get_year(),user=attendance.user) 
+    year_counter = YearCounter.objects.get(date__year=get_year(),user=attendance.user)
+    context = {
+        'form':leave_form,
+        'attendance':attendance,
+        'month':month_counter,
+        'count':year_counter
+    }
+    if request.method == "POST":
+        leave_form = AdminLeaveForm(request.POST,instance=attendance)
+        if leave_form.is_valid():
+            #leave balance check
+            balance = get_balance(leave_form,attendance.user)
+            leave_type = leave_form.cleaned_data['leave_type']
+            if balance:
+                messages.warning(request, f'Please check your {leave_type.upper()} availability')
+                return render(request, 'admin/admin_leave_apply.html',context)
+            leave_form.save()
+            return redirect('admin_leave_detail',pk=pk)
+    else:
+        return render(request,'admin/admin_leave_apply.html',context)
 
 @login_required
 def approve_leave(request,pk):
@@ -514,6 +550,10 @@ def admin_missing_regular(request):
                 if flag:
                     attendance.leave = True
                     attendance.save()
+                else:          #if flag is false and leave is True (when rejected)
+                    if attendance.leave == True:
+                        attendance.leave = False
+                        attendance.save()
                 attendance =  Attendance.objects.filter(attendance_date =datetime.date.today(),shift='morning',entry_time=None).order_by('-attendance_date')
         
         elif filter == 'month':
@@ -524,6 +564,10 @@ def admin_missing_regular(request):
                 if flag:
                     attendance.leave = True
                     attendance.save()
+                else:          #if flag is false and leave is True (when rejected)
+                    if attendance.leave == True:
+                        attendance.leave = False
+                        attendance.save()
             attendance =  Attendance.objects.filter(entry_time=None, attendance_date__month=get_month(),shift='morning').order_by('-attendance_date')
 
 
@@ -534,6 +578,10 @@ def admin_missing_regular(request):
                 if flag:
                     attendance.leave = True
                     attendance.save()
+                else:          #if flag is false and leave is True (when rejected)
+                    if attendance.leave == True:
+                        attendance.leave = False
+                        attendance.save()
             attendance =  Attendance.objects.filter(entry_time=None, shift='morning').order_by('-attendance_date')
             
         return render(request, 'admin/admin_missing_regular.html',{'attendance':attendance,'filter':filter})
@@ -545,23 +593,21 @@ def admin_missing_regular(request):
                 if flag:
                     attendance.leave = True
                     attendance.save()
+                else:          #if flag is false and leave is True (when rejected)
+                    if attendance.leave == True:
+                        attendance.leave = False
+                        attendance.save()
         attendance =  Attendance.objects.filter(entry_time=None, attendance_date = datetime.date.today(),shift='morning').order_by('-attendance_date')
         return render(request, 'admin/admin_missing_regular.html',{'attendance':attendance})
 
-# attendance view for a single employee
-@login_required
-def single_employee_leave(request,pk):
-        attendance =  Attendance.objects.filter(shift='morning',entry_time=None,user=pk).order_by('-id')
-        context = {
-            'attendance':attendance
-        }
-        return render(request,'admin/admin_single_employee_leave.html',context)
+
 
 # to add leave by admin
 @login_required
 def admin_leave_apply(request,pk):
     attendance = Attendance.objects.get(id=pk)
     count = YearCounter.objects.get(user = attendance.user)
+    month = LeaveCounter.objects.get(user = attendance.user, date__month=get_month())
     if request.method == "POST":
       leave_form = AdminLeaveForm(request.POST)
       if leave_form.is_valid():
@@ -570,22 +616,24 @@ def admin_leave_apply(request,pk):
          leave_type = leave_form.cleaned_data['leave_type']
          if balance:
             messages.warning(request, f'Please check your {leave_type.upper()} availability')
-            return render(request, 'admin/admin_leave_apply.html',{ 'form': leave_form,'attendance':attendance,'count':count }) 
+            return render(request, 'admin/admin_leave_apply.html',{ 'form': leave_form,'attendance':attendance,'count':count,'month':month }) 
 
          leave = leave_form.save(False)
          leave.from_date = attendance.attendance_date
          leave.to_date = attendance.attendance_date
          leave.reason = "Leave Added by admin"
+         leave.admin = True
          leave.user = attendance.user
          leave.save()
          return redirect('approve_leave', pk=leave.pk)  
       else:
-         return render(request, 'admin/admin_leave_apply.html',{ 'form': leave_form, 'attendance':attendance,'count':count })
+         return render(request, 'admin/admin_leave_apply.html',{ 'form': leave_form, 'attendance':attendance,'count':count,'month':month })
     else:  
       form = AdminLeaveForm()
-      return render(request, 'admin/admin_leave_apply.html',{ 'form': form, 'attendance':attendance,'count':count})
+      return render(request, 'admin/admin_leave_apply.html',{ 'form': form, 'attendance':attendance,'count':count,'month':month })
 
 #exit time not marked
+@login_required
 def exit_missing(request):
     if request.method == "POST":
         filter = request.POST['filter']
@@ -605,3 +653,102 @@ def exit_missing(request):
     else:
         attendance =  Attendance.objects.filter(exit_time=None, attendance_date = datetime.date.today(),shift='morning').exclude(entry_time = None).order_by('attendance_date')
         return render(request, 'admin/exit_time_missing.html',{'attendance':attendance})
+
+# Attendance Mark for Exit missing
+@login_required
+def exit_missing_mark(request,pk):
+    attendance = Attendance.objects.get(id=pk)
+    form = AdminAttendanceForm(instance=attendance)
+    context = {
+        'attendance':attendance,
+        'form':form
+    }
+    if request.method == "POST":
+        form = AdminAttendanceForm(request.POST ,instance=attendance)
+        if form.is_valid():
+            form.save()
+            emp = attendance.user.first_name+' '+attendance.user.middle_name+' '+attendance.user.last_name
+            messages.success(request,f'Exit time marked for {emp.upper()}')
+            return redirect('admin_attendance_view')
+    else:
+        return render(request,'admin/admin_add_attendance.html',context)
+
+#view night shift unmarked attendance:
+@login_required
+def night_unmarked(request):
+    if request.method == "POST":
+        filter = request.POST['filter']
+        if filter == 'month':
+            #this months attendance missing
+            attendance =  Attendance.objects.filter(exit_time=None, attendance_date__month=get_month(),shift='night').exclude(entry_time = None).order_by('attendance_date')
+
+        elif filter == 'all':
+            attendance =  Attendance.objects.filter(exit_time=None, shift='night').exclude(entry_time = None).order_by('attendance_date')
+            
+        return render(request, 'admin/night_shift_unmarked.html',{'attendance':attendance,'filter':filter})
+
+    else:
+        attendance =  Attendance.objects.filter(exit_time=None, attendance_date__month=get_month(),shift='night').exclude(entry_time = None).order_by('attendance_date')
+        return render(request, 'admin/night_shift_unmarked.html',{'attendance':attendance})
+
+
+# Add an attendance to employee
+@login_required
+def add_emp_attendance(request,pk):
+    emp = Newuser.objects.get(id=pk)
+    form = AdminEmpAttendance()
+    context = {
+        'form':form,
+        'emp':emp
+    }
+    if request.method == "POST":
+        form = AdminEmpAttendance(request.POST)
+        if form.is_valid():
+            shift = form.cleaned_data['shift']
+            date = form.cleaned_data['attendance_date']
+
+            #to update the leve feild by checking if leave applied or not
+            try:    
+                attendance = Attendance.objects.get(attendance_date=date,user=pk,shift='morning')
+                flag = leave_marked(pk,date)
+                if flag:
+                        attendance.leave = True
+                        attendance.save()
+                else:          #if flag is false and leave is True (when rejected)
+                    if attendance.leave == True:
+                        attendance.leave = False
+                        attendance.save()
+            except:
+                messages.warning(request,f'Check your attendance date')
+                return render(request,'admin/admin_emp_attendance.html',{'form':form,'emp':emp})
+
+
+
+            if shift == 'morning':
+                attendance = Attendance.objects.get(attendance_date=date,user=pk,shift='morning')
+                if attendance:
+                    if attendance.entry_time == None and attendance.exit_time == None and attendance.leave == False:
+                        attendance.entry_time = form.cleaned_data['entry_time']
+                        attendance.exit_time = form.cleaned_data['exit_time']
+                        attendance.save()
+                        messages.success(request,f'Attendance Marked')
+                        return redirect('admin_attendance_view',user=pk)
+                    else:
+                        messages.warning(request,f'Failed to mark attendance')
+                else:
+                    messages.warning(request,f'Failed to mark attendance')
+                return render(request,'admin/admin_emp_attendance.html',{'form':form,'emp':emp})
+                
+            #  night shift    
+            else:
+                if date > datetime.date.today():
+                    messages.warning(request,f'Check your attendance date')
+                    return render(request,'admin/admin_emp_attendance.html',{'form':form,'emp':emp})
+                else:
+                    leave = form.save(False)
+                    leave.user = emp
+                    leave.save()
+                    messages.success(request,f'Attendance Added')
+                    return redirect('admin_attendance_view',user=pk)
+    else:
+        return render(request,'admin/admin_emp_attendance.html',context)

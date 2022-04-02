@@ -19,7 +19,10 @@
                     <a href="{% url 'employee_detail' attendance.user.pk %}"><b>{{  attendance.user.first_name|title}} {{  attendance.user.middle_name|title}} {{  attendance.user.last_name|title}}</b></a>
                 </div>
 
-                <div class="mt-2"><b> {% now "Y" %}, Year Total</b></div>
+               
+
+
+                <div class="mt-1"><b> {% now "Y" %}, Year Total</b></div>
             <div class="pb-2">
                   <div class="custom-style-button m-2"  style="background-color:#e43c5c">
                     <!-- to take value form list  -->
@@ -35,6 +38,23 @@
                     SL : <span class="">{{ count.sl }}</span>
                   </div>
             </div>
+
+
+            <div class="mt-1"><b> {% now "F" %}, {% now "Y" %}</b></div>
+            <div class="pb-2">
+              <div class="custom-style-button m-2" style="background-color:#345363;">
+                CL : <span class="">{{ month.cl }}</span>
+              </div>
+              <div class="custom-style-button m-2" style="background-color:#345363 ;">
+                EL : <span class="">{{ month.el }}</span>
+              </div>
+              <div class="custom-style-button m-2" style="background-color:#345363 ;">
+                LOP : <span class="">{{ month.lp }}</span>
+              </div>
+              <div class="custom-style-button m-2" style="background-color:#345363 ;">
+                SL : <span class="">{{ month.sl }}</span>
+              </div>
+          </div>
                     
             <form method="POST" class=" col-md-6 pl-5 pr-5 pt-3 pb-2" style=" box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
                 <div class="mb-2"><b>Leave Date : {{ attendance.attendance_date }}</b></div>

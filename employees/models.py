@@ -57,6 +57,7 @@ class Leave(models.Model):
     applied_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
     approval = models.CharField(max_length=12,default='pending')
+    admin = models.BooleanField(default=False)
     attachments =  models.FileField(validators=[FileExtensionValidator(allowed_extensions=['pdf','docx'])],default='')
 
     def get_absolute_url(self):

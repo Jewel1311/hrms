@@ -79,7 +79,14 @@
                         {% endif %}
 
 
-                 <td><a href="{% url 'admin_leave_detail' leave.pk %}"class="custom-style-button">Details</a></td>
+                 <td>
+                     <a href="{% url 'admin_leave_detail' leave.pk %}"class="custom-style-button">Details</a>
+                     {% if leave.admin == True %}
+                     <div class="bg-info" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                        Admin
+                    </div>
+                     {% endif %}
+                    </td>
                 </tr>
 
                 {% endfor %} 

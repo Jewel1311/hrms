@@ -41,7 +41,7 @@
 
 
       <div class="col-md-6">
-        <div class="mb-2"><b>Total ({% now "Y" %})</b></div>
+        <div class="mb-2"><b>Total, {% now "Y" %}</b></div>
         <div class="custom-style-button"  style="background-color:#e43c5c">
           <!-- to take value form list  -->
           CL : <span class="">{{ year_counter.cl }}</span>   
@@ -81,7 +81,13 @@
     </div>
    
     {% endif %}
-     
+    
+    {% if leave.admin == True and leave.approval != 'approved' %}
+    <div class="row">
+        <div class="ml-auto mr-2"><a href="{% url 'admin_leave_edit' leave.pk %}" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
+    </div>
+    {% endif %}
+
  <div class="row">
       <div class=" col-md-6 mt-2">
         <b class="pr-2">Leave Type</b><div class=" p-2" style="background-color: #DADDE2">{{ leave.leave_type|title }} 

@@ -1,11 +1,16 @@
+from dataclasses import field
 from django import forms
-from .models import AttendanceRegularization, Leave
+from .models import Attendance, AttendanceRegularization, Leave
 
 LEAVE_CHOICES =(
     ('casual leave', 'Casual Leave'),
     ('loss of pay', 'Loss of Pay'),
     ('earned leave', 'Earned Leave'),
      ('sick leave', 'Sick Leave')
+)
+SHIFT_CHOICES = (
+    ('morning', 'morning'),
+    ('night', 'night')
 )
 
 SESSION_CHOICES =(
@@ -48,3 +53,19 @@ class RegularizeForm(forms.ModelForm):
         model = AttendanceRegularization
         fields = ['new_entry','new_exit','reason']
 
+class AdminAttendanceForm(forms.ModelForm):
+    entry_time = forms.TimeField( label="Entry Time",widget=TimePickerInput(attrs={'class':'form-control'}))
+    exit_time = forms.TimeField(label="Exit Time",widget=TimePickerInput(attrs={'class':'form-control'}))
+    class Meta:
+        model = Attendance
+        fields = ['entry_time','exit_time']
+
+class AdminEmpAttendance(forms.ModelForm):
+    attendance_date = forms.DateField(widget=DateInput(attrs = {'class':'form-control '}),required=True)
+    shift =  forms.CharField(widget= forms.Select(choices=SHIFT_CHOICES ,attrs= {'class':'form-control '}),required =True)
+    entry_time = forms.TimeField( label="Entry Time",widget=TimePickerInput(attrs={'class':'form-control'}),required=True)
+    exit_time = forms.TimeField(label="Exit Time",widget=TimePickerInput(attrs={'class':'form-control'}),required=True)
+
+    class Meta:
+        model = Attendance
+        fields = ['attendance_date','shift','entry_time','exit_time']

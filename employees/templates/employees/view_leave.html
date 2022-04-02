@@ -54,7 +54,15 @@
                         {% endif %}
 
 
-                 <td><a href="{{ leave.get_absolute_url }}"class="custom-style-button">View</a></td>
+                 <td>
+                     <a href="{{ leave.get_absolute_url }}"class="custom-style-button">View</a>
+                     
+                     {% if leave.admin == True %}
+                     <div class="bg-info" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                        Admin
+                    </div>
+                     {% endif %}
+                    </td>
                 </tr>
 
                 {% endfor %} 
