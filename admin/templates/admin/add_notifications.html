@@ -1,0 +1,107 @@
+{% extends "admin/admin-home.html" %}
+{% load crispy_forms_tags %}
+{% block page %} 
+
+    <div class="row">
+        <div class="ml-3">
+            <div class="custom-style-button" style="border-radius: 20px;background-color: rgb(19, 165, 202);"><i class="bi bi-envelope-fill pr-1"></i> Inbox <span class="pl-1 pr-1 rounded-circle" style="background-color: #345363;">{{ count }}</span></div>
+        </div>
+       
+        <div class="ml-auto mr-4 mb-3">
+            
+        <div class="row">
+                <form class="d-flex mr-3" method="POST">
+                    {% csrf_token %}
+                    <input class="form-control mr-2" style="border-radius: 20px; border: 1px solid grey;" type="text" name="search_msg" placeholder="Search">
+                    <button type="submit" class="custom-style-button" name="search" style="border-radius: 20px;">Search</button>
+                </form>
+           
+
+                <button class="custom-style-button" style="border-radius: 20px"  data-toggle="modal" data-target="#exampleModalCenter" data-backdrop="static"><i class="bi bi-bell-fill"></i> Add Message</button></div>  
+        </div>  
+    </div>
+
+        <!-- messages  -->
+<center>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}
+     <!-- end messages  -->
+</center>
+
+{% if message|length > 0%}
+<div class="mb-3" style="border-bottom: 2px solid black;"></div>
+{% for message in message %}
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{% url 'view_notification' message.pk %}"> <h5 style="color:#904D91;">{{ message.title }}</h5></a>
+            
+            <div>{{ message.date }}</div>
+
+            <div class="row mr-3">
+
+                <div class="ml-auto"><a href="{% url 'edit_notification' message.pk %}" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
+
+                <div class="ml-5"><a href="{% url 'delete_notification' message.pk %}" style="color:#e43c5c; font-size: 1.5rem;"><i class="bi bi-trash-fill"></i></a></div>
+
+            </div>
+            <div style="border-bottom:1px solid grey;"></div>
+
+        </div>
+    </div>   
+{% endfor %}
+{% else %}  
+
+<center>
+    <p class="alert alert-info mt-5"> No Messsages Here </p>
+</center>
+
+{% endif %}
+<center class="mt-3">
+    {% if message.has_previous %}
+
+      <a href="{% url 'add_notification' %}?page={{ message.previous_page_number}}"><i class="bi bi-arrow-left-circle" style="color: #e43c5c;font-size:2.5rem; "></i></a>
+    {% endif %}
+
+    {% if message.has_next %}
+
+      <a href="{% url 'add_notification' %}?page={{ message.next_page_number}}"><i class="bi bi-arrow-right-circle" style="color: #e43c5c;font-size:2.5rem;"></i></a>
+      
+    {% endif %}
+    {% if  message %}
+    <p>Page:{{  message.number }} </p>  <!-- current page number  -->
+    {% endif%}
+</center>
+
+
+<!-- Modal  to add notifications-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Add Messages</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+              {% csrf_token %}
+             {{ form | crispy }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" name="add" class="custom-style-button">Add</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal  -->
+
+
+{% endblock page %}

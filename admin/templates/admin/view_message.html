@@ -1,0 +1,27 @@
+{% extends "admin/admin-home.html" %}
+{% block page %} 
+ <!-- Modal  for edit -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
+ data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Message</h5>
+          <a href="{% url 'add_notification' %}" class="close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+        </div>
+        <div class="modal-body">
+            <div><b>{{ message.title }}</b></div>
+            <div class="mt-2">{{ message.body }}</div>
+        </div>
+        <div class="modal-footer">
+          <div>{{ message.date }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal  -->
+
+{% endblock page %}
+

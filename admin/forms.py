@@ -1,6 +1,7 @@
+from email.message import Message
 from django import forms
 from admin.models import Designations,Salary
-from applicants.models import Interviews
+from applicants.models import Interviews, Messages, Messages
 from base.models import Department
 from employees.models import  EmployeeDesignation
 from users.forms import UserRegistrationForm
@@ -84,3 +85,11 @@ class InterviewForm(forms.ModelForm):
         model = Interviews
         fields = ['interview_date','start_time','end_time','description']
 
+
+class MessageForm(forms.ModelForm):
+    title = forms.CharField(widget=forms.TextInput(attrs = {'class':'form-control '}),required =True)
+    body = forms.CharField(widget=forms.Textarea(attrs = {'class':'form-control','rows':4}),required=True)
+
+    class Meta:
+        model = Messages
+        fields = ['title','body']

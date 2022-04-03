@@ -1,5 +1,4 @@
 import datetime
-from operator import mod
 from django.db import models
 from django.forms import ValidationError
 from base.models import Department, Jobs
@@ -22,4 +21,9 @@ class Interviews(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     job = models.ForeignKey(Jobs, on_delete=models.CASCADE) 
     description = models.TextField(default='')
-    
+
+
+class Messages(models.Model):
+    title = models.CharField(max_length=100)
+    body = models.TextField()
+    date = models.DateTimeField(default=datetime.datetime.now())

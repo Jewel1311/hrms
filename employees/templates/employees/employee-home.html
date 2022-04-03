@@ -57,6 +57,10 @@
                 </ul>
             </li>
 
+            <li class="{% if url_name == 'view_notification' %} active {% elif url_name == 'notification_detail' %} active {% endif %}">
+                <a  href="{% url 'view_notification' %}" > <i class="bi bi-bell-fill"></i> <span class="ml-2"> Notifications </span></a> 
+              </li>
+
             <!-- profile  -->
             <li class="{% if url_name == 'view_employee_profile' %} active {% endif %}">
                 <a href="{% url 'view_employee_profile' %}"><i class="bi bi-person-square"></i> <span class="ml-2">Profile </span></a>

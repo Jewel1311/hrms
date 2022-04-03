@@ -1,4 +1,5 @@
 import datetime
+from traceback import print_tb
 from employees.forms import AdminAttendanceForm, AdminEmpAttendance, AdminLeaveForm, AdminRegularizationForm
 from employees.views import attendance_regularization
 from .tasks import get_balance, get_month,get_year, leave_approval, leave_marked, leave_reject,set_leave
@@ -7,15 +8,16 @@ from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, InterviewForm, JobForm, SalaryForm
+from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, InterviewForm, JobForm, MessageForm, SalaryForm
 from django.contrib import messages
 from admin.models import Designations, Salary
-from applicants.models import Applications, Interviews
+from applicants.models import Applications, Interviews, Messages
 from base.models import Department, Jobs
 from base.views import leave_counter
 from employees.models import Attendance, AttendanceRegularization, EmployeeDesignation, Leave, LeaveCounter, YearCounter
 from users.models import ApplicantProfile, Newuser
-
+from django.db.models import Q
+from django.core.paginator import Paginator,EmptyPage
 
 @login_required
 def admin_home(request):
@@ -763,10 +765,98 @@ def apply_regularization(request,pk):
 
     return render(request,'admin/admin_regularization_detail.html', context)
 
+#reject regularization
 @login_required
 def reject_regularization(request,pk):
     attendance = AttendanceRegularization.objects.get(id=pk)
-    attendance.status = 'rejected'
+    id = attendance.attendance_id
+    if attendance.status == 'approved':
+        old_attendance = Attendance.objects.get(id=id)
+        old_attendance.entry_time = attendance.old_entry
+        old_attendance.exit_time = attendance.old_exit
+        old_attendance.save()
+        attendance.status = 'rejected'
+    else:
+        attendance.status = 'rejected'
     attendance.save()
     messages.warning(request, f'Regularization rejected')
     return redirect('admin_regularize')
+
+
+#notification 
+@login_required
+def add_notification(request):
+    form = MessageForm()
+    message = Messages.objects.all().order_by('-id')
+    count = Messages.objects.all().count()
+    context = {
+        'message':message,
+        'count':count,
+        'form':form
+    }
+    if request.method == "POST":
+        if "search" in request.POST:
+            value = request.POST['search_msg']
+            message = Messages.objects.filter(Q (title__icontains=value) | Q(date__icontains=value)).order_by('-id')
+            c = message.count()
+            if c == 0:
+                messages.info(request,f'No results found')
+                return redirect('add_notification')
+            else:
+                p = Paginator(message,5)  # second argument is no of items to be displayed
+                page_num = request.GET.get('page',1 ) #get the page no by url  and 1 is default
+                try:
+                    page = p.page(page_num)
+                except EmptyPage:
+                    page = p.page(1)
+                return render(request, 'admin/add_notifications.html',{'message':page,'count':count,'form':form})
+        
+        elif "add" in request.POST:
+            form = MessageForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request,'Message Added')
+                return redirect('add_notification')
+    
+    else:
+        if count != 0:
+            p = Paginator(message,5)  # second argument is no of items to be displayed
+            page_num = request.GET.get('page',1 ) #get the page no by url  and 1 is default
+            try:
+               page = p.page(page_num)
+            except EmptyPage:
+               page = p.page(1)
+            return render(request, 'admin/add_notifications.html',{'message':page,'count':count,'form':form})
+        else:
+            return render(request, 'admin/add_notifications.html',context)
+
+# edit notification
+@login_required
+def edit_notification(request,pk):
+    message = Messages.objects.get(id=pk)
+    if request.method == "POST":
+        form = MessageForm(request.POST, instance=message)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Message Edited')
+            return redirect('add_notification')
+    else:
+        form = MessageForm(instance=message)
+        return render(request, 'admin/edit_notification.html',{'form':form})
+
+#view message
+@login_required
+def view_notification(request,pk):
+    message = Messages.objects.get(id=pk)
+    return render(request, 'admin/view_message.html',{'message':message})
+
+#delete message
+@login_required
+def delete_notification(request,pk):
+    message = Messages.objects.get(id=pk)
+    if request.method == "POST":
+        message.delete()
+        messages.warning(request,f'Message Deleted')
+        return redirect('add_notification')
+    else:
+        return render(request, 'admin/delete_message.html',{'message':message})

@@ -15,4 +15,6 @@ urlpatterns = [
     path('regularization/',views.selected_attendance, name='selected_attendance'),
     path('attendace_regularization/<str:pk>/',views.attendance_regularization, name='attendance_regularization'),
     path('attendace_regularization/',views.regularization_requests, name='regularization_requests'),
+    path('view_notification/',views.view_notification, name='view_notification'),
+    path('notification_detail/<int:pk>/',views.notification_detail, name='notification_detail'),
 ]

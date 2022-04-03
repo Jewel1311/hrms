@@ -1,0 +1,31 @@
+{% extends "admin/admin-home.html" %}
+{% load crispy_forms_tags %}
+{% block page %} 
+ <!-- Modal  for edit -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
+ data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit Message</h5>
+          <a href="{% url 'add_notification' %}" class="close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+              {% csrf_token %}
+             {{ form | crispy }}
+        </div>
+        <div class="modal-footer">
+          <a href="{% url 'add_notification' %}" class="btn btn-secondary">Close</a>
+          <button type="submit" class="custom-style-button">Save</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal  -->
+
+{% endblock page %}
+

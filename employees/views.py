@@ -5,11 +5,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from admin.models import Designations
 from admin.tasks import get_balance
+from applicants.models import Messages
 from base.models import Department
 from employees.forms import LeaveForm, RegularizeForm
 from .models import AttendanceRegularization, EmployeeDesignation, Leave
 from .models import Attendance, EmployeeProfile
 from django.contrib import messages
+from django.db.models import Q
+from django.core.paginator import Paginator,EmptyPage
 
 
 @login_required
@@ -275,3 +278,49 @@ def regularization_requests(request):
       'requests':requests,
    }
    return render(request,'employees/regularization_requests.html',context)
+
+
+#view notifications
+@login_required
+def view_notification(request):
+   message = Messages.objects.all().order_by('-id')
+   count = Messages.objects.all().count()
+   context = {
+        'message':message,
+        'count':count,
+   }
+   if request.method == "POST":
+            value = request.POST['search_msg']
+            message = Messages.objects.filter(Q (title__icontains=value) | Q(date__icontains=value)).order_by('-id')
+            c = message.count()
+            if c == 0:
+                messages.info(request,f'No results found')
+                return redirect('view_notification')
+            else:
+               p = Paginator(message,5)  # second argument is no of items to be displayed
+               page_num = request.GET.get('page',1 ) #get the page no by url  and 1 is default
+               try:
+                  page = p.page(page_num)
+               except EmptyPage:
+                  page = p.page(1)
+               return render(request, 'employees/view_notification.html',{'message':page,'count':count})
+
+   else:
+      if count != 0:
+            p = Paginator(message,5)  # second argument is no of items to be displayed
+            page_num = request.GET.get('page',1 ) #get the page no by url  and 1 is default
+            try:
+               page = p.page(page_num)
+            except EmptyPage:
+               page = p.page(1)
+            return render(request, 'employees/view_notification.html',{'message':page,'count':count})
+      else:
+            return render(request, 'employees/view_notification.html',context)
+   
+
+#detail view of messages
+@login_required
+def notification_detail(request,pk):
+    message = Messages.objects.get(id=pk)
+    return render(request, 'employees/notification_details.html',{'message':message})
+      

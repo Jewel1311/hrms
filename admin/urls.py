@@ -48,6 +48,10 @@ urlpatterns = [
     path('admin_attendance_regularization/', views.admin_regularize, name='admin_regularize'),
     path('admin_apply_regularization/<int:pk>/', views.apply_regularization, name='apply_regularization'),
     path('admin_reject_regularization/<int:pk>/', views.reject_regularization, name='reject_regularization'),
+    path('add_notification/', views.add_notification, name='add_notification'),
+    path('edit_notification/<int:pk>/', views.edit_notification, name='edit_notification'),
+    path('view_notification/<int:pk>/', views.view_notification, name='view_notification'),
+    path('delete_notification/<int:pk>/', views.delete_notification, name='delete_notification'),
 
 
 ]
