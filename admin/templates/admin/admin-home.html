@@ -72,9 +72,23 @@
                     </li>
                 </ul>
             </li>
+
+            <!-- payroll  -->
+            <li class =" ">
+                <a href="#paySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-cash-coin"></i> <span class="ml-2">Payroll </span></a>
+
+                <ul class="collapse list-unstyled" id="paySubmenu">
+                    <li class="">
+                        <a href="{% url 'payroll_month' %}">Calculate</a>
+                    </li>
+                    <li class="">
+                        <a href="#">View</a>
+                    </li>
+                </ul>
+            </li>
            
 
-              <!-- applicants  -->
+              <!-- recruitments  -->
               <li class =" {% if url_name == 'add_jobs'  %} active {% elif url_name == 'view_all_jobs' %} active{% elif url_name == 'view_applicants' %}active{% elif url_name == 'check_schedule' %} active {% endif %}">
 
                 <a href="#applicantSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-person-lines-fill"></i> <span class="ml-2">Recruitments</span></a>

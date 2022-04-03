@@ -1,7 +1,6 @@
 import datetime
 from employees.forms import AdminAttendanceForm, AdminEmpAttendance, AdminLeaveForm, AdminRegularizationForm
-from employees.views import attendance_regularization
-from .tasks import get_balance, get_month,get_year, leave_approval, leave_marked, leave_reject,set_leave
+from .tasks import get_balance, get_month,get_year, leave_approval, leave_marked, leave_reject
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -9,10 +8,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, InterviewForm, JobForm, MessageForm, SalaryForm
 from django.contrib import messages
-from admin.models import Designations, Salary
+from admin.models import Designations, Payroll, Salary
 from applicants.models import Applications, Interviews, Messages
 from base.models import Department, Jobs
-from base.views import leave_counter
 from employees.models import Attendance, AttendanceRegularization, EmployeeDesignation, Leave, LeaveCounter, YearCounter
 from users.models import ApplicantProfile, Newuser
 from django.db.models import Q
@@ -865,3 +863,29 @@ def delete_notification(request,pk):
         return redirect('add_notification')
     else:
         return render(request, 'admin/delete_message.html',{'message':message})
+
+
+#payroll month select
+@login_required
+def payroll_month(request):
+    if request.method == "POST":
+        date = request.POST['date']
+        datem = datetime.datetime.strptime(date, "%Y-%m-%d")
+        today = datetime.date.today()
+        if datem.month < today.month and datem.year<=today.year:
+            payroll = Payroll.objects.filter(date__gte=date).count()
+            if payroll == 0:
+                messages.success(request,f'Can be Calculated')
+                return redirect('payroll_month')
+
+            else:
+                messages.warning(request,f'Payroll Already Calculated')
+                return redirect('payroll_month')
+        else:
+            messages.warning(request,f'Select a valid month and year')
+            return redirect('payroll_month')
+    else:
+         return render(request,'admin/payroll_month_selector.html')
+
+# #calculate payroll
+# @login_required

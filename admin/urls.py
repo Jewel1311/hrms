@@ -53,6 +53,7 @@ urlpatterns = [
     path('edit_notification/<int:pk>/', views.edit_notification, name='edit_notification'),
     path('view_notification/<int:pk>/', views.view_notification, name='view_notification'),
     path('delete_notification/<int:pk>/', views.delete_notification, name='delete_notification'),
+    path('payroll_month/', views.payroll_month, name='payroll_month'),
 
 
 ]
