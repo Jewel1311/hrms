@@ -1,4 +1,5 @@
 import datetime
+from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -13,6 +14,13 @@ from .models import Attendance, EmployeeProfile
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator,EmptyPage
+from django.contrib.auth.views import PasswordChangeView
+
+
+class MyPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
+   template_name = 'employees/change_password.html'
+   success_message = "Password Changed"
+   success_url = reverse_lazy('employee-password-change')
 
 
 @login_required
@@ -283,15 +291,15 @@ def regularization_requests(request):
 #view notifications
 @login_required
 def view_notification(request):
-   message = Messages.objects.all().order_by('-id')
-   count = Messages.objects.all().count()
+   message = Messages.objects.filter(date__gte = request.user.date_joined).order_by('-id')
+   count = Messages.objects.filter(date__gte = request.user.date_joined).count()
    context = {
         'message':message,
         'count':count,
    }
    if request.method == "POST":
             value = request.POST['search_msg']
-            message = Messages.objects.filter(Q (title__icontains=value) | Q(date__icontains=value)).order_by('-id')
+            message = Messages.objects.filter(Q (title__icontains=value) | Q(date__icontains=value)).filter(date__gte = request.user.date_joined).order_by('-id')
             c = message.count()
             if c == 0:
                 messages.info(request,f'No results found')

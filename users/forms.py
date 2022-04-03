@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from .models import Newuser
 from django.contrib.auth.forms import UserCreationForm
@@ -14,3 +15,5 @@ class UserRegistrationForm(UserCreationForm):
         class Meta:
             model = Newuser
             fields = [ 'first_name','middle_name','last_name','email' ]
+
+

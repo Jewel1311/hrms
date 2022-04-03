@@ -1,5 +1,4 @@
 import datetime
-from traceback import print_tb
 from employees.forms import AdminAttendanceForm, AdminEmpAttendance, AdminLeaveForm, AdminRegularizationForm
 from employees.views import attendance_regularization
 from .tasks import get_balance, get_month,get_year, leave_approval, leave_marked, leave_reject,set_leave
@@ -18,11 +17,17 @@ from employees.models import Attendance, AttendanceRegularization, EmployeeDesig
 from users.models import ApplicantProfile, Newuser
 from django.db.models import Q
 from django.core.paginator import Paginator,EmptyPage
+from django.contrib.auth.views import PasswordChangeView
 
 @login_required
 def admin_home(request):
     return render(request, 'admin/admin-home.html')
 
+
+class AdPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
+   template_name = 'admin/admin_password_change.html'
+   success_message = "Password Changed"
+   success_url = reverse_lazy('admin_password_change')
 
 # adding the employee
 

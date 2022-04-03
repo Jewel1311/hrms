@@ -1,10 +1,10 @@
-from django.urls import path,include
+from django.urls import path
 from . import views
-
 
 
 urlpatterns = [
     path('', views.jobs, name='jobs'),
+    path('change_pasword/',views.AppPasswordChangeView.as_view(), name='applicant-password-change'),
     path('job-detail/<str:job_id>/', views.job_detail, name='job-detail'),
     path('apply_confirmation/<str:job_id>/', views.apply_confirmation, name='apply_confirmation'),
     path('apply_now/<str:job_id>/', views.apply_now, name='apply_now'),

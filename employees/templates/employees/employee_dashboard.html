@@ -1,0 +1,18 @@
+{% extends "employees/employee-home.html" %}
+{% block content %} 
+
+
+<center>
+    <!-- start messages  -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}            
+     <!-- end messages  -->
+    </center>
+
+
+{% endblock content %}

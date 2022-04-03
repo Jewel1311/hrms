@@ -4,10 +4,20 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator,EmptyPage
 from django.contrib import messages
+from django.urls import reverse_lazy
 from applicants.models import Applications, Interviews
 from base.models import Jobs
 from users.models import ApplicantProfile
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 
+
+
+
+class AppPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
+   template_name = 'applicant/applicant_password_change.html'
+   success_message = "Password Changed"
+   success_url = reverse_lazy('applicant-password-change')
 
 # list view of jobs 
 

@@ -109,6 +109,10 @@
                 <a href="{% url 'add_notification' %}"> <i class="bi bi-bell-fill"></i> <span class="ml-2"> Notifications</span></a>  
               </li>
 
+              <li class="{% if url_name == 'admin_password_change' %} active {% endif %}">
+                <a href="{% url 'admin_password_change' %}"> <i class="bi bi-unlock"></i> <span class="ml-2">Change Password</span></a>  
+            </li>
+
             <li>
                 <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> <span class="ml-2">Logout </span></a>
             </li>
