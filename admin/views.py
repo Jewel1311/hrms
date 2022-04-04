@@ -1,6 +1,7 @@
 import datetime
+from email import message
 from employees.forms import AdminAttendanceForm, AdminEmpAttendance, AdminLeaveForm, AdminRegularizationForm
-from .tasks import get_balance, get_month,get_year, leave_approval, leave_marked, leave_reject
+from .tasks import calculate_salary, get_balance, get_month,get_year, leave_approval, leave_marked, leave_reject
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -707,7 +708,7 @@ def add_emp_attendance(request,pk):
 
 
             if shift == 'morning':
-                attendance = Attendance.objects.get(attendance_date=date,user=pk,shift='morning')
+                attendance = Attendance.objects.get(attendance_date=date, user=pk, shift='morning')
                 if attendance:
                     if attendance.entry_time == None and attendance.exit_time == None and attendance.leave == False:
                         attendance.entry_time = form.cleaned_data['entry_time']
@@ -872,20 +873,108 @@ def payroll_month(request):
         date = request.POST['date']
         datem = datetime.datetime.strptime(date, "%Y-%m-%d")
         today = datetime.date.today()
-        if datem.month < today.month and datem.year<=today.year:
-            payroll = Payroll.objects.filter(date__gte=date).count()
-            if payroll == 0:
-                messages.success(request,f'Can be Calculated')
-                return redirect('payroll_month')
+        if  datem.year == today.year:
+                if datem.month < today.month:
+                    payroll = Payroll.objects.filter(date__month__gte=datem.month, date__year__gte=datem.year).count()
+                    if payroll == 0:
+                        return redirect('calculate_payroll',cdate=datem)
 
-            else:
-                messages.warning(request,f'Payroll Already Calculated')
-                return redirect('payroll_month')
+                    else:
+                        messages.info(request,f'Payroll Already Calculated')
+                        return redirect('payroll_month')
+                else:
+                    messages.warning(request,f'Select a valid month and year')
+                    return redirect('payroll_month')
+               
+        elif  datem.year < today.year:
+                payroll = Payroll.objects.filter(date__month__gte=datem.month, date__year__gte=datem.year).count()
+                if payroll == 0:
+                    return redirect('calculate_payroll',cdate=datem)
+                else:
+                    messages.info(request,f'Payroll Already Calculated')
+                    return redirect('payroll_month')
+
         else:
-            messages.warning(request,f'Select a valid month and year')
-            return redirect('payroll_month')
+                    messages.warning(request,f'Select a valid month and year')
+                    return redirect('payroll_month')
+
     else:
          return render(request,'admin/payroll_month_selector.html')
 
-# #calculate payroll
-# @login_required
+
+#calculate payroll
+def calculate_payroll(request,cdate):
+    cdate = datetime.datetime.strptime(cdate, "%Y-%m-%d %H:%M:%S")
+    calculate_salary(cdate)
+    messages.success(request, f'Calculation completed')
+    return redirect('view_payroll', vdate = cdate)
+    
+#payroll view month select
+def view_payroll_month(request):
+    if request.method == "POST":
+        date = request.POST['date']
+        datem = datetime.datetime.strptime(date, "%Y-%m-%d")
+        payroll = Payroll.objects.filter(date__month=datem.month, date__year=datem.year).count()
+        if payroll != 0:
+            return redirect('view_payroll', vdate=datem)
+        else:
+            messages.warning(request,f'Not Available, please check your date')
+            return redirect('view_payroll_month')
+    else:
+        return render(request, 'admin/payroll_view_month.html')
+
+#view payroll
+def view_payroll(request,vdate):
+    try:
+        vdate = datetime.datetime.strptime(vdate, "%Y-%m-%d %H:%M:%S")
+    except:
+        vdate = datetime.datetime.strptime(vdate, "%Y-%m-%d")
+
+    payroll = Payroll.objects.filter(date__month=vdate.month, date__year=vdate.year)
+    obj = EmployeeDesignation.objects.all()
+    context = {
+        'payroll':payroll,
+        'obj':obj,
+        'vdate':vdate
+    }
+    return render(request, 'admin/view_payroll.html',context)
+
+#hold salary
+def hold_salary(request, pk):
+    salary = Payroll.objects.get(id=pk)
+    emp = salary.user.first_name+' '+salary.user.middle_name+' '+salary.user.last_name
+    if salary.status == 'hold':
+        salary.status = 'pending'
+        messages.success(request,f'Salary unholded for {emp.upper()}')
+    else:
+        salary.status = 'hold'
+        messages.info(request,f'Salary holded for {emp.upper()}')
+    vdate = salary.date
+    salary.save()
+    return redirect('view_payroll', vdate = vdate)
+
+#approve salary
+def approve_salary(request,pk):
+    salary = Payroll.objects.get(id=pk)
+    emp = salary.user.first_name+' '+salary.user.middle_name+' '+salary.user.last_name
+    salary.status = 'approved'
+    salary.save()
+    vdate = salary.date
+    messages.success(request,f'Salary Approved for {emp.upper()}')
+    return redirect('view_payroll', vdate = vdate)
+
+
+#view salary slip
+def salary_slip(request, pk):
+    payroll = Payroll.objects.get(id=pk)
+    emp = Newuser.objects.get(id = payroll.user.id)
+    salary = Salary.objects.get(user = payroll.user.id)
+    designation = EmployeeDesignation.objects.get(user = payroll.user.id)
+    context = {
+        'payroll':payroll,
+        'emp':emp,
+        'salary':salary,
+        'designation':designation
+    }
+    return render(request, 'admin/salary_slip.html',context)
+

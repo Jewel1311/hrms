@@ -1,0 +1,98 @@
+{% extends "admin/admin-home.html" %}
+{% block page %} 
+<center>
+    <h5 class="mb-3" style="color: #e43c5c;">Payroll of {{ vdate |date:"F, Y" }}</h5>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}
+</center>
+{% if payroll|length > 0 %}
+        <table id='tableid2' class="jtable">
+            <thead>
+                <th>Employee</th>
+                <th>Department</th>
+                <th>Basic</th>
+                <th>HRA </th>
+                <th>TA</th>
+                <th>PF</th>
+                <th>TE</th>
+                <th>TR</th>
+                <th>Net Sal</th>
+                <th>Status</th>
+                <th class="text-center">Action</th>
+            </thead>
+            <tbody>
+                {% for payroll in payroll %}
+                <tr>
+                    <td>
+                        <a href="/media/{{ payroll.user.employeeprofile.photo }}"><img src="{{ payroll.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+
+                        <a href="{% url 'employee_detail' payroll.user.pk %}"><b>{{ payroll.user.first_name|title}} {{ payroll.user.middle_name|title}} {{ payroll.user.last_name|title}}</b></a>
+                    </td>
+                    {% for object in obj %} 
+                    {% if object.user == payroll.user %}
+
+                    <td>{{ object.department }}</td>    
+
+                    {% endif %}
+                    {%endfor %}
+                    <td>{{ payroll.basic }}</td>
+                    <td>{{ payroll.hra }}</td>
+                    <td>{{ payroll.ta }}</td>
+                    <td>{{ payroll.pf }}</td>
+                    <td>{{ payroll.other_benefits }}</td>
+                    <td>{{ payroll.other_deductions }}</td>
+                    <td><b>{{ payroll.net_salary }}</b></td>
+                    
+
+                    <!-- for status colors  -->
+                        {% if payroll.status == 'approved' %}
+                        <td><div class="bg-success" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                    {{payroll.status|title}}
+                            </div>
+                        </td>
+                        {% elif payroll.status == 'hold' %}
+                        <td><div class="bg-danger" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                    On Hold
+                            </div>
+                        </td>
+                        {% else %}
+                        <td><div class="bg-warning" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                            {{payroll.status|title}}
+                        </div>
+                        </td>
+                        {% endif %}
+
+
+                    <td class="text-right">
+                        {% if payroll.status == 'pending' %}
+                        <a href="{% url 'approve_salary' payroll.pk %}"class="btn btn-success mr-2">Approve</a>
+                        {% endif %}
+                       
+                        <a href="{% url 'salary_slip' payroll.pk %}" style="color: rgb(9, 194, 201); font-size: 1.5rem;" class="mr-2"><i class="bi bi-eye-fill"></i></a>  
+
+                        <a href="#" style="color: rgb(77, 77, 250); font-size: 1.5rem;" class="mr-2"><i class="bi bi-pencil-square"></i></a>  
+
+                        {% if payroll.status == 'hold' %}
+                        <a href="{% url 'hold_salary' payroll.pk %}"class="btn btn-info pl-1 pr-1" >Unhold</a>
+                        {% else %}
+                        <a href="{% url 'hold_salary' payroll.pk %}"class="btn btn-danger" >Hold</a>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% endfor %} 
+            </tbody>
+        </table>
+{% else %}
+<center>
+    <p class="alert alert-info mt-5"> No Payroll Available </p>
+</center>
+{% endif %}
+
+{% endblock page %}
+

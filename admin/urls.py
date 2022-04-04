@@ -54,6 +54,12 @@ urlpatterns = [
     path('view_notification/<int:pk>/', views.view_notification, name='view_notification'),
     path('delete_notification/<int:pk>/', views.delete_notification, name='delete_notification'),
     path('payroll_month/', views.payroll_month, name='payroll_month'),
+    path('calculate_payroll/<str:cdate>/', views.calculate_payroll, name='calculate_payroll'),
+    path('view_payroll_month/', views.view_payroll_month, name='view_payroll_month'),
+    path('view_payroll/<str:vdate>/', views.view_payroll, name='view_payroll'),
+    path('hold_salary/<int:pk>/', views.hold_salary, name='hold_salary'),
+    path('approve_salary/<int:pk>/', views.approve_salary, name='approve_salary'),
+    path('salary_slip/<int:pk>/', views.salary_slip, name='salary_slip'),
 
 
 ]

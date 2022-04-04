@@ -1,6 +1,9 @@
+from admin.models import Payroll, Salary
 from employees.models import Leave, LeaveCounter, YearCounter
 import datetime
 from django.db.models import Q
+
+from users.models import Newuser
 
 
 #returns the current year
@@ -223,9 +226,63 @@ def leave_reject(leave):
 
             leave.approval = 'rejected'
             leave.save()
+#calculate hra
+def calc_hra(basic):
+    hra = (40/100)*basic
+    return hra
+
+#calculate ta
+def calc_ta(basic):
+    ta = (20/100)*basic
+    return ta
+
+#calculate pf
+def calc_pf(basic):
+    pf = (12/100)*basic
+    return pf
+
+#calculate other benefits
+def calc_ob(cdate,employee,basic):
+    if cdate.month == 12:
+        earnedleave = YearCounter.objects.get(date__year=cdate.year ,user=employee)
+        if earnedleave.el < 12:
+            single_day = basic/30
+            left = 12 - earnedleave.el
+            ob = left * single_day
+    else:
+        ob = 0
+    return ob
 
 
+#calculate other deductions
+def calc_od(cdate,employee,basic):
+    od = 0
+    single_day = basic/30
+    leave = LeaveCounter.objects.get(date__month = cdate.month,user=employee)
+    if leave.sl > 0:
+        pay = (single_day/2) * leave.sl
+        od = od + pay
+    if leave.lp > 0:
+        pay = single_day * leave.lp
+        od = od + pay
+    return od
 
+#calculate salary
+def calculate_salary(cdate):
+    employees = Newuser.objects.filter(is_employee=True)
+    for employee in employees:
+        salary = Salary.objects.get(user=employee)
+        basic = salary.basic_pay
+        if salary.hra == True:
+            hra = calc_hra(basic)
+        if salary.ta == True:
+            ta = calc_ta(basic)
+        if salary.pf == True:
+            pf = calc_pf(basic)
+        ob = calc_ob(cdate,employee,basic)
+        od = calc_od(cdate,employee,basic)
+        net_salary = ((basic + hra + ta + ob)-pf) - od 
+        Payroll.objects.create(basic = basic, hra = hra, ta = ta, pf = pf, other_benefits = ob, other_deductions = od, net_salary = net_salary, date = cdate, user = employee)   
 
 
 

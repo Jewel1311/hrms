@@ -14,6 +14,13 @@
     <div class="d-flex flex-column align-items-center">
         <div class="col-md-6 mt-2" >
             <form method="POST" class="pl-5 pr-5 pt-3 pb-3" style=" box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+
+                <div class="m-2 pb-2">
+                    <a href="/media/{{ emp.employeeprofile.photo }}"><img src="{{ emp.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+              
+                    <a href="{% url 'employee_detail' emp.pk %}"><b>{{ emp.first_name|title}} {{ emp.middle_name|title}} {{ emp.last_name|title}}</b></a>
+                </div>
+
                 {% csrf_token %}
             {{ form | crispy }}
             <center>

@@ -1,0 +1,89 @@
+{% extends "admin/admin-home.html" %}
+{% load crispy_forms_tags %}
+{% block page %} 
+<center>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}
+    <h5 style="color: #e43c5c;">Salary Slip of {{ emp.first_name|title}} {{ emp.middle_name|title}} {{ emp.last_name|title}}</h5>
+    </center>
+    <div class="d-flex flex-column align-items-center">
+        <div class="col-md-6 mt-2" >
+            <div style=" box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+               <div class="p-3 text-white" style="background-color: #0e2837;"><h4><b>HRMS</b></h4></div>
+               <div class="d-flex justify-content-center mt-2"><b style="border-bottom: 2px solid black;">Salary slip of {{ payroll.date|date:"F, Y"}}</b></div>
+
+                        {% if payroll.status == 'approved' %}
+                        <div class="bg-success ml-3" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                    {{payroll.status|title}}
+                        </div>
+                
+                        {% elif payroll.status == 'hold' %}
+                        <div class="bg-danger ml-3" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                                    On Hold
+                        </div>
+                        
+                        {% else %}
+                        <div class="bg-warning ml-3" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                            {{payroll.status|title}}
+                        </div>
+                        
+                        {% endif %}
+
+                    <div class="ml-3 mt-3"><b>Employee Name :</b> {{ emp.first_name|title}} {{emp.middle_name|title}} {{emp.last_name|title}}</div>
+                    <div class="ml-3 mt-1"><b>Phone :</b> {{ emp.employeeprofile.phone }}</div>
+                    <div class="ml-3 mt-1"><b>Designation :</b> {{ designation.designation }}</div>
+                    <div class="ml-3 mt-1"><b>DOJ :</b> {{ emp.date_joined|date}}</div>
+                
+                <div class="mt-3" style="background-color: #929fa7;"><b class="ml-3">Salary Details</b></div>
+
+                <div class="row ml-1 mr-1">
+                    <div class=" col-6" style="border:1px solid black;"><b>Basic Pay </b> </div>
+                    <div class=" col-6" style="border:1px solid black;">{{ payroll.basic}} </div>
+                </div>
+
+                <div class="row ml-1 mr-1" style="background-color: #d6d8da;">
+                    <div class=" col-6" style="border:1px solid black;"><b>HRA </b> </div>
+                    <div class=" col-6" style="border:1px solid black;">{{ payroll.hra }} </div>
+                </div>
+
+                <div class="row ml-1 mr-1">
+                    <div class=" col-6" style="border:1px solid black;"><b>TA </b> </div>
+                    <div class=" col-6" style="border:1px solid black;">{{ payroll.ta }} </div>
+                </div>
+
+                <div class="row ml-1 mr-1" style="background-color: #d6d8da;">
+                    <div class=" col-6" style="border:1px solid black;"><b>Total Earnings</b> </div>
+                    <div class=" col-6" style="border:1px solid black;">{{ payroll.other_benefits }} </div>
+                </div>
+
+                <div class="row ml-1 mr-1">
+                    <div class=" col-6 text-right" style="border:1px solid black;"><b>PF </b> </div>
+                    <div class=" col-6 text-right" style="border:1px solid black;">{{ payroll.pf }} </div>
+                </div>
+
+                <div class="row ml-1 mr-1" style="background-color: #d6d8da;">
+                    <div class=" col-6 text-right" style="border:1px solid black;"><b>Total Deductions </b> </div>
+                    <div class=" col-6 text-right" style="border:1px solid black;">{{ payroll.other_deductions }} </div>
+                </div>
+
+                <div class="row ml-1 mr-1">
+                    <div class=" col-6 text-white" style="border:1px solid black;"><br></div>
+                    <div class=" col-6 text-white" style="border:1px solid black;"> </div>
+                </div>
+
+                <div class="row ml-1 mr-1">
+                    <div class=" col-6 pt-3 pb-2" style="border:1px solid black;"><b>Net Salary</b> </div>
+                    <div class=" col-6 pt-3 pb-2" style="border:1px solid black;background-color: #d6d8da;"><b>{{ payroll.net_salary }}</b></div>
+                </div>
+                <div class="p-2"></div>
+
+            </div>
+        </div>
+    </div>
+{% endblock page %}
+
