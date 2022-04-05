@@ -881,7 +881,7 @@ def payroll_month(request):
 
                     else:
                         messages.info(request,f'Payroll Already Calculated')
-                        return redirect('payroll_month')
+                        return redirect('view_payroll', vdate = datem)
                 else:
                     messages.warning(request,f'Select a valid month and year')
                     return redirect('payroll_month')
@@ -892,7 +892,7 @@ def payroll_month(request):
                     return redirect('calculate_payroll',cdate=datem)
                 else:
                     messages.info(request,f'Payroll Already Calculated')
-                    return redirect('payroll_month')
+                    return redirect('view_payroll', vdate = datem)
 
         else:
                     messages.warning(request,f'Select a valid month and year')
@@ -948,7 +948,7 @@ def hold_salary(request, pk):
         messages.success(request,f'Salary unholded for {emp.upper()}')
     else:
         salary.status = 'hold'
-        messages.info(request,f'Salary holded for {emp.upper()}')
+        messages.warning(request,f'Salary holded for {emp.upper()}')
     vdate = salary.date
     salary.save()
     return redirect('view_payroll', vdate = vdate)

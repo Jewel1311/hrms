@@ -74,14 +74,14 @@
             </li>
 
             <!-- payroll  -->
-            <li class =" ">
+            <li class ="{% if url_name == 'payroll_month'  %} active {% elif url_name == 'view_payroll_month'  %} active {% elif url_name == 'view_payroll'  %} active {% elif url_name == 'salary_slip'  %} active {% endif %} ">
                 <a href="#paySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-cash-coin"></i> <span class="ml-2">Payroll </span></a>
 
                 <ul class="collapse list-unstyled" id="paySubmenu">
-                    <li class="">
+                    <li class="{% if url_name == 'payroll_month'  %} active {% endif %}">
                         <a href="{% url 'payroll_month' %}">Calculate</a>
                     </li>
-                    <li class="">
+                    <li class="{% if url_name == 'view_payroll_month'  %} active {% elif url_name == 'view_payroll'  %} active {% elif url_name == 'salary_slip'  %} active{% endif %}">
                         <a href="{% url 'view_payroll_month' %}">View</a>
                     </li>
                 </ul>
