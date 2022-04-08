@@ -271,13 +271,16 @@ def calc_od(cdate,employee,basic):
 def calculate_salary(cdate):
     employees = Newuser.objects.filter(is_employee=True)
     for employee in employees:
+        hra = 0
+        ta = 0
+        pf = 0
         salary = Salary.objects.get(user=employee)
         basic = salary.basic_pay
-        if salary.hra == True:
+        if salary.hra:
             hra = calc_hra(basic)
-        if salary.ta == True:
+        if salary.ta:
             ta = calc_ta(basic)
-        if salary.pf == True:
+        if salary.pf:
             pf = calc_pf(basic)
         ob = calc_ob(cdate,employee,basic)
         od = calc_od(cdate,employee,basic)

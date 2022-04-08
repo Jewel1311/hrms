@@ -21,7 +21,7 @@
 
         <ul class="list-unstyled components">
             <li class="{% if url_name == 'employee-home' %} active {% endif %}">
-              <a  href="{% url 'employee-home' %}" ><i class="bi bi-house-door-fill"></i> <span class="ml-2">Dashboard </span></a> 
+              <a  href="{% url 'employee-home' %}" ><i class="bi bi-grid"></i> <span class="ml-2">Dashboard </span></a> 
             </li>
             <li class =" {% if url_name == 'morning_shift'  %} active {% elif url_name == 'night_shift' %}active  {% elif url_name == 'attendance_view' %}active {% elif url_name == 'regularization_requests' %}active {% endif %}">
 
@@ -58,7 +58,7 @@
             </li>
 
             <li class="">
-                <a href="#"> <i class="bi bi-cash-coin"></i><span class="ml-2">Payroll </span></a>
+                <a href="{% url 'emp_payroll_month' %}"> <i class="bi bi-cash-coin"></i><span class="ml-2">Payroll </span></a>
             </li>
 
             <li class="{% if url_name == 'view_notification' %} active {% elif url_name == 'notification_detail' %} active {% endif %}">

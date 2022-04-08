@@ -1,18 +1,79 @@
 {% extends "employees/employee-home.html" %}
 {% block content %} 
 
+<div class="col-md-12">
+    <h4>Welcome, {{user.first_name |title}} {{user.middle_name | title}} {{user.last_name |title }}</h4>
+    <h5 style="color: rgb(132, 131, 131);">{% now "l" %}, {% now "d"%} {% now "F" %} {% now "Y" %}</h5>
+</div>
 
-<center>
-    <!-- start messages  -->
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{message.tags}} mt-2">
-        {{ message }}
+<div class="col-md-12 mt-4">
+    <div class="d-flex justify-content-between">
+
+        <div class="col-md-3 shadow pt-2 pb-2">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="dash-icon p-2"><i class=" rounded-circle p-3  bi bi-calendar-check"></i></div>
+                <div class="stat-content ml-4">Attendance</div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="stat-content1">{{ attendance_count|stringformat:"02d" }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 shadow pt-2 pb-2">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="dash-icon1 p-2"><i class=" rounded-circle p-3  bi bi-moon-stars"></i></div>
+                <div class="stat-content ml-4">Night Shifts</div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="stat-content1">{{ night_count|stringformat:"02d" }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 shadow pt-2 pb-2">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="dash-icon2 p-2"><i class=" rounded-circle p-3  bi bi-calendar-week"></i></div>
+                <div class="stat-content ml-2">Regularizations</div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="stat-content1">{{ reg_count|stringformat:"02d" }}</div>
+            </div>
+        </div>
+
     </div>
-    {% endfor %}
-      {% endif %}            
-     <!-- end messages  -->
-    </center>
 
+    <div class="d-flex justify-content-between mt-5">
+
+        <div class="col-md-8 shadow pt-2 pb-2">
+            <div class="row d-flex align-items-center">
+                <div class="dash-icon3 p-2 ml-2"><i class=" rounded-circle p-3  bi bi-calendar2-minus"></i></div>
+                <div class="stat-content ml-4">Leaves</div>
+                <div class="stat-content ml-4">{{ leave_count|stringformat:"02d" }}</div>
+                <div class="stat-content ml-4 pl-3" style="border-left:3px solid gray ;">Pending</div>
+                <div class="stat-content ml-4">{{ pending_count|stringformat:"02d" }}</div>
+            </div>
+            <div class="row d-flex mt-3">
+                <div class="col-md-3 d-flex text-center">
+                    <div class="stat-content ml-4">CL :</div>
+                    <div class="stat-content ml-2">{{ leave_count|stringformat:"02d" }}</div>
+                </div>
+                <div class="col-md-3 d-flex text-center">
+                    <div class="stat-content ml-4">CL :</div>
+                    <div class="stat-content ml-2">{{ leave_count|stringformat:"02d" }}</div>
+                </div>
+                <div class="col-md-3 d-flex text-center">
+                    <div class="stat-content ml-4">CL :</div>
+                    <div class="stat-content ml-2">{{ leave_count|stringformat:"02d" }}</div>
+                </div>
+                <div class="col-md-3 d-flex text-center">
+                    <div class="stat-content ml-4">CL :</div>
+                    <div class="stat-content ml-2">{{ leave_count|stringformat:"02d" }}</div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
 
 {% endblock content %}

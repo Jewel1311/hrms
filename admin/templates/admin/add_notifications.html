@@ -38,7 +38,7 @@
 {% for message in message %}
     <div class="row">
         <div class="col-md-12">
-            <a href="{% url 'view_notification' message.pk %}"> <h5 style="color:#904D91;">{{ message.title }}</h5></a>
+            <a href="{% url 'view_notification' message.pk %}"> <h5 class="mt-1" style="color:rgb(19, 165, 202);">{{ message.title }}</h5></a>
             
             <div>{{ message.date }}</div>
 

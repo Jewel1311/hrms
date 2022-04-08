@@ -18,4 +18,6 @@ urlpatterns = [
     path('attendace_regularization/',views.regularization_requests, name='regularization_requests'),
     path('view_notification/',views.view_notification, name='view_notification'),
     path('notification_detail/<int:pk>/',views.notification_detail, name='notification_detail'),
+    path('emp_payroll_month/',views.emp_payroll_month, name='emp_payroll_month'),
+    path('emp_salary_slip/<str:vdate>/', views.emp_salary_slip, name='emp_salary_slip'),
 ]

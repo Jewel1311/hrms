@@ -4,7 +4,7 @@ from django.views.generic import UpdateView
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
-from admin.models import Designations
+from admin.models import Designations, Payroll
 from admin.tasks import get_balance
 from applicants.models import Messages
 from base.models import Department
@@ -25,8 +25,19 @@ class MyPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
 
 @login_required
 def employee_home(request):
-   employee = EmployeeProfile.objects.get(user = request.user)
-   return render(request, 'employees/employee-home.html',{'employee':employee})
+   attendance_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='morning').exclude(exit_time = None).count()
+   night_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='night').exclude(exit_time = None).count()
+   reg_count = AttendanceRegularization.objects.filter(user=request.user,date__month=datetime.date.today().month).count()
+   leave_count = Leave.objects.filter(user = request.user,applied_date__year=datetime.date.today().year).count()
+   pending_count = Leave.objects.filter(user = request.user,applied_date__year=datetime.date.today().year,approval='pending').count()
+   context = {
+      'attendance_count':attendance_count,
+      'night_count':night_count,
+      'reg_count':reg_count,
+      'leave_count':leave_count,
+      'pending_count':pending_count
+   }
+   return render(request, 'employees/employee_dashboard.html',context)
 
 @login_required
 def employee_profile(request):
@@ -331,4 +342,31 @@ def view_notification(request):
 def notification_detail(request,pk):
     message = Messages.objects.get(id=pk)
     return render(request, 'employees/notification_details.html',{'message':message})
+
+# to select payroll view month
+@login_required
+def emp_payroll_month(request):
+   if request.method == "POST":
+      date = request.POST['date']
+      datem = datetime.datetime.strptime(date, "%Y-%m-%d")
+      payroll = Payroll.objects.filter(date__month=datem.month, date__year=datem.year, user= request.user,status='approved').count()
+      if payroll !=0:
+            return redirect('emp_salary_slip', vdate=datem)
+      else:
+            messages.warning(request,f'Not Available')
+            return redirect('emp_payroll_month')
+   else:
+        return render(request, 'employees/payroll_view_month_emp.html')
       
+#view salary slip
+@login_required
+def emp_salary_slip(request, vdate):
+   print(vdate)
+   vdate = datetime.datetime.strptime(vdate, "%Y-%m-%d %H:%M:%S")
+   payroll = Payroll.objects.get(user=request.user,date__month=vdate.month, date__year=vdate.year)
+   designation = EmployeeDesignation.objects.get(user = request.user)
+   context = {
+        'payroll':payroll,
+        'designation':designation,
+    }
+   return render(request, 'employees/emp_salary_slip.html',context)

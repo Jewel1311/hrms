@@ -1,0 +1,41 @@
+{% extends "employees/employee-home.html" %}
+{% block content %} 
+ <!-- Modal  for edit -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
+ data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Select Month to View</h5>
+          <a href="{% url 'employee-home' %}" class="close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+        </div>
+        <div class="modal-body">
+            <center>
+                <!-- start messages  -->
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{message.tags}} mt-2">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                  {% endif %}            
+                 <!-- end messages  -->
+                </center>
+          <form method="POST">
+              {% csrf_token %}
+              <input type="date" name="date" class="form-control" min="2022-03-01" required>
+        </div>
+        <div class="modal-footer">
+          <a href="{% url 'employee-home' %}" class="btn btn-secondary">Close</a>
+          <button type="submit" class="custom-style-button">View</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal  -->
+
+{% endblock content %}
+

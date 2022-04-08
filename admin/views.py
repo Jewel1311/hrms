@@ -7,7 +7,7 @@ from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, InterviewForm, JobForm, MessageForm, SalaryForm
+from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, InterviewForm, JobForm, MessageForm, PayrollEditForm, SalaryForm
 from django.contrib import messages
 from admin.models import Designations, Payroll, Salary
 from applicants.models import Applications, Interviews, Messages
@@ -881,7 +881,7 @@ def payroll_month(request):
 
                     else:
                         messages.info(request,f'Payroll Already Calculated')
-                        return redirect('view_payroll', vdate = datem)
+                        return redirect('payroll_month')
                 else:
                     messages.warning(request,f'Select a valid month and year')
                     return redirect('payroll_month')
@@ -892,7 +892,7 @@ def payroll_month(request):
                     return redirect('calculate_payroll',cdate=datem)
                 else:
                     messages.info(request,f'Payroll Already Calculated')
-                    return redirect('view_payroll', vdate = datem)
+                    return redirect('payroll_month')
 
         else:
                     messages.warning(request,f'Select a valid month and year')
@@ -903,6 +903,7 @@ def payroll_month(request):
 
 
 #calculate payroll
+@login_required
 def calculate_payroll(request,cdate):
     cdate = datetime.datetime.strptime(cdate, "%Y-%m-%d %H:%M:%S")
     calculate_salary(cdate)
@@ -910,6 +911,7 @@ def calculate_payroll(request,cdate):
     return redirect('view_payroll', vdate = cdate)
     
 #payroll view month select
+@login_required
 def view_payroll_month(request):
     if request.method == "POST":
         date = request.POST['date']
@@ -924,6 +926,7 @@ def view_payroll_month(request):
         return render(request, 'admin/payroll_view_month.html')
 
 #view payroll
+@login_required
 def view_payroll(request,vdate):
     try:
         vdate = datetime.datetime.strptime(vdate, "%Y-%m-%d %H:%M:%S")
@@ -940,6 +943,7 @@ def view_payroll(request,vdate):
     return render(request, 'admin/view_payroll.html',context)
 
 #hold salary
+@login_required
 def hold_salary(request, pk):
     salary = Payroll.objects.get(id=pk)
     emp = salary.user.first_name+' '+salary.user.middle_name+' '+salary.user.last_name
@@ -954,6 +958,7 @@ def hold_salary(request, pk):
     return redirect('view_payroll', vdate = vdate)
 
 #approve salary
+@login_required
 def approve_salary(request,pk):
     salary = Payroll.objects.get(id=pk)
     emp = salary.user.first_name+' '+salary.user.middle_name+' '+salary.user.last_name
@@ -965,16 +970,49 @@ def approve_salary(request,pk):
 
 
 #view salary slip
+@login_required
 def salary_slip(request, pk):
     payroll = Payroll.objects.get(id=pk)
     emp = Newuser.objects.get(id = payroll.user.id)
-    salary = Salary.objects.get(user = payroll.user.id)
     designation = EmployeeDesignation.objects.get(user = payroll.user.id)
     context = {
         'payroll':payroll,
         'emp':emp,
-        'salary':salary,
         'designation':designation
     }
     return render(request, 'admin/salary_slip.html',context)
+
+#edit payroll
+@login_required
+def edit_payroll(request,pk):
+    payroll = Payroll.objects.get(id=pk)
+    form = PayrollEditForm()
+    vdate = payroll.date
+    if request.method == "POST":
+        form = PayrollEditForm(request.POST)
+        if form.is_valid():
+            payroll.net_salary = payroll.net_salary + float(form.cleaned_data['other_benefits'])
+            
+            payroll.net_salary = payroll.net_salary - float(form.cleaned_data['other_deductions'])
+
+            payroll.other_benefits = payroll.other_benefits + float(form.cleaned_data['other_benefits'])
+            payroll.other_deductions = payroll.other_deductions +  float(form.cleaned_data['other_deductions'])
+
+            payroll.save()
+            messages.success(request, f'Payroll Edited Successfully')
+            return redirect('view_payroll', vdate = vdate)
+    else:
+        return render(request, 'admin/edit_payroll.html',{'payroll':payroll,'form':form})
+
+# to approve all pending payrolls 
+@login_required
+def approve_all_payroll(request, vdate):
+    vdate = datetime.datetime.strptime(vdate, "%Y-%m-%d %H:%M:%S")
+    payrolls = Payroll.objects.filter(status='pending',date=vdate)
+    for payroll in payrolls:
+        payroll.status = 'approved'
+        payroll.save()
+    messages.success(request, f'Payrolls Approved')
+    return redirect('view_payroll', vdate = vdate)
+    
 

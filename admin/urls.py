@@ -60,6 +60,8 @@ urlpatterns = [
     path('hold_salary/<int:pk>/', views.hold_salary, name='hold_salary'),
     path('approve_salary/<int:pk>/', views.approve_salary, name='approve_salary'),
     path('salary_slip/<int:pk>/', views.salary_slip, name='salary_slip'),
+    path('edit_payroll/<int:pk>/', views.edit_payroll, name='edit_payroll'),
+    path('approve_all_payroll/<str:vdate>/', views.approve_all_payroll, name='approve_all_payroll'),
 
 
 ]

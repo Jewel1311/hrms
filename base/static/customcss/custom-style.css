@@ -241,3 +241,34 @@
     border: 2px solid #e43c5c;
 }
 
+.dash-icon{
+    font-size: 2.5rem;
+}
+.dash-icon i {
+    background-color: #9bee9f;
+}
+.dash-icon1{
+    font-size: 2.5rem;
+}
+.dash-icon1 i {
+    background-color: #7fb4d8;
+}
+.dash-icon2{
+    font-size: 2.5rem;
+}
+.dash-icon2 i {
+    background-color: #f28888;
+}
+.dash-icon3{
+    font-size: 1.5rem;
+    color:#98d80d;
+}
+
+.stat-content{
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+.stat-content1{
+    font-size: 2rem;
+    font-weight: bold;
+}

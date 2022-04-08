@@ -1,6 +1,6 @@
 from email.message import Message
 from django import forms
-from admin.models import Designations,Salary
+from admin.models import Designations, Payroll,Salary
 from applicants.models import Interviews, Messages, Messages
 from base.models import Department
 from employees.models import  EmployeeDesignation
@@ -93,3 +93,12 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Messages
         fields = ['title','body']
+
+
+class PayrollEditForm(forms.ModelForm):
+    other_benefits= forms.CharField(label="Add Benfits",widget=forms.NumberInput(attrs = {'class':'form-control '}),initial=0,required =True)
+    other_deductions= forms.CharField(label="Add Deductions",widget=forms.NumberInput(attrs = {'class':'form-control'}),initial=0,required=True)
+
+    class Meta:
+        model = Payroll
+        fields = ['other_benefits','other_deductions']

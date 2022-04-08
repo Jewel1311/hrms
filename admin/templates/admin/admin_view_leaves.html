@@ -36,7 +36,7 @@
                 <th>To</th>
                 <th>To Session</th> 
                 <th>Status</th>
-                <th>Action</th>
+                <th class="text-right">Action</th>
             </thead>
             <tbody>
                 {% for leave in leaves %}
@@ -79,13 +79,13 @@
                         {% endif %}
 
 
-                 <td>
+                 <td class="text-right">
+                    {% if leave.admin == True %}
+                    <div class="bg-info" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                       Admin
+                   </div>
+                    {% endif %}
                      <a href="{% url 'admin_leave_detail' leave.pk %}"class="custom-style-button">Details</a>
-                     {% if leave.admin == True %}
-                     <div class="bg-info" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
-                        Admin
-                    </div>
-                     {% endif %}
                     </td>
                 </tr>
 

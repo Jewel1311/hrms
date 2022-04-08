@@ -1,0 +1,36 @@
+{% extends "admin/admin-home.html" %}
+{% load crispy_forms_tags %}
+{% block page %} 
+ <!-- Modal  for edit -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
+ data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit Payroll </h5>
+          <a href="{% url 'view_payroll' payroll.date %}" class="close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+        </div>
+        <div class="modal-body">
+
+            <a href="/media/{{ payroll.user.employeeprofile.photo }}"><img src="{{ payroll.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+
+            <a href="{% url 'employee_detail' payroll.user.pk %}"><b>{{ payroll.user.first_name|title}} {{ payroll.user.middle_name|title}} {{ payroll.user.last_name|title}}</b></a>
+
+          <form method="POST" class="mt-2">
+              {% csrf_token %}
+              {{ form | crispy}}
+        </div>
+        <div class="modal-footer">
+          <a href="{% url 'view_payroll' payroll.date %}" class="btn btn-secondary">Close</a>
+          <button type="submit" class="custom-style-button">Save</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal  -->
+
+{% endblock page %}
+
