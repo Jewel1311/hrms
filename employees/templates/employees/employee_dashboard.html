@@ -1,79 +1,86 @@
 {% extends "employees/employee-home.html" %}
 {% block content %} 
 
-<div class="col-md-12">
-    <h4>Welcome, {{user.first_name |title}} {{user.middle_name | title}} {{user.last_name |title }}</h4>
-    <h5 style="color: rgb(132, 131, 131);">{% now "l" %}, {% now "d"%} {% now "F" %} {% now "Y" %}</h5>
+<div class="row">
+    <div class="col-md-9">
+        <h4>Welcome, {{user.first_name |title}} {{user.middle_name | title}} {{user.last_name |title }}</h4>
+        <h5 style="color: rgb(132, 131, 131);">{% now "l" %}, {% now "d"%} {% now "F" %} {% now "Y" %}</h5>
+    </div>
 </div>
 
-<div class="col-md-12 mt-4">
-    <div class="d-flex justify-content-between">
-
-        <div class="col-md-3 shadow pt-2 pb-2">
-            <div class="row d-flex align-items-center justify-content-center">
+    <div class="row d-flex justify-content-between m-3">
+        <div class="card-block c-shadow pt-2 pb-2 m-2" style="width: 20rem;">
+            <div class="d-flex align-items-center justify-content-center">
                 <div class="dash-icon p-2"><i class=" rounded-circle p-3  bi bi-calendar-check"></i></div>
-                <div class="stat-content ml-4">Attendance</div>
+                <div class="stat-content ml-2 pr-0 pl-0">Attendance</div>
             </div>
-            <div class="row d-flex justify-content-center">
+            <div class="d-flex justify-content-center">
                 <div class="stat-content1">{{ attendance_count|stringformat:"02d" }}</div>
             </div>
         </div>
-
-        <div class="col-md-3 shadow pt-2 pb-2">
-            <div class="row d-flex align-items-center justify-content-center">
+ 
+        <div class="card-block c-shadow pt-2 pb-2 m-2" style="width: 20rem;">
+            <div class="d-flex align-items-center justify-content-center">
                 <div class="dash-icon1 p-2"><i class=" rounded-circle p-3  bi bi-moon-stars"></i></div>
-                <div class="stat-content ml-4">Night Shifts</div>
+                <div class="stat-content ml-2">Night Shifts</div>
             </div>
-            <div class="row d-flex justify-content-center">
+            <div class="d-flex justify-content-center">
                 <div class="stat-content1">{{ night_count|stringformat:"02d" }}</div>
             </div>
         </div>
 
-        <div class="col-md-3 shadow pt-2 pb-2">
-            <div class="row d-flex align-items-center justify-content-center">
+        <div class="card-block c-shadow pt-2 pb-2 m-2" style="width: 20rem;">
+            <div class="d-flex align-items-center justify-content-center">
                 <div class="dash-icon2 p-2"><i class=" rounded-circle p-3  bi bi-calendar-week"></i></div>
                 <div class="stat-content ml-2">Regularizations</div>
             </div>
-            <div class="row d-flex justify-content-center">
+            <div class="d-flex justify-content-center">
                 <div class="stat-content1">{{ reg_count|stringformat:"02d" }}</div>
             </div>
         </div>
 
-    </div>
-
-    <div class="d-flex justify-content-between mt-5">
-
-        <div class="col-md-8 shadow pt-2 pb-2">
-            <div class="row d-flex align-items-center">
-                <div class="dash-icon3 p-2 ml-2"><i class=" rounded-circle p-3  bi bi-calendar2-minus"></i></div>
-                <div class="stat-content ml-4">Leaves</div>
-                <div class="stat-content ml-4">{{ leave_count|stringformat:"02d" }}</div>
-                <div class="stat-content ml-4 pl-3" style="border-left:3px solid gray ;">Pending</div>
-                <div class="stat-content ml-4">{{ pending_count|stringformat:"02d" }}</div>
+        <div class=" card-block c-shadow pt-2 pb-2 m-2" style="width: 20rem;">
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="dash-icon4 p-2"><i class=" rounded-circle p-3  bi bi-calendar2-x"></i></div>
+                <div class="stat-content ml-2">Missing</div>
             </div>
-            <div class="row d-flex mt-3">
-                <div class="col-md-3 d-flex text-center">
-                    <div class="stat-content ml-4">CL :</div>
-                    <div class="stat-content ml-2">{{ leave_count|stringformat:"02d" }}</div>
-                </div>
-                <div class="col-md-3 d-flex text-center">
-                    <div class="stat-content ml-4">CL :</div>
-                    <div class="stat-content ml-2">{{ leave_count|stringformat:"02d" }}</div>
-                </div>
-                <div class="col-md-3 d-flex text-center">
-                    <div class="stat-content ml-4">CL :</div>
-                    <div class="stat-content ml-2">{{ leave_count|stringformat:"02d" }}</div>
-                </div>
-                <div class="col-md-3 d-flex text-center">
-                    <div class="stat-content ml-4">CL :</div>
-                    <div class="stat-content ml-2">{{ leave_count|stringformat:"02d" }}</div>
-                </div>
+            <div class=" d-flex justify-content-center">
+                <div class="stat-content1">{{ missing_count|stringformat:"02d" }}</div>
             </div>
         </div>
-
-
+        
     </div>
 
-</div>
+
+    <div class="row m-4">
+        <div class="col-md-6 p-3 c-shadow">
+            <div>{% now "F"%}, {% now "Y" %}</div>
+            <div class=" mt-1 d-flex justify-content-between">
+                <div class="leaves-style">Leaves : <span class="rounded-circle p-1">{{ leave_count |stringformat:"02d"}} </div>
+                <div class="leaves-style ml-4">Pending : <span class="rounded-circle p-1">{{ pending_count |stringformat:"02d"}}</span> </div>
+            </div>
+            <div class="mt-4">{% now "Y" %}</div>
+            <div class=" mt-2 p-2">
+                <div style="font-size: 1rem;">Casual Leave : {{yc_cl|stringformat:"02d"}}</div>
+                <div class="progress mt-1">
+                    <div class="progress-bar bg-success"  style="width: {{cl}}%;" role="progressbar" aria-valuenow="{{cl}}" aria-valuemin="0" aria-valuemax="100">{{cl}}%</div> 
+                </div>
+
+                <div class="mt-4" style="font-size: 1rem;">Earned Leave : {{yc_el|stringformat:"02d"}}</div>
+                <div class="progress mt-1">
+                    <div class="progress-bar bg-warning"  style="width: {{el}}%;" role="progressbar" aria-valuenow="{{el}}" aria-valuemin="0" aria-valuemax="100">{{el}}%</div> 
+                </div>
+
+                <div  class="mt-4" style="font-size: 1rem;">Sick Leave : {{yc_sl|stringformat:"02d"}}</div>
+                <div class="progress mt-1">
+                    <div class="progress-bar bg-info"  style="width: {{sl}}%;" role="progressbar" aria-valuenow="{{sl}}" aria-valuemin="0" aria-valuemax="100">{{sl}}%</div> 
+                </div> 
+
+               <div  class="mt-4" style="font-size: 1rem;">Loss of Pay : <span class="text-white pt-1 pb-1 pl-3 pr-3"  style="background-color: #e43c5c; border-radius: 5px;">{{yc_lp|stringformat:"02d"}}</span></div>
+            </div>
+
+        </div>
+    </div>
+   
 
 {% endblock content %}

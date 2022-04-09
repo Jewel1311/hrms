@@ -242,26 +242,29 @@
 }
 
 .dash-icon{
-    font-size: 2.5rem;
+    font-size: 2rem;
 }
 .dash-icon i {
     background-color: #9bee9f;
 }
 .dash-icon1{
-    font-size: 2.5rem;
+    font-size: 2rem;
 }
 .dash-icon1 i {
     background-color: #7fb4d8;
 }
 .dash-icon2{
-    font-size: 2.5rem;
+    font-size: 2rem;
 }
 .dash-icon2 i {
     background-color: #f28888;
 }
-.dash-icon3{
-    font-size: 1.5rem;
-    color:#98d80d;
+
+.dash-icon4{
+    font-size: 2rem;
+}
+.dash-icon4 i {
+    background-color: #dfef65;
 }
 
 .stat-content{
@@ -271,4 +274,26 @@
 .stat-content1{
     font-size: 2rem;
     font-weight: bold;
+}
+
+.c-shadow{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.active-dot{
+    position: relative;
+}
+.active-dot .act{
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    color: rgb(13, 229, 20);
+}
+
+.leaves-style{
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.leaves-style span{
+    background-color: #425262;
+    color: white;
 }

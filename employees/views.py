@@ -9,7 +9,7 @@ from admin.tasks import get_balance
 from applicants.models import Messages
 from base.models import Department
 from employees.forms import LeaveForm, RegularizeForm
-from .models import AttendanceRegularization, EmployeeDesignation, Leave
+from .models import AttendanceRegularization, EmployeeDesignation, Leave, LeaveCounter, YearCounter
 from .models import Attendance, EmployeeProfile
 from django.contrib import messages
 from django.db.models import Q
@@ -26,16 +26,31 @@ class MyPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
 @login_required
 def employee_home(request):
    attendance_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='morning').exclude(exit_time = None).count()
+   missing_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='morning',entry_time = None).count()
    night_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='night').exclude(exit_time = None).count()
    reg_count = AttendanceRegularization.objects.filter(user=request.user,date__month=datetime.date.today().month).count()
-   leave_count = Leave.objects.filter(user = request.user,applied_date__year=datetime.date.today().year).count()
-   pending_count = Leave.objects.filter(user = request.user,applied_date__year=datetime.date.today().year,approval='pending').count()
+   yc = YearCounter.objects.get(user = request.user,date__year=datetime.date.today().year)
+   leave_c = LeaveCounter.objects.get(user = request.user,date__month=datetime.date.today().month)
+   pending_count = Leave.objects.filter(user = request.user,applied_date__month=datetime.date.today().month,approval='pending').count()
+
+   leave_count = leave_c.cl + leave_c.el + leave_c.lp + leave_c.sl
+   cl = int((yc.cl/12)*100)
+   el = int((yc.el/12)*100)
+   sl = int((yc.sl/12)*100)
    context = {
       'attendance_count':attendance_count,
       'night_count':night_count,
       'reg_count':reg_count,
       'leave_count':leave_count,
-      'pending_count':pending_count
+      'pending_count':pending_count,
+      'missing_count': missing_count,
+      'cl':cl,
+      'el':el,
+      'sl':sl,
+      'yc_cl':yc.cl,
+      'yc_el':yc.el,
+      'yc_sl':yc.sl,
+      'yc_lp':yc.lp
    }
    return render(request, 'employees/employee_dashboard.html',context)
 
