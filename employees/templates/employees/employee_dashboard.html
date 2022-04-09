@@ -1,15 +1,15 @@
 {% extends "employees/employee-home.html" %}
 {% block content %} 
 
-<div class="row">
-    <div class="col-md-9">
+<div class="row  d-flex justify-content-between ml-4">
+    <div>
         <h4>Welcome, {{user.first_name |title}} {{user.middle_name | title}} {{user.last_name |title }}</h4>
         <h5 style="color: rgb(132, 131, 131);">{% now "l" %}, {% now "d"%} {% now "F" %} {% now "Y" %}</h5>
     </div>
 </div>
 
-    <div class="row d-flex justify-content-between m-3">
-        <div class="card-block c-shadow pt-2 pb-2 m-2" style="width: 20rem;">
+    <div class="row d-flex justify-content-between ml-3 mt-1">
+        <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 20rem;">
             <div class="d-flex align-items-center justify-content-center">
                 <div class="dash-icon p-2"><i class=" rounded-circle p-3  bi bi-calendar-check"></i></div>
                 <div class="stat-content ml-2 pr-0 pl-0">Attendance</div>
@@ -19,7 +19,7 @@
             </div>
         </div>
  
-        <div class="card-block c-shadow pt-2 pb-2 m-2" style="width: 20rem;">
+        <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 20rem;">
             <div class="d-flex align-items-center justify-content-center">
                 <div class="dash-icon1 p-2"><i class=" rounded-circle p-3  bi bi-moon-stars"></i></div>
                 <div class="stat-content ml-2">Night Shifts</div>
@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <div class="card-block c-shadow pt-2 pb-2 m-2" style="width: 20rem;">
+        <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 20rem;">
             <div class="d-flex align-items-center justify-content-center">
                 <div class="dash-icon2 p-2"><i class=" rounded-circle p-3  bi bi-calendar-week"></i></div>
                 <div class="stat-content ml-2">Regularizations</div>
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <div class=" card-block c-shadow pt-2 pb-2 m-2" style="width: 20rem;">
+        <div class=" card-block c-shadow pt-3 pb-2 m-2" style="width: 20rem;">
             <div class="d-flex align-items-center justify-content-center">
                 <div class="dash-icon4 p-2"><i class=" rounded-circle p-3  bi bi-calendar2-x"></i></div>
                 <div class="stat-content ml-2">Missing</div>
@@ -52,7 +52,7 @@
     </div>
 
 
-    <div class="row m-4">
+    <div class="row ml-4 mt-4">
         <div class="col-md-6 p-3 c-shadow">
             <div>{% now "F"%}, {% now "Y" %}</div>
             <div class=" mt-1 d-flex justify-content-between">
@@ -63,24 +63,115 @@
             <div class=" mt-2 p-2">
                 <div style="font-size: 1rem;">Casual Leave : {{yc_cl|stringformat:"02d"}}</div>
                 <div class="progress mt-1">
-                    <div class="progress-bar bg-success"  style="width: {{cl}}%;" role="progressbar" aria-valuenow="{{cl}}" aria-valuemin="0" aria-valuemax="100">{{cl}}%</div> 
+                    <div class="progress-bar bg-success"  style="width: {{cl}}%" role="progressbar" aria-valuenow="{{cl}}" aria-valuemin="0" aria-valuemax="100">{{cl}}%</div> 
                 </div>
 
                 <div class="mt-4" style="font-size: 1rem;">Earned Leave : {{yc_el|stringformat:"02d"}}</div>
                 <div class="progress mt-1">
-                    <div class="progress-bar bg-warning"  style="width: {{el}}%;" role="progressbar" aria-valuenow="{{el}}" aria-valuemin="0" aria-valuemax="100">{{el}}%</div> 
+                    <div class="progress-bar bg-warning"  style="width:{{el}}%" role="progressbar" aria-valuenow="{{el}}" aria-valuemin="0" aria-valuemax="100">{{el}}%</div> 
                 </div>
 
                 <div  class="mt-4" style="font-size: 1rem;">Sick Leave : {{yc_sl|stringformat:"02d"}}</div>
                 <div class="progress mt-1">
-                    <div class="progress-bar bg-info"  style="width: {{sl}}%;" role="progressbar" aria-valuenow="{{sl}}" aria-valuemin="0" aria-valuemax="100">{{sl}}%</div> 
+                    <div class="progress-bar bg-info"  style="width: {{sl}}%" role="progressbar" aria-valuenow="{{sl}}" aria-valuemin="0" aria-valuemax="100">{{sl}}%</div> 
                 </div> 
 
                <div  class="mt-4" style="font-size: 1rem;">Loss of Pay : <span class="text-white pt-1 pb-1 pl-3 pr-3"  style="background-color: #e43c5c; border-radius: 5px;">{{yc_lp|stringformat:"02d"}}</span></div>
             </div>
 
         </div>
+
+        <!-- bottom right  -->
+        
+        <div class="col-md-6">
+
+            <div class=" ml-auto c-shadow pl-3 pr-3 pt-3 pb-2 " style="border-left: 0.25rem solid #e43c5c;">
+                <div class="font-weight-bold">Today</div>
+                <div class="mt-2 row">
+                    <div class="col-md-6">Entry Time :  
+                            {% if today.entry_time == None %}
+                                <span class="text-danger">Missing</span>
+                            {% else %}
+                                <span class=" p-2 text-success font-weight-bold" style="border-radius: 5px;"> {{ today.entry_time}}</span>
+                            {% endif %}
+                    </div>
+                    <div class="col-md-6 text-right">Exit Time :
+                            {% if today.exit_time == None %}
+                                <span class="text-danger">Missing</span>
+                            {% else %}  
+                            <span class=" p-2 text-success font-weight-bold" style="border-radius: 5px;"> {{ today.exit_time}}</span>
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class=" mt-3 ml-auto c-shadow pl-3 pr-3 pt-3 pb-2 " style="border-left: 0.25rem solid #e43c5c;">
+                <div class="font-weight-bold">  <span class="text-danger" style="font-size: 1rem;"><i class="bi bi-calendar-minus"></i></span> Lastest Leave</div>
+                <div class="mt-2 row">
+                    {% if latest_leave %}
+                    <div class="col-md-12"> Type : <b>{{ latest_leave.leave_type |title}} </b> <span class="ml-3">Status : 
+                        {% if latest_leave.approval == 'approved' %}
+                            <span class="text-success"><b></b>{{latest_leave.approval|title }}</b></span>
+                        {% elif latest_leave.approval == 'rejected' %}
+                            <span class="text-danger"><b>{{latest_leave.approval|title }}</b></span>
+                        {% else %}
+                            <span class="text-warning"><b>{{latest_leave.approval|title }}</b></span>
+                        {% endif %}
+                    </span>
+                </div>
+                {% else %}
+                <div class=" col-md-12 text-success">No Leaves Applied </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class=" mt-3  c-shadow pl-3 pr-3 pt-3 pb-2" style="border-left: 0.25rem solid #e43c5c;">
+                    <div class="font-weight-bold"> <span class="text-danger" style="font-size: 1rem;"><i class="bi-calendar-week"></i></span> Latest Regularization</div>
+                    <div class="mt-2 row">
+                        {% if reg %}
+
+                        <div class="col-md-12"> Date : <b>{{ reg.date }} </b> <span class="ml-3"></span>Shift : <b>{{ reg.shift }} </b><span class="ml-3">Status : 
+                            {% if reg.status == 'approved' %}
+                                <span class="text-success"><b></b>{{reg.status|title }}</b></span>
+                            {% elif reg.status == 'rejected' %}
+                                <span class="text-danger"><b>{{reg.status|title }}</b></span>
+                            {% else %}
+                                <span class="text-warning"><b>{{reg.status|title }}</b></span>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    {% else %}
+                    <div class=" col-md-12 text-info">No Regularizations Requested </div>
+                    {% endif %}
+                    </div>
+                 
+            </div>
+
+            <div class=" mt-3 ml-auto c-shadow pl-3 pr-3 pt-3 pb-2 " style="border-left: 0.25rem solid #e43c5c;">
+                <div class="font-weight-bold"> <span class="text-danger" style="font-size: 1rem;"><i class="bi bi-bell-fill"></i></span> Latest Notification  </div>
+                <div class="mt-2 row d-flex">
+                    {% if notification.date >= user.date_joined %}
+                    <div class="m-1" style="background-color: #eeeeee; width: 100%;">
+                        <marquee direction="left">
+                            
+                                Your last recived  notification is <b>{{ notification.title }}</b>
+                            
+                        </marquee>
+                    </div>
+                    {% else %}
+                    <div class="col-md-12 text-info">No notifications yet</div>
+                    {% endif %}
+                </div>
+            </div>
+
+
+
+
     </div>
    
+
+    
 
 {% endblock content %}

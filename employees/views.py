@@ -32,6 +32,10 @@ def employee_home(request):
    yc = YearCounter.objects.get(user = request.user,date__year=datetime.date.today().year)
    leave_c = LeaveCounter.objects.get(user = request.user,date__month=datetime.date.today().month)
    pending_count = Leave.objects.filter(user = request.user,applied_date__month=datetime.date.today().month,approval='pending').count()
+   today = Attendance.objects.get(user=request.user, attendance_date=datetime.date.today(),shift='morning')
+   notification = Messages.objects.latest('id')
+   latest_leave = Leave.objects.filter(user = request.user).last()
+   reg = AttendanceRegularization.objects.filter(user = request.user).last()
 
    leave_count = leave_c.cl + leave_c.el + leave_c.lp + leave_c.sl
    cl = int((yc.cl/12)*100)
@@ -50,7 +54,11 @@ def employee_home(request):
       'yc_cl':yc.cl,
       'yc_el':yc.el,
       'yc_sl':yc.sl,
-      'yc_lp':yc.lp
+      'yc_lp':yc.lp,
+      'today':today,
+      'notification':notification,
+      'latest_leave':latest_leave,
+      'reg':reg
    }
    return render(request, 'employees/employee_dashboard.html',context)
 
