@@ -4,8 +4,9 @@ from django.views.generic import UpdateView
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
-from admin.models import Designations, Payroll
+from admin.models import Designations, Holidays, Payroll
 from admin.tasks import get_balance
+from admin.views import holidays
 from applicants.models import Messages
 from base.models import Department
 from employees.forms import LeaveForm, RegularizeForm
@@ -26,7 +27,7 @@ class MyPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
 @login_required
 def employee_home(request):
    attendance_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='morning').exclude(exit_time = None).count()
-   missing_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='morning',entry_time = None).count()
+   missing_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='morning',entry_time = None,holiday=False).count()
    night_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='night').exclude(exit_time = None).count()
    reg_count = AttendanceRegularization.objects.filter(user=request.user,date__month=datetime.date.today().month).count()
    yc = YearCounter.objects.get(user = request.user,date__year=datetime.date.today().year)
@@ -36,6 +37,7 @@ def employee_home(request):
    notification = Messages.objects.latest('id')
    latest_leave = Leave.objects.filter(user = request.user).last()
    reg = AttendanceRegularization.objects.filter(user = request.user).last()
+   holiday = Holidays.objects.filter(date__gt = datetime.date.today()).order_by('date').first()
 
    leave_count = leave_c.cl + leave_c.el + leave_c.lp + leave_c.sl
    cl = int((yc.cl/12)*100)
@@ -58,7 +60,8 @@ def employee_home(request):
       'today':today,
       'notification':notification,
       'latest_leave':latest_leave,
-      'reg':reg
+      'reg':reg,
+      'holiday':holiday
    }
    return render(request, 'employees/employee_dashboard.html',context)
 
@@ -182,6 +185,9 @@ def night_shift(request):
                night_shift.entry_time = datetime.datetime.now().time()
                night_shift.shift = 'night'
                night_shift.user = request.user
+               holiday = Holidays.objects.filter(date = datetime.date.today())
+               if holiday:
+                  night_shift.holiday = True
                night_shift.save()
                return redirect('night_shift')
 
@@ -295,16 +301,20 @@ def attendance_regularization(request,pk):
    if request.method == "POST":
       reg_form = RegularizeForm(request.POST)
       if reg_form.is_valid():
-         regulization = reg_form.save(False)
-         regulization.date = attendance.attendance_date
-         regulization.old_entry = attendance.entry_time
-         regulization.old_exit = attendance.exit_time
-         regulization.shift = attendance.shift
-         regulization.user = request.user
-         regulization.attendance = attendance
-         regulization.save()
-         messages.success(request,f'Regulization Requested')
-         return redirect('regularization_requests')
+         if attendance.entry_time == None or attendance.exit_time == None:
+            messages.warning(request,f'Entry or Exit time cannot be null')
+            return render(request,'employees/attendance_regularization.html',context)
+         else:
+               regulization = reg_form.save(False)
+               regulization.date = attendance.attendance_date
+               regulization.old_entry = attendance.entry_time
+               regulization.old_exit = attendance.exit_time
+               regulization.shift = attendance.shift
+               regulization.user = request.user
+               regulization.attendance = attendance
+               regulization.save()
+               messages.success(request,f'Regulization Requested')
+               return redirect('regularization_requests')
       else:
          return render(request,'employees/attendance_regularization.html',context)
 
@@ -393,3 +403,9 @@ def emp_salary_slip(request, vdate):
         'designation':designation,
     }
    return render(request, 'employees/emp_salary_slip.html',context)
+
+#view holiday
+@login_required
+def view_holidays(request):
+   holidays = Holidays.objects.all().order_by('-date')
+   return render(request, 'employees/holiday_view.html',{'holidays':holidays} )

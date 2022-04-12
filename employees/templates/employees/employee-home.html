@@ -57,12 +57,16 @@
                 </ul>
             </li>
 
-            <li class="">
-                <a href="{% url 'emp_payroll_month' %}"> <i class="bi bi-cash-coin"></i><span class="ml-2">Payroll </span></a>
+            <li class="{% if url_name == 'emp_payroll_month' %} active {% elif url_name == 'emp_salary_slip' %} active{% endif %}">
+                <a href="{% url 'emp_payroll_month' %}"> <i class="bi bi-cash-coin"></i><span class="ml-2"> Payroll </span></a>
+            </li>
+
+            <li class="{% if url_name == 'view_holidays' %} active{% endif %}">
+                <a href="{% url 'view_holidays' %}"> <i class="bi bi-megaphone"></i> <span class="ml-2"> Holidays </span></a>
             </li>
 
             <li class="{% if url_name == 'view_notification' %} active {% elif url_name == 'notification_detail' %} active {% endif %}">
-                <a  href="{% url 'view_notification' %}" > <i class="bi bi-bell-fill"></i> <span class="ml-2"> Notifications </span></a> 
+                <a  href="{% url 'view_notification' %}" > <i class="bi bi-bell"></i> <span class="ml-2"> Notifications </span></a> 
               </li>
 
             <!-- profile  -->

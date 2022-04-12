@@ -36,7 +36,13 @@
 
                         <a href="{% url 'employee_detail' attendance.user.pk %}"><b>{{ attendance.user.first_name|title}} {{ attendance.user.middle_name|title}} {{ attendance.user.last_name|title}}</b></a>
                     </td>
-                    <td> {{ attendance.date }}</td>
+                    <td> {{ attendance.date }}
+                        {% if attendance.attendance.holiday == True %}
+                        <div class="bg-info" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                            Holiday
+                        </div>
+                        {% endif %}
+                    </td>
                     <td>{{ attendance.old_entry }}</td>
                     <td>{{ attendance.new_entry }}</td>
                     <td>{{ attendance.old_exit }}</td>

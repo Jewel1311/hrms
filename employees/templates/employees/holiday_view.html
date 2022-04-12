@@ -1,0 +1,41 @@
+{% extends "employees/employee-home.html" %}
+{% block content %} 
+<center>
+    <!-- start messages  -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}            
+     <!-- end messages  -->
+
+     <h5 style="color: #e43c5c;">Holidays</h5>
+    </center>
+
+{% if holidays|length > 0 %}
+        <table class="jtable" id='tableid2'>
+            <thead >
+                <th>Date</th>
+                <th>Reason</th>
+            </thead>
+            <tbody>
+                {% for holiday in holidays %}
+                <tr>
+                    <td>{{ holiday.date }}</td>
+                    <td>{{ holiday.reason }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No Holidays</p>
+        </center>
+{% endif %}
+
+
+{% endblock content %}
+

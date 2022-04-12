@@ -1,5 +1,5 @@
 import datetime
-from email import message
+from multiprocessing import context
 from employees.forms import AdminAttendanceForm, AdminEmpAttendance, AdminLeaveForm, AdminRegularizationForm
 from .tasks import calculate_salary, get_balance, get_month,get_year, leave_approval, leave_marked, leave_reject
 from django.urls import reverse_lazy
@@ -7,9 +7,9 @@ from django.views.generic import DeleteView,UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, InterviewForm, JobForm, MessageForm, PayrollEditForm, SalaryForm
+from admin.forms import AddEmployeeForm, DesignationForm, EditEmployeeForm, HolidayForm, InterviewForm, JobForm, MessageForm, PayrollEditForm, SalaryForm
 from django.contrib import messages
-from admin.models import Designations, Payroll, Salary
+from admin.models import Designations, Holidays, Payroll, Salary
 from applicants.models import Applications, Interviews, Messages
 from base.models import Department, Jobs
 from employees.models import Attendance, AttendanceRegularization, EmployeeDesignation, Leave, LeaveCounter, YearCounter
@@ -20,7 +20,19 @@ from django.contrib.auth.views import PasswordChangeView
 
 @login_required
 def admin_home(request):
-    return render(request, 'admin/admin-home.html')
+    employees = Newuser.objects.filter(is_employee=True).count()
+    applicants = Newuser.objects.filter(is_applicant=True).count()
+    department = Department.objects.all().count()
+    designations = Designations.objects.all().count()
+    interviews = Interviews.objects.filter(interview_date__gt=datetime.date.today()).count()
+    context = {
+       'employees':employees,
+       'applicants':applicants,
+       'department':department,
+       'designations':designations,
+       'interviews':interviews
+    }
+    return render(request, 'admin/admin_dashboard.html',context)
 
 
 class AdPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
@@ -739,7 +751,7 @@ def add_emp_attendance(request,pk):
 # Attendance regularization 
 @login_required
 def admin_regularize(request):
-    attendance = AttendanceRegularization.objects.all()
+    attendance = AttendanceRegularization.objects.all().order_by('-id')
     context = {
         'attendance':attendance
     }
@@ -1014,5 +1026,64 @@ def approve_all_payroll(request, vdate):
         payroll.save()
     messages.success(request, f'Payrolls Approved')
     return redirect('view_payroll', vdate = vdate)
-    
 
+#add holidays
+@login_required
+def holidays(request):
+    holidays = Holidays.objects.all().order_by('-date')
+    form = HolidayForm()
+    if request.method == "POST":
+        form = HolidayForm(request.POST)
+        if form.is_valid():
+            date = form.cleaned_data['date']
+            attendance = Attendance.objects.filter(attendance_date = date)
+            if attendance:
+                for attendance in attendance:
+                    attendance.holiday = True
+                    attendance.save()
+            form.save()
+            messages.success(request,f'Holiday Added')
+            return redirect('holidays')
+    else:
+        return render(request,'admin/admin_holidays.html',{'holidays':holidays,'form':form})
+    
+#edit holidays
+@login_required
+def holiday_edit(request,pk):
+    holiday = Holidays.objects.get(id = pk)
+    form = HolidayForm(instance=holiday)
+    if request.method == "POST":
+        att = Attendance.objects.filter(attendance_date = holiday.date)
+        if att:
+            for att in att:
+                att.holiday = False
+                att.save()
+        form = HolidayForm(request.POST,instance=holiday)
+        if form.is_valid():
+            date = form.cleaned_data['date']
+            attendance = Attendance.objects.filter(attendance_date = date)
+            if attendance:
+                for attendance in attendance:
+                    attendance.holiday = True
+                    attendance.save()
+            form.save()
+            messages.success(request,f'Holiday Edited')
+            return redirect('holidays')
+    else:
+        return render(request, 'admin/holiday_edit.html',{'form':form})
+
+#delete holiday
+@login_required
+def delete_holiday(request,pk):
+    holiday = Holidays.objects.get(id = pk)
+    if request.method == "POST":
+        att = Attendance.objects.filter(attendance_date = holiday.date)
+        if att:
+            for att in att:
+                att.holiday = False
+                att.save()
+        holiday.delete()
+        messages.success(request,f'Holiday Deleted')
+        return redirect('holidays')
+    else:
+        return render(request,'admin/delete_holiday.html',{'holiday':holiday})

@@ -260,6 +260,12 @@
     background-color: #f28888;
 }
 
+.dash-icon3{
+    font-size: 2rem;
+}
+.dash-icon3 i {
+    background-color: rgb(125, 243, 243);
+}
 .dash-icon4{
     font-size: 2rem;
 }

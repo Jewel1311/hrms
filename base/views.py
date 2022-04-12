@@ -1,4 +1,5 @@
 import datetime
+from admin.models import Holidays
 from admin.tasks import get_year
 from django.shortcuts import render
 from .models import Jobs
@@ -17,9 +18,23 @@ def index(request):
 def create_attendance():
      check = Attendance.objects.filter(attendance_date__gte=datetime.date.today()).count()
      if check == 0:
-          employees = Newuser.objects.filter(is_employee = True)
-          for employee in employees:
-               Attendance.objects.create(attendance_date=datetime.date.today(),entry_time=None,exit_time=None,shift='morning',user=employee) 
+          try:
+               holiday = Holidays.objects.get(date = datetime.date.today())
+               if holiday:
+                    employees = Newuser.objects.filter(is_employee = True)
+                    for employee in employees:
+                         Attendance.objects.create(attendance_date=datetime.date.today(),entry_time=None,exit_time=None,shift='morning',holiday=True,user=employee) 
+          except:
+               print(datetime.date.today().weekday())
+               if datetime.date.today().weekday() == 6:
+                    employees = Newuser.objects.filter(is_employee = True)
+                    for employee in employees:
+                         Attendance.objects.create(attendance_date=datetime.date.today(),entry_time=None,exit_time=None,shift='morning',holiday=True,user=employee) 
+               else:
+                    employees = Newuser.objects.filter(is_employee = True)
+                    for employee in employees:
+                         Attendance.objects.create(attendance_date=datetime.date.today(),entry_time=None,exit_time=None,shift='morning',user=employee) 
+
 
 # to update the leave counter every month
 def leave_counter():

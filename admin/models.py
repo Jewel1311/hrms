@@ -26,3 +26,6 @@ class Payroll(models.Model):
     status = models.CharField(max_length=12,default='pending')
     user = user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
 
+class Holidays(models.Model):
+    date = models.DateField()
+    reason = models.TextField()

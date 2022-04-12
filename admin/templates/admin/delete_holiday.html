@@ -6,18 +6,18 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Delete Designation</h5>
-          <a href="{% url 'designations' %}" class="close">
+          <h5 class="modal-title" id="exampleModalLongTitle">Delete Holiday</h5>
+          <a href="{% url 'holidays' %}" class="close">
             <span aria-hidden="true">&times;</span>
           </a>
         </div>
         <div class="modal-body">
           <form method="POST">
               {% csrf_token %}
-              <div>Do you really want to delete <b>{{ object.designation }}</b>?</div>
+              <div>Do you really want to delete the holiday on <b>{{ holiday.date }}</b>?</div>
         </div>
         <div class="modal-footer">
-          <a href="{% url 'designations' %}" class="btn btn-secondary">Close</a>
+          <a href="{% url 'holidays' %}" class="btn btn-secondary">Close</a>
           <button type="submit" class="custom-style-button">Yes, Delete</button>
         </form>
         </div>

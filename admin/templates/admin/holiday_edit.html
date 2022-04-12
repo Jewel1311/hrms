@@ -1,4 +1,5 @@
 {% extends "admin/admin-home.html" %}
+{% load crispy_forms_tags %}
 {% block page %} 
  <!-- Modal  for edit -->
  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
@@ -6,19 +7,19 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Delete Designation</h5>
-          <a href="{% url 'designations' %}" class="close">
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit Holiday</h5>
+          <a href="{% url 'holidays' %}" class="close">
             <span aria-hidden="true">&times;</span>
           </a>
         </div>
         <div class="modal-body">
           <form method="POST">
               {% csrf_token %}
-              <div>Do you really want to delete <b>{{ object.designation }}</b>?</div>
+             {{ form | crispy }}
         </div>
         <div class="modal-footer">
-          <a href="{% url 'designations' %}" class="btn btn-secondary">Close</a>
-          <button type="submit" class="custom-style-button">Yes, Delete</button>
+          <a href="{% url 'holidays' %}" class="btn btn-secondary">Close</a>
+          <button type="submit" class="custom-style-button">Save</button>
         </form>
         </div>
       </div>

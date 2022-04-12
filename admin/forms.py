@@ -1,6 +1,6 @@
 from email.message import Message
 from django import forms
-from admin.models import Designations, Payroll,Salary
+from admin.models import Designations, Holidays, Payroll,Salary
 from applicants.models import Interviews, Messages, Messages
 from base.models import Department
 from employees.models import  EmployeeDesignation
@@ -102,3 +102,10 @@ class PayrollEditForm(forms.ModelForm):
     class Meta:
         model = Payroll
         fields = ['other_benefits','other_deductions']
+
+class HolidayForm(forms.ModelForm):
+    date = forms.DateField(widget=DateInput(attrs = {'class':'form-control '}),required=True)
+    reason = forms.CharField(widget= forms.Textarea(attrs={'class':'form-control','rows':2}),required =True)
+    class Meta:
+        model = Holidays
+        fields = ['date','reason']

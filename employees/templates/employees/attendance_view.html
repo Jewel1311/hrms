@@ -31,18 +31,24 @@
 {% if attendance|length > 0 %}
         <div >
         <table class="jtable" id='tableid2'>
-            <thead style="text-align: center;">
+            <thead>
                 <th>ID</th>
                 <th>Date</th>
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Shift</th>
             </thead>
-            <tbody  style="text-align: center;">
+            <tbody>
                 {% for attendance in attendance %}
                 <tr>
                     <td> {{ attendance.id }}</td>
-                    <td> {{ attendance.attendance_date }}</td>
+                    <td> {{ attendance.attendance_date }}
+                        {% if attendance.holiday == True %}
+                        <div class="bg-info" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                            Holiday
+                        </div>
+                        {% endif %}
+                    </td>
                     <td>
                         {% if attendance.entry_time == None %}
                         <div style="color: #e43c5c;">Missing</div>

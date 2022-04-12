@@ -28,7 +28,7 @@
             <!-- Employees  -->
 
             <li class =" {% if url_name == 'add_employee'  %} active {% elif url_name == 'view_employee' %}active  {% elif url_name == 'attendance_view' %}active {% endif %}">
-                <a href="#employeeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-briefcase-fill"></i> <span class="ml-2">Employee </span></a>
+                <a href="#employeeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="bi bi-briefcase"></i> <span class="ml-2">Employee </span></a>
                 <ul class="collapse list-unstyled" id="employeeSubmenu">
                     <li class =" {% if url_name == 'add_employee'  %} active {% endif %}">
                        <a href="{% url 'add_employee' %}">Add Employee </a>
@@ -118,9 +118,12 @@
                 <a href="{% url 'department' %}"> <i class="bi bi-building"></i> <span class="ml-2">Department</span></a>  
             </li>
 
+            <li class="{% if url_name == 'holidays'  %} active  {% elif url_name == 'holiday_edit'  %} active {% elif url_name == 'delete_holiday'  %} active {% endif %} ">
+                <a href="{% url 'holidays' %}"> <i class="bi bi-megaphone"></i> <span class="ml-2">Holidays</span></a>  
+            </li>
 
             <li class="{% if url_name == 'add_notification' %} active{% elif url_name == 'view_notification' %}active {% elif url_name == 'edit_notification' %}active{% elif url_name == 'delete_notification' %}active {% endif %}">
-                <a href="{% url 'add_notification' %}"> <i class="bi bi-bell-fill"></i> <span class="ml-2"> Notifications</span></a>  
+                <a href="{% url 'add_notification' %}"><i class="bi bi-bell"></i> <span class="ml-2"> Notifications</span></a>  
               </li>
 
               <li class="{% if url_name == 'admin_password_change' %} active {% endif %}">

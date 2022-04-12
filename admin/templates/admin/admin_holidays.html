@@ -1,0 +1,79 @@
+{% extends "admin/admin-home.html" %}
+{% load crispy_forms_tags %}
+{% block page %} 
+<center>
+    <!-- start messages  -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} mt-2">
+        {{ message }}
+    </div>
+    {% endfor %}
+      {% endif %}            
+     <!-- end messages  -->
+    </center>
+
+  <!-- add holiday  -->
+    <div class="row mr-auto mb-3"><button class=" ml-auto custom-style-button" style="border-radius: 20px"  data-toggle="modal" data-target="#exampleModalCenter"><i class="bi bi-plus-lg"></i> Add Holiday</button></div>
+
+{% if holidays|length > 0 %}
+        <table class="jtable" id='tableid2'>
+            <thead >
+                <th>Date</th>
+                <th>Reason</th>
+                <th style="text-align: right;">Action</th>
+            </thead>
+            <tbody>
+                {% for holiday in holidays %}
+                <tr>
+                    <td>{{ holiday.date }}</td>
+                    <td>{{ holiday.reason }}</td>
+                    <td style="text-align: right;">
+                       <div class="d-inline-block">
+                         <div class="d-flex">
+                              <div class="ml-auto"><a href="{% url 'holiday_edit' holiday.pk %}" style="color: rgb(77, 77, 250); font-size: 1.5rem;"><i class="bi bi-pencil-square"></i></a></div>
+                              
+                              <div class="ml-5"><a href="{% url 'delete_holiday' holiday.pk %}" style="color: #e43c5c; font-size: 1.5rem;"><i class="bi bi-trash-fill"></i></buton></div>
+                   
+                             
+                        </div>
+                      </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{%else%}
+        <center>
+            <p class="alert alert-info mt-5"> No Holidays</p>
+        </center>
+{% endif %}
+
+  
+  <!-- Modal -->
+  <div class="modal fade"  id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Add Holidays</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+              {% csrf_token %}
+              {{ form | crispy }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="custom-style-button">Add</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal  -->
+{% endblock page %}
+

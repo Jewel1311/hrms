@@ -2,8 +2,18 @@
 {% block content %} 
 <div class="d-flex flex-column align-items-center">
     <div class="col-md-6 p-3" style=" box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">
-        <center><h5 class="mb-5" style="display: inline-block;border-bottom: 3px solid #e43c5c;">Attendance Regularization</h5></center>
-        <div class="row"><div class="col-md-3">Date :</div><div class="col-md-3">{{ attendance.attendance_date}}</div></div>
+        <center>
+            {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert alert-{{message.tags}} mt-2">
+                      {{ message }}
+                  </div>
+                  {% endfor %}
+           {% endif %}
+        
+        <h5 class="mb-5" style="display: inline-block;border-bottom: 3px solid #e43c5c;">Attendance Regularization</h5>
+    </center>
+        <div class="row"><div class="col-md-3">Date :</div><div class="col-md-3">{{ attendance.attendance_date}} </div></div>
         <div class="row"><div class="col-md-3">Shift :</div><div class="col-md-3">{{ attendance.shift|title}}</div></div>
         <div class="row"><div class="col-md-3">Current Entry Time :</div><div class="col-md-3">{{ attendance.entry_time}}</div></div>
         <div class="row"><div class="col-md-3">Current Exit Time :</div><div class="col-md-3">{{ attendance.exit_time}}</div></div>

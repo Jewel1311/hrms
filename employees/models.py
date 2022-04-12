@@ -1,5 +1,4 @@
 import datetime
-from operator import mod
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from PIL import Image
@@ -41,6 +40,7 @@ class Attendance(models.Model):
     exit_time = models.TimeField(null=True)
     shift = models.CharField(max_length=10,default='')
     leave = models.BooleanField(default=False)
+    holiday = models.BooleanField(default=False)
     user = models.ForeignKey(Newuser, on_delete=models.CASCADE)
 
 #to check if the date is a past date

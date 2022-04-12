@@ -20,4 +20,5 @@ urlpatterns = [
     path('notification_detail/<int:pk>/',views.notification_detail, name='notification_detail'),
     path('emp_payroll_month/',views.emp_payroll_month, name='emp_payroll_month'),
     path('emp_salary_slip/<str:vdate>/', views.emp_salary_slip, name='emp_salary_slip'),
+    path('view_holidays/',views.view_holidays, name='view_holidays'),
 ]

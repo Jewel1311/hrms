@@ -29,7 +29,13 @@
             <tbody>
                 {% for request in requests %}
                 <tr>
-                    <td> {{ request.date }}</td>
+                    <td> {{ request.date }}
+                        {% if request.attendance.holiday == True %}
+                        <div class="bg-info" style="display:inline-block; padding:0.1rem 0.25rem;border-radius: 0.2rem;">
+                            Holiday
+                        </div>
+                        {% endif %}
+                    </td>
                     <td>{{ request.old_entry }}</td>
                     <td>{{ request.new_entry }}</td>
                     <td>{{ request.old_exit }}</td>
