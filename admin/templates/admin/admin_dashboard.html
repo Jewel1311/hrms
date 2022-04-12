@@ -1,61 +1,161 @@
 {% extends "admin/admin-home.html" %}
 {% block page %} 
-<div class="row d-flex justify-content-between m-2">
+<div class="col-md-12">
 
-    
-    <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 15rem;">
-        <div class="d-flex align-items-center justify-content-center">
-            <div class="dash-icon p-2"><i class=" rounded-circle p-3  bi bi-briefcase"></i></div>
-            <div class="stat-content ml-2 pr-0 pl-0">Employees</div>
+
+
+    <div class=" row d-flex justify-content-between">
+
+        
+        <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 16rem;">
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="dash-icon p-2"><i class=" rounded-circle p-3  bi bi-briefcase"></i></div>
+                <div class="stat-content ml-2 pr-0 pl-0">Employees</div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="stat-content1">{{ employees|stringformat:"02d" }}</div>
+            </div>
         </div>
-        <div class="d-flex justify-content-center">
-            <div class="stat-content1">{{ employees|stringformat:"02d" }}</div>
+
+        <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 16rem;">
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="dash-icon1 p-2"><i class=" rounded-circle p-3  bi bi-people"></i></div>
+                <div class="stat-content ml-2 pr-0 pl-0">Applicants</div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="stat-content1">{{ applicants|stringformat:"02d" }}</div>
+            </div>
         </div>
+        
+        <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 16rem;">
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="dash-icon2 p-2"><i class=" rounded-circle p-3  bi bi-briefcase"></i></div>
+                <div class="stat-content ml-2 pr-0 pl-0">Departments</div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="stat-content1">{{ department|stringformat:"02d" }}</div>
+            </div>
+        </div>
+        
+        <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 16rem;">
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="dash-icon4 p-2"><i class=" rounded-circle p-3  bi bi-briefcase"></i></div>
+                <div class="stat-content ml-2 pr-0 pl-0">Designations</div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="stat-content1">{{ designations|stringformat:"02d" }}</div>
+            </div>
+        </div>
+        
+        <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 16rem;">
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="dash-icon3 p-2"><i class=" rounded-circle p-3  bi bi-briefcase"></i></div>
+                <div class="stat-content ml-2 pr-0 pl-0">Interviews</div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="stat-content1">{{ interviews|stringformat:"02d" }}</div>
+            </div>
+        </div>
+
+
     </div>
 
-    <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 15rem;">
-        <div class="d-flex align-items-center justify-content-center">
-            <div class="dash-icon1 p-2"><i class=" rounded-circle p-3  bi bi-people"></i></div>
-            <div class="stat-content ml-2 pr-0 pl-0">Applicants</div>
+
+    <div class=" row  mt-2">
+        <div class="col-md-6 c-shadow">
+            <div class="d-flex justify-content-between align-items-center" >
+                <div class="p-2 "> <span style="color: rgb(221, 73, 73);;"><b>Leave Requests Pending </b></span> <span class="rounded-circle p-1 text-white" style="background-color: rgb(66, 60, 69);">{{ leave_count|stringformat:"02d" }}</span></div> 
+                <div class="custom-style-button pt-0 pb-0 pl-1 pr-1"> <a href="{% url 'admin_view_leaves' %}">View</a></div>         
+            </div>
+            <div class="p-2">
+                <b>Recent Leaves</b>
+            </div>
+            {% if leaves|length > 0 %}
+            {% for leave in leaves %}
+                <div class="d-flex justify-content-between align-items-center mt-1 mb-2 pt-2" style="border-top: 1px solid rgb(222, 219, 219);">
+
+                    <div>
+                        <a href="/media/{{ leave.user.employeeprofile.photo }}"><img src="{{ leave.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+
+                        <a href="{% url 'employee_detail' leave.user.pk %}"><b>{{ leave.user.first_name|title}} {{ leave.user.middle_name|title}} {{ leave.user.last_name|title}}</b></a>
+                    </div>
+                    <div>{{ leave.leave_type | title}}</div>
+
+                    {% if leave.approval == 'approved' %} 
+                        <div class="text-success text-bolder">{{ leave.approval | title}} </div>
+
+                    {% elif leave.approval == 'rejected' %} 
+                        <div class="text-danger">{{ leave.approval | title}} </div>
+
+                    {% else %} 
+                        <div class="text-warning">{{ leave.approval | title}} </div>
+                    {% endif %}
+                   
+
+                </div>
+            {% endfor %}
+            {% else %}
+            {% for i in "123" %}
+                <div class="text-info p-2">Not Available</div>
+            {% endfor %}
+            {% endif %}
         </div>
-        <div class="d-flex justify-content-center">
-            <div class="stat-content1">{{ applicants|stringformat:"02d" }}</div>
+        <div class="ml-3 c-shadow d-flex flex-column align-items-center justify-content-center pl-5 pr-5 ">
+            <div class="mb-3"><b>Attendance Today <span>{{att_count}}/{{employees}}</span></b></div>
+            <div class="progress mx-auto" data-value='{{att_per}}'> <span class="progress-left"> <span class="progress-bar border-primary"></span> </span> <span class="progress-right"> <span class="progress-bar  border-primary"></span> </span>
+                <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="h2 font-weight-bold">{{att_per}}%</div>
+                </div>
+            </div>
+
         </div>
+
     </div>
-    
-    <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 15rem;">
-        <div class="d-flex align-items-center justify-content-center">
-            <div class="dash-icon2 p-2"><i class=" rounded-circle p-3  bi bi-briefcase"></i></div>
-            <div class="stat-content ml-2 pr-0 pl-0">Departments</div>
+
+
+    <div class=" row  mt-3">
+        <div class="col-md-6 c-shadow">
+            <div  class="d-flex justify-content-between align-items-center">
+                <div class="p-2"> <span style="color: rgb(89, 119, 240);;"><b>Regularization Requests Pending </b></span> <span class="rounded-circle p-1 text-white" style="background-color: rgb(66, 60, 69);">{{ regular_count|stringformat:"02d" }}</span> </div>   
+                <div class="custom-style-button pt-0 pb-0 pl-1 pr-1"> <a href="{% url 'admin_regularize' %}">View</a></div>         
+            </div>
+            <div class="p-2">
+                <b>Recent Requests</b>
+            </div>
+            {% if regular|length > 0 %}
+            {% for regular in regular %}
+                <div class="d-flex justify-content-between align-items-center mt-1 mb-2 pt-2" style="border-top: 1px solid rgb(222, 219, 219);">
+
+                    <div>
+                        <a href="/media/{{ regular.user.employeeprofile.photo }}"><img src="{{ regular.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
+
+                        <a href="{% url 'employee_detail' regular.user.pk %}"><b>{{ regular.user.first_name|title}} {{ regular.user.middle_name|title}} {{ regular.user.last_name|title}}</b></a>
+                    </div>
+                    <div>{{ regular.date }}</div>
+
+                    {% if regular.status == 'approved' %} 
+                        <div class="text-success text-bolder">{{ regular.status | title}} </div>
+
+                    {% elif regular.status == 'rejected' %} 
+                        <div class="text-danger">{{ regular.status | title}} </div>
+
+                    {% else %} 
+                        <div class="text-warning">{{ regular.status | title}} </div>
+                    {% endif %}
+                   
+
+                </div>
+            {% endfor %}
+            {% else %}
+            {% for i in "123" %}
+                <div class="text-info p-2">Not Available</div>
+            {% endfor %}
+            {% endif %}
         </div>
-        <div class="d-flex justify-content-center">
-            <div class="stat-content1">{{ department|stringformat:"02d" }}</div>
-        </div>
-    </div>
-    
-    <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 15rem;">
-        <div class="d-flex align-items-center justify-content-center">
-            <div class="dash-icon4 p-2"><i class=" rounded-circle p-3  bi bi-briefcase"></i></div>
-            <div class="stat-content ml-2 pr-0 pl-0">Designations</div>
-        </div>
-        <div class="d-flex justify-content-center">
-            <div class="stat-content1">{{ designations|stringformat:"02d" }}</div>
-        </div>
-    </div>
-    
-    <div class="card-block c-shadow pt-3 pb-2 m-2" style="width: 15rem;">
-        <div class="d-flex align-items-center justify-content-center">
-            <div class="dash-icon3 p-2"><i class=" rounded-circle p-3  bi bi-briefcase"></i></div>
-            <div class="stat-content ml-2 pr-0 pl-0">Interviews</div>
-        </div>
-        <div class="d-flex justify-content-center">
-            <div class="stat-content1">{{ interviews|stringformat:"02d" }}</div>
-        </div>
+
     </div>
 
 
 
 </div>
-
 {% endblock page %}
-

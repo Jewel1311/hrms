@@ -25,12 +25,24 @@ def admin_home(request):
     department = Department.objects.all().count()
     designations = Designations.objects.all().count()
     interviews = Interviews.objects.filter(interview_date__gt=datetime.date.today()).count()
+    leave_count = Leave.objects.filter(approval = 'pending').count()
+    leaves = Leave.objects.filter().order_by('-id')[:3]
+    regular_count = AttendanceRegularization.objects.filter(status='pending').count()
+    regular = AttendanceRegularization.objects.filter().order_by('-id')[:3]
+    att_count = Attendance.objects.filter(attendance_date = datetime.date.today(),shift='morning').exclude(entry_time = None).count()
+    att_per = int((att_count/employees)*100)
     context = {
        'employees':employees,
        'applicants':applicants,
        'department':department,
        'designations':designations,
-       'interviews':interviews
+       'interviews':interviews,
+       'leave_count':leave_count,
+       'leaves':leaves,
+       'regular_count':regular_count,
+       'regular':regular,
+       'att_per':att_per,
+       'att_count':att_count
     }
     return render(request, 'admin/admin_dashboard.html',context)
 
