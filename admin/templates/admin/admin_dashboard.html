@@ -64,7 +64,7 @@
     <div class=" row  mt-2">
         <div class="col-md-6 c-shadow">
             <div class="d-flex justify-content-between align-items-center" >
-                <div class="p-2 "> <span style="color: rgb(221, 73, 73);;"><b>Leave Requests Pending </b></span> <span class="rounded-circle p-1 text-white" style="background-color: rgb(66, 60, 69);">{{ leave_count|stringformat:"02d" }}</span></div> 
+                <div class="p-2 "> <span style="color: rgb(221, 73, 73);;"><b>Leave Requests Pending </b></span> <span class="rounded-circle p-1 text-white" style="background-color: rgb(51, 49, 52);">{{ leave_count|stringformat:"02d" }}</span></div> 
                 <div class="custom-style-button pt-0 pb-0 pl-1 pr-1"> <a href="{% url 'admin_view_leaves' %}">View</a></div>         
             </div>
             <div class="p-2">
@@ -100,14 +100,39 @@
             {% endfor %}
             {% endif %}
         </div>
-        <div class="ml-3 c-shadow d-flex flex-column align-items-center justify-content-center pl-5 pr-5 ">
-            <div class="mb-3"><b>Attendance Today <span>{{att_count}}/{{employees}}</span></b></div>
-            <div class="progress mx-auto" data-value='{{att_per}}'> <span class="progress-left"> <span class="progress-bar border-primary"></span> </span> <span class="progress-right"> <span class="progress-bar  border-primary"></span> </span>
-                <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
-                    <div class="h2 font-weight-bold">{{att_per}}%</div>
-                </div>
+        <div class="ml-3 c-shadow  pl-2 pr-2">
+           <div class="mt-1 pb-2" style="color: rgb(89, 119, 240);border-bottom: 1px solid rgb(222, 219, 219);"> <b>{% now "F"%} {% now "Y" %}</b></div>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div class="mr-5"><b>Leave Requests</b></div>
+                <div class="rounded pl-1 pr-1 text-white  bg bg-info"><b>{{mon_leave|stringformat:"02d"}}</b></div>
             </div>
 
+            <div class="d-flex justify-content-between align-items-center mt-4 pb-2" style="border-bottom: 1px solid rgb(222, 219, 219);">
+                <div class="mr-5"><b>Approved Requests</b></div>
+                <div class="rounded pl-1 pr-1 text-white  bg bg-success"><b>{{mon_app|stringformat:"02d"}}</b></div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div class="mr-5"> <b>Regularization Requests</b></div>
+                <div class="rounded pl-1 pr-1 text-white  bg bg-info"><b>{{reg_mon|stringformat:"02d"}}</b></div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div class="mr-5"><b>Approved Requests</b></div>
+                <div class="rounded pl-1 pr-1 text-white  bg bg-success"><b>{{reg_app|stringformat:"02d"}}</b></div>
+            </div>
+
+        </div>
+
+        <div class="ml-3 c-shadow d-flex   justify-content-center pl-2 pr-2 ">
+            <div class="mt-1 d-flex flex-column justify-content-between">
+               <b class="text-success"> Attendance: <span>{{att_count}}/{{employees}}</span></b>
+               <b class="text-danger"> Missing: <span>4</span></b>
+            </div>
+            <div class="circular-progress">
+                <div class="value-container">0%</div>
+            </div>
+            
         </div>
 
     </div>
@@ -116,7 +141,7 @@
     <div class=" row  mt-3">
         <div class="col-md-6 c-shadow">
             <div  class="d-flex justify-content-between align-items-center">
-                <div class="p-2"> <span style="color: rgb(89, 119, 240);;"><b>Regularization Requests Pending </b></span> <span class="rounded-circle p-1 text-white" style="background-color: rgb(66, 60, 69);">{{ regular_count|stringformat:"02d" }}</span> </div>   
+                <div class="p-2"> <span style="color: rgb(89, 119, 240);"><b>Regularization Requests Pending </b></span> <span class="rounded-circle p-1 text-white" style="background-color: rgb(41, 39, 42);">{{ regular_count|stringformat:"02d" }}</span> </div>   
                 <div class="custom-style-button pt-0 pb-0 pl-1 pr-1"> <a href="{% url 'admin_regularize' %}">View</a></div>         
             </div>
             <div class="p-2">
@@ -152,10 +177,83 @@
             {% endfor %}
             {% endif %}
         </div>
+        <div class="col-md-6">
+            <div class=" c-shadow">
+                <div  class="d-flex justify-content-between align-items-center pl-2 pr-2">
+                    <div class="p-2"> <span style="color: rgb(89, 119, 240);"><b>Jobs</b></span> <span class="rounded-circle p-1 text-white" style="background-color: rgb(41, 39, 42);">{{ regular_count|stringformat:"02d" }}</span> </div>   
+                    <div class="custom-style-button pt-0 pb-0 pl-1 pr-1"> <a href="{% url 'view_all_jobs' %}">View</a></div>         
+                </div>
+                <div class="pl-2">
+                    <b style="color:#e43c5c">Recent Jobs</b>
+                </div>
+                {% if jobs|length > 0 %}
+                {% for job in jobs %}
+                    <div class="d-flex justify-content-between align-items-center mt-1  p-2" style="border-top: 1px solid rgb(222, 219, 219);">
+                        <div><b>{{ job.job_title }}</b></div>
+                        <div><b>{{ job.withdraw_date }}</b></div>
+                        <div><b>{{ job.location }}</b></div>
+                    </div>
+                {% endfor %}
+                {% else %}
+                {% for i in "123" %}
+                    <div class="text-info p-2">Not Available</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="c-shadow  mt-3 ml-3 p-2" style="width:21rem;">
+                    <div class="d-flex justify-content-between align-items-center" style="border-bottom: 1px solid rgb(222, 219, 219);color:rgb(89, 119, 240)">
+                        <div class="pb-2"><b>Upcoming Interview</b> </div> 
+                        <div class="custom-style-button pt-0 pb-0 pl-1 pr-1"> <a href="{% url 'check_schedule' %}">View</a></div>
+                    </div> 
+                    <div class="mt-2">Date :  <b>{{ up_int.interview_date}}</b></div>
+                </div>
 
+                <div class="c-shadow   mt-3 ml-2 p-2" style="width:21rem;">
+                    <div class="d-flex justify-content-between align-items-center" style="border-bottom: 1px solid rgb(222, 219, 219);color:#e43c5c">
+                        <div class="pb-2"><b>Upcoming Holiday</b> </div> 
+                        <div class="custom-style-button pt-0 pb-0 pl-1 pr-1"> <a href="{% url 'holidays' %}">View</a></div>
+                    </div> 
+                    <div class="mt-2">Date :  <b>{{ holiday.date}}</b></div>
+                </div>
+    
+            </div>
+        </div> 
+
+
+              
     </div>
 
 
 
 </div>
+
 {% endblock page %}
+
+{% block scr %}
+ <!-- progress bar animation  -->
+    <script>
+
+        let progressBar = document.querySelector(".circular-progress");
+        let valueContainer = document.querySelector(".value-container");
+
+        let progressValue = 0;
+        let progressEndValue = "{{att_per}}";
+        let speed = 20;
+
+        let progress = setInterval(() => {
+            progressValue++;
+            valueContainer.textContent = `${progressValue}%`;
+            progressBar.style.background = `conic-gradient(
+                #43eca0 ${progressValue * 3.6 }deg,
+                #eaeced ${progressValue * 3.6 }deg
+                )`;
+            if (progressValue == progressEndValue) {
+                clearInterval(progress)
+            }
+
+        },speed);
+
+    </script>
+
+{% endblock scr%}

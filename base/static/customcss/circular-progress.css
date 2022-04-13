@@ -1,0 +1,32 @@
+/* circular progress bar  */
+*,
+*:before,
+*:after{
+    padding :0;
+    margin:0;
+    box-sizing: border-box;
+}
+
+.circular-progress{
+    position: relative;
+    height: 250px;
+    width: 250px;
+    background-color: #eaeced;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+}
+.circular-progress:before{
+    content: "";
+    position: absolute;
+    height: 84%;
+    width: 84%;
+    background-color: white;
+    border-radius: 50%;
+}
+.value-container{
+    position: relative;
+    font-size: 50px;
+    font-weight: bold;
+    color:#231c3d
+}

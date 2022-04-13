@@ -30,7 +30,14 @@ def admin_home(request):
     regular_count = AttendanceRegularization.objects.filter(status='pending').count()
     regular = AttendanceRegularization.objects.filter().order_by('-id')[:3]
     att_count = Attendance.objects.filter(attendance_date = datetime.date.today(),shift='morning').exclude(entry_time = None).count()
+    mon_leave = Leave.objects.filter(applied_date__month = datetime.date.today().month).count()
+    mon_app = Leave.objects.filter(applied_date__month = datetime.date.today().month,approval='approved').count()
     att_per = int((att_count/employees)*100)
+    reg_mon = AttendanceRegularization.objects.filter(date__month=datetime.date.today().month).count()
+    reg_app = AttendanceRegularization.objects.filter(date__month=datetime.date.today().month,status='approved').count()
+    up_int = Interviews.objects.filter(interview_date__gt=datetime.date.today()).order_by('interview_date').first()
+    holiday = Holidays.objects.filter(date__gt = datetime.date.today()).order_by('date').first()
+    jobs = Jobs.objects.filter().order_by('-id')[:2]
     context = {
        'employees':employees,
        'applicants':applicants,
@@ -42,7 +49,15 @@ def admin_home(request):
        'regular_count':regular_count,
        'regular':regular,
        'att_per':att_per,
-       'att_count':att_count
+       'att_count':att_count,
+       'mon_leave':mon_leave,
+       'mon_app':mon_app,
+       'reg_mon':reg_mon,
+       'reg_app':reg_app,
+       'up_int':up_int,
+       'holiday':holiday,
+       'jobs':jobs
+
     }
     return render(request, 'admin/admin_dashboard.html',context)
 

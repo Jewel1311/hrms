@@ -67,17 +67,17 @@
             <div class=" mt-2 p-2">
                 <div style="font-size: 1rem;">Casual Leave : {{yc_cl|stringformat:"02d"}}</div>
                 <div class="progress mt-1">
-                    <div class="progress-bar bg-success"  style="width: {{cl}}%" role="progressbar" aria-valuenow="{{cl}}" aria-valuemin="0" aria-valuemax="100">{{cl}}%</div> 
+                    <div class="progress-bar bg-success" id="pgb-1" style="width:0%" role="progressbar" aria-valuenow="{{cl}}" aria-valuemin="0" aria-valuemax="100">{{cl}}%</div> 
                 </div>
 
                 <div class="mt-4" style="font-size: 1rem;">Earned Leave : {{yc_el|stringformat:"02d"}}</div>
                 <div class="progress mt-1">
-                    <div class="progress-bar bg-warning"  style="width:{{el}}%" role="progressbar" aria-valuenow="{{el}}" aria-valuemin="0" aria-valuemax="100">{{el}}%</div> 
+                    <div class="progress-bar bg-warning" id="pgb-2" style="width:0%" role="progressbar" aria-valuenow="{{el}}" aria-valuemin="0" aria-valuemax="100">{{el}}%</div> 
                 </div>
 
                 <div  class="mt-4" style="font-size: 1rem;">Sick Leave : {{yc_sl|stringformat:"02d"}}</div>
                 <div class="progress mt-1">
-                    <div class="progress-bar bg-info"  style="width: {{sl}}%" role="progressbar" aria-valuenow="{{sl}}" aria-valuemin="0" aria-valuemax="100">{{sl}}%</div> 
+                    <div class="progress-bar bg-info" id="pgb-3" style="width:0%" role="progressbar" aria-valuenow="{{sl}}" aria-valuemin="0" aria-valuemax="100">{{sl}}%</div> 
                 </div> 
 
                <div  class="mt-4" style="font-size: 1rem;">Loss of Pay : <span class="text-white pt-1 pb-1 pl-3 pr-3"  style="background-color: #e43c5c; border-radius: 5px;">{{yc_lp|stringformat:"02d"}}</span></div>
@@ -87,7 +87,7 @@
 
         <!-- bottom right  -->
         
-        <div class="col-md-6">
+        <div class="col-md-6 mt-1">
 
             <div class=" ml-auto c-shadow pl-3 pr-3 pt-3 pb-2 " style="border-left: 0.25rem solid #e43c5c;">
                 <div class="font-weight-bold"><span class="text-danger" style="font-size: 1rem;"><i class="bi bi-clock"></i></span> Today {% if today.holiday == True %}
@@ -180,6 +180,20 @@
     </div>
    
 
-    
-
 {% endblock content %}
+
+{% block scr %}
+    <script>
+        $("#pgb-1").animate({
+    width: "{{cl}}%"
+}, 700);
+
+$("#pgb-2").animate({
+    width: "{{el}}%"
+}, 700);
+
+$("#pgb-3").animate({
+    width: "{{sl}}%"
+}, 700);
+    </script>
+{% endblock scr%}

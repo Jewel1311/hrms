@@ -55,8 +55,13 @@ a:focus {
 }
 
 #sidebar {
+    position: fixed;
+    top:0;
+    left: 0;
     min-width: 250px;
     max-width: 250px;
+    height:100%;
+    overflow-y: auto;
     background:#253b46;
     color: #fff;
     transition: all 0.3s;
@@ -64,6 +69,10 @@ a:focus {
 
 #sidebar.active {
     margin-left: -250px;
+}
+
+#content.active {
+    width: 100%;
 }
 
 #sidebar .sidebar-header {
@@ -146,7 +155,10 @@ a.article:hover {
 ----------------------------------------------------- */
 
 #content {
-    width: 100%;
+    position: absolute;
+    top:0;
+    right: 0;
+    width: calc(100% - 250px);
     padding: 20px;
     min-height: 100vh;
     transition: all 0.3s;
@@ -165,5 +177,11 @@ a.article:hover {
     }
     #sidebarCollapse span {
         display: none;
+    }
+    #content{
+        width: 100%;
+    }
+    #content.active{
+        width: calc(100% - 250px);
     }
 }

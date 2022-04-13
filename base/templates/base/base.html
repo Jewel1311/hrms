@@ -14,13 +14,16 @@
      <!-- bootstrap icons  -->
      <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
 
+     <!-- logo  -->
+     <link rel = "icon" href = "{% static 'assets/img/logo.png' %}">
+
       <!-- custom css link -->
      <link href="{% static 'customcss/custom-style.css' %}" rel="stylesheet">
 
+     <!-- circular progress bar  -->
 
-      <!-- custom css link -->
+     <link href="{% static 'customcss/circular-progress.css' %}" rel="stylesheet">
 
-      <link rel = "icon" href = "{% static 'assets/img/logo.png' %}">
 
       <!-- datatable  -->
 
@@ -110,17 +113,6 @@
   $('[data-toggle="popover"]').popover()
 })
  </script>
- <script>
-     $(function() {
-
-$(".progress").each(function() {
-
-var value = $(this).attr('data-value');
-var left = $(this).find('.progress-left .progress-bar');
-var right = $(this).find('.progress-right .progress-bar');
-
-if (value > 0) {
-if (value <= 50) { right.css('transform', 'rotate(' + percentageToDegrees(value) + 'deg)' ) } else { right.css('transform', 'rotate(180deg)' ); left.css('transform', 'rotate(' + percentageToDegrees(value - 50) + 'deg)' ) } } }); function percentageToDegrees(percentage) { return percentage / 100 * 360 } });
- </script>
+ {% block scr %} {% endblock scr %}
 </body>
 </html>
