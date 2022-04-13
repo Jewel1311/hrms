@@ -38,6 +38,7 @@ def admin_home(request):
     up_int = Interviews.objects.filter(interview_date__gt=datetime.date.today()).order_by('interview_date').first()
     holiday = Holidays.objects.filter(date__gt = datetime.date.today()).order_by('date').first()
     jobs = Jobs.objects.filter().order_by('-id')[:2]
+    job_count = Jobs.objects.all().count()
     context = {
        'employees':employees,
        'applicants':applicants,
@@ -56,7 +57,9 @@ def admin_home(request):
        'reg_app':reg_app,
        'up_int':up_int,
        'holiday':holiday,
-       'jobs':jobs
+       'jobs':jobs,
+       'job_count':job_count
+
 
     }
     return render(request, 'admin/admin_dashboard.html',context)
