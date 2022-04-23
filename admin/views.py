@@ -519,6 +519,7 @@ def reject_leave(request,pk):
             messages.info(request,f'Already Rejected')
         else:
             leave.approval = 'rejected'
+            leave.save()
             messages.warning(request,f'Leave Rejected')
 
         return redirect('admin_leave_detail',pk=pk)
