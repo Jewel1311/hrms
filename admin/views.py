@@ -861,7 +861,9 @@ def add_notification(request):
         elif "add" in request.POST:
             form = MessageForm(request.POST)
             if form.is_valid():
-                form.save()
+                msg = form.save(False)
+                msg.date = datetime.datetime.now()
+                msg.save()
                 messages.success(request,'Message Added')
                 return redirect('add_notification')
     

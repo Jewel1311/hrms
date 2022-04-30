@@ -26,4 +26,4 @@ class Interviews(models.Model):
 class Messages(models.Model):
     title = models.CharField(max_length=100)
     body = models.TextField()
-    date = models.DateTimeField(default=datetime.datetime.now())
+    date = models.DateTimeField()
