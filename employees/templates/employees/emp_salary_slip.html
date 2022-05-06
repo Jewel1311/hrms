@@ -16,32 +16,32 @@
 
                 <div class="row ml-1 mr-1">
                     <div class=" col-6" style="border:1px solid black;"><b>Basic Pay </b> </div>
-                    <div class=" col-6" style="border:1px solid black;">{{ payroll.basic}} </div>
+                    <div class=" col-6" style="border:1px solid black;">{{ payroll.basic|floatformat:2 }} </div>
                 </div>
 
                 <div class="row ml-1 mr-1" style="background-color: #d6d8da;">
                     <div class=" col-6" style="border:1px solid black;"><b>HRA </b> </div>
-                    <div class=" col-6" style="border:1px solid black;">{{ payroll.hra }} </div>
+                    <div class=" col-6" style="border:1px solid black;">{{ payroll.hra|floatformat:2  }} </div>
                 </div>
 
                 <div class="row ml-1 mr-1">
                     <div class=" col-6" style="border:1px solid black;"><b>TA </b> </div>
-                    <div class=" col-6" style="border:1px solid black;">{{ payroll.ta }} </div>
+                    <div class=" col-6" style="border:1px solid black;">{{ payroll.ta|floatformat:2  }} </div>
                 </div>
 
                 <div class="row ml-1 mr-1" style="background-color: #d6d8da;">
                     <div class=" col-6" style="border:1px solid black;"><b>Total Earnings</b> </div>
-                    <div class=" col-6" style="border:1px solid black;">{{ payroll.other_benefits }} </div>
+                    <div class=" col-6" style="border:1px solid black;">{{ payroll.other_benefits|floatformat:2  }} </div>
                 </div>
 
                 <div class="row ml-1 mr-1">
                     <div class=" col-6 text-right" style="border:1px solid black;"><b>PF </b> </div>
-                    <div class=" col-6 text-right" style="border:1px solid black;">{{ payroll.pf }} </div>
+                    <div class=" col-6 text-right" style="border:1px solid black;">{{ payroll.pf|floatformat:2  }} </div>
                 </div>
 
                 <div class="row ml-1 mr-1" style="background-color: #d6d8da;">
                     <div class=" col-6 text-right" style="border:1px solid black;"><b>Total Deductions </b> </div>
-                    <div class=" col-6 text-right" style="border:1px solid black;">{{ payroll.other_deductions }} </div>
+                    <div class=" col-6 text-right" style="border:1px solid black;">{{ payroll.other_deductions|floatformat:2  }} </div>
                 </div>
 
                 <div class="row ml-1 mr-1">
@@ -51,7 +51,7 @@
 
                 <div class="row ml-1 mr-1">
                     <div class=" col-6 pt-3 pb-2" style="border:1px solid black;"><b>Net Salary</b> </div>
-                    <div class=" col-6 pt-3 pb-2" style="border:1px solid black;background-color: #d6d8da;"><b>{{ payroll.net_salary }}</b></div>
+                    <div class=" col-6 pt-3 pb-2" style="border:1px solid black;background-color: #d6d8da;"><b>{{ payroll.net_salary|floatformat:2  }}</b></div>
                 </div>
                 <div class="p-2"></div>
 
