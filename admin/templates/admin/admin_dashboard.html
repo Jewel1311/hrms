@@ -72,23 +72,23 @@
             </div>
             {% if leaves|length > 0 %}
             {% for leave in leaves %}
-                <div class="d-flex justify-content-between align-items-center mt-1 mb-2 pt-2" style="border-top: 1px solid rgb(222, 219, 219);">
+                <div class="d-flex align-items-center mt-1 mb-2 pt-2" style="border-top: 1px solid rgb(222, 219, 219);">
 
-                    <div>
+                    <div class="col-md-6">
                         <a href="/media/{{ leave.user.employeeprofile.photo }}"><img src="{{ leave.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
 
                         <a href="{% url 'employee_detail' leave.user.pk %}"><b>{{ leave.user.first_name|title}} {{ leave.user.middle_name|title}} {{ leave.user.last_name|title}}</b></a>
                     </div>
-                    <div>{{ leave.leave_type | title}}</div>
-
+                    <div class="col-md-3">{{ leave.leave_type | title}}</div>
+ 
                     {% if leave.approval == 'approved' %} 
-                        <div class="text-success text-bolder">{{ leave.approval | title}} </div>
+                        <div class="text-success text-bolder col-md-3 text-right">{{ leave.approval | title}} </div>
 
                     {% elif leave.approval == 'rejected' %} 
-                        <div class="text-danger">{{ leave.approval | title}} </div>
+                        <div class="text-danger col-md-3 text-right">{{ leave.approval | title}} </div>
 
                     {% else %} 
-                        <div class="text-warning">{{ leave.approval | title}} </div>
+                        <div class="text-warning col-md-3 text-right ">{{ leave.approval | title}} </div>
                     {% endif %}
                    
 
@@ -148,23 +148,23 @@
             </div>
             {% if regular|length > 0 %}
             {% for regular in regular %}
-                <div class="d-flex justify-content-between align-items-center mt-1 mb-2 pt-2" style="border-top: 1px solid rgb(222, 219, 219);">
+                <div class="d-flex align-items-center mt-1 mb-2 pt-2" style="border-top: 1px solid rgb(222, 219, 219);">
 
-                    <div>
+                    <div class="col-md-6">
                         <a href="/media/{{ regular.user.employeeprofile.photo }}"><img src="{{ regular.user.employeeprofile.photo.url }}" class="rounded-circle mr-1"  width="40px" height="40px"> </a> 
 
                         <a href="{% url 'employee_detail' regular.user.pk %}"><b>{{ regular.user.first_name|title}} {{ regular.user.middle_name|title}} {{ regular.user.last_name|title}}</b></a>
                     </div>
-                    <div>{{ regular.date }}</div>
+                    <div class="col-md-3">{{ regular.date }}</div>
 
                     {% if regular.status == 'approved' %} 
-                        <div class="text-success text-bolder">{{ regular.status | title}} </div>
+                        <div class="text-success text-bolder col-md-3 text-right">{{ regular.status | title}} </div>
 
                     {% elif regular.status == 'rejected' %} 
-                        <div class="text-danger">{{ regular.status | title}} </div>
+                        <div class="text-danger col-md-3 text-right">{{ regular.status | title}} </div>
 
                     {% else %} 
-                        <div class="text-warning">{{ regular.status | title}} </div>
+                        <div class="text-warning col-md-3 text-right">{{ regular.status | title}} </div>
                     {% endif %}
                    
 
@@ -188,9 +188,9 @@
                 {% if jobs|length > 0 %}
                 {% for job in jobs %}
                     <div class="d-flex justify-content-between align-items-center mt-1  p-2" style="border-top: 1px solid rgb(222, 219, 219);">
-                        <div><b><span style="color:#e43c5c"><i class="bi bi-arrow-right-circle-fill"></i></span> {{ job.job_title }}</b></div>
-                        <div>{{ job.withdraw_date }}</div>
-                        <div>{{ job.location }}</div>
+                        <div class="col-md-6"><b><span style="color:#e43c5c"><i class="bi bi-arrow-right-circle-fill"></i></span> {{ job.job_title }}</b></div>
+                        <div class="col-md-3">{{ job.withdraw_date }}</div>
+                        <div class="col-md-3 text-right">{{ job.location }}</div>
                     </div>
                 {% endfor %}
                 {% else %}
