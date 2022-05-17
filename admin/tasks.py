@@ -1,5 +1,5 @@
 from admin.models import Payroll, Salary
-from employees.models import Leave, LeaveCounter, YearCounter
+from employees.models import Attendance, Leave, LeaveCounter, YearCounter
 import datetime
 from django.db.models import Q
 
@@ -241,16 +241,25 @@ def calc_pf(basic):
     pf = (12/100)*basic
     return pf
 
+#calculate night shift salary
+def calc_night_shift(employee, cdate):
+    night = Attendance.objects.filter(attendance_date__month = cdate.month, user=employee, shift='night').count()
+    sal = night*400
+    return sal
+
+
+
 #calculate other benefits
 def calc_ob(cdate,employee,basic):
+    ob = 0
+    night = calc_night_shift(employee, cdate)
+    ob = ob + night
     if cdate.month == 12:
         earnedleave = YearCounter.objects.get(date__year=cdate.year ,user=employee)
         if earnedleave.el < 12:
             single_day = basic/30
             left = 12 - earnedleave.el
             ob = left * single_day
-    else:
-        ob = 0
     return ob
 
 
