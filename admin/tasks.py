@@ -267,7 +267,7 @@ def calc_ob(cdate,employee,basic):
 def calc_od(cdate,employee,basic):
     od = 0
     single_day = basic/30
-    leave = LeaveCounter.objects.get(date__month = cdate.month,user=employee)
+    leave = LeaveCounter.objects.get(date__month = cdate.month, date__year = cdate.year,user=employee)
     if leave.sl > 0:
         pay = (single_day/2) * leave.sl
         od = od + pay

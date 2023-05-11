@@ -26,13 +26,13 @@ class MyPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
 
 @login_required
 def employee_home(request):
-   attendance_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='morning').exclude(exit_time = None).count()
-   missing_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='morning',entry_time = None,holiday=False).count()
-   night_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,shift='night').exclude(exit_time = None).count()
-   reg_count = AttendanceRegularization.objects.filter(user=request.user,date__month=datetime.date.today().month).count()
+   attendance_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,attendance_date__year=datetime.date.today().year,shift='morning').exclude(exit_time = None).count()
+   missing_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,attendance_date__year=datetime.date.today().year,shift='morning',entry_time = None,holiday=False).count()
+   night_count = Attendance.objects.filter(user=request.user, attendance_date__month=datetime.date.today().month,attendance_date__year=datetime.date.today().year,shift='night').exclude(exit_time = None).count()
+   reg_count = AttendanceRegularization.objects.filter(user=request.user,date__month=datetime.date.today().month,date__year=datetime.date.today().year).count()
    yc = YearCounter.objects.get(user = request.user,date__year=datetime.date.today().year)
-   leave_c = LeaveCounter.objects.get(user = request.user,date__month=datetime.date.today().month)
-   pending_count = Leave.objects.filter(user = request.user,applied_date__month=datetime.date.today().month,approval='pending').count()
+   leave_c = LeaveCounter.objects.get(user = request.user,date__month=datetime.date.today().month, date__year=datetime.date.today().year)
+   pending_count = Leave.objects.filter(user = request.user,applied_date__month=datetime.date.today().month,applied_date__year=datetime.date.today().year,approval='pending').count()
    today = Attendance.objects.get(user=request.user, attendance_date=datetime.date.today(),shift='morning')
    notification = Messages.objects.latest('id')
    latest_leave = Leave.objects.filter(user = request.user).last()

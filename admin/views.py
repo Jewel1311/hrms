@@ -30,11 +30,11 @@ def admin_home(request):
     regular_count = AttendanceRegularization.objects.filter(status='pending').count()
     regular = AttendanceRegularization.objects.filter().order_by('-id')[:3]
     att_count = Attendance.objects.filter(attendance_date = datetime.date.today(),shift='morning').exclude(entry_time = None).count()
-    mon_leave = Leave.objects.filter(applied_date__month = datetime.date.today().month).count()
-    mon_app = Leave.objects.filter(applied_date__month = datetime.date.today().month,approval='approved').count()
+    mon_leave = Leave.objects.filter(applied_date__month = datetime.date.today().month,applied_date__year=datetime.date.today().year).count()
+    mon_app = Leave.objects.filter(applied_date__month = datetime.date.today().month,applied_date__year=datetime.date.today().year,approval='approved').count()
     att_per = int((att_count/employees)*100)
-    reg_mon = AttendanceRegularization.objects.filter(date__month=datetime.date.today().month).count()
-    reg_app = AttendanceRegularization.objects.filter(date__month=datetime.date.today().month,status='approved').count()
+    reg_mon = AttendanceRegularization.objects.filter(date__month=datetime.date.today().month,date__year=datetime.date.today().year).count()
+    reg_app = AttendanceRegularization.objects.filter(date__month=datetime.date.today().month,date__year=datetime.date.today().year,status='approved').count()
     up_int = Interviews.objects.filter(interview_date__gt=datetime.date.today()).order_by('interview_date').first()
     holiday = Holidays.objects.filter(date__gt = datetime.date.today()).order_by('date').first()
     jobs = Jobs.objects.filter().order_by('-id')[:2]
@@ -251,7 +251,7 @@ class DeleteDepartment(SuccessMessageMixin,DeleteView):
 
     def get_object(self):
         id =  self.kwargs.get("pk")
-        print(id)
+        # print(id)
         return get_object_or_404(Department, id=id)
    
 
